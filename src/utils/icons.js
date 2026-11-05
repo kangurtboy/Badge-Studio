@@ -37,7 +37,9 @@ import {
   ArrowDown,
   ArrowUpToLine,
   ArrowDownToLine,
-  Minus
+  Minus,
+  ArrowLeft,
+  ArrowRight
 } from 'lucide';
 
 export const appIcons = {
@@ -78,7 +80,9 @@ export const appIcons = {
   ArrowDown,
   ArrowUpToLine,
   ArrowDownToLine,
-  Minus
+  Minus,
+  ArrowLeft,
+  ArrowRight
 };
 
 export function initIcons(container = document) {
