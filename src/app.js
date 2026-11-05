@@ -51,7 +51,7 @@ export class App {
     try {
       await openDB();
       const savedProject = await loadProject('current-project');
-      if (savedProject && savedProject.cards && savedProject.cards.length > 0) {
+      if (savedProject && savedProject.version === '2.0' && savedProject.cards && savedProject.cards.length > 0) {
         this.cards = savedProject.cards;
         this.currentCardId = savedProject.currentCardId || this.cards[0].id;
         if (savedProject.settings) {
@@ -59,6 +59,13 @@ export class App {
         }
       } else {
         this.loadSampleData();
+        await this.autoSaveManager.saveNow({
+          id: 'current-project',
+          version: '2.0',
+          cards: this.cards,
+          currentCardId: this.currentCardId,
+          settings: this.settings,
+        });
       }
     } catch (e) {
       console.warn('Could not load from IndexedDB, using sample data:', e);
@@ -517,6 +524,7 @@ export class App {
     this.syncCurrentCardToMemory();
     this.autoSaveManager.schedule({
       id: 'current-project',
+      version: '2.0',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -751,6 +759,7 @@ export class App {
         this.syncCurrentCardToMemory();
         this.autoSaveManager.saveNow({
           id: 'current-project',
+          version: '2.0',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,

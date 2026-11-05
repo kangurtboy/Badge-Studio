@@ -367,22 +367,33 @@
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 8px;
+  border-radius: 14px;
   overflow: hidden;
   background-color: var(--bg-card);
   transform: translate3d(0, 0, 0);
+  border: 1px solid rgba(15, 23, 42, 0.12);
 }
 
 .card-face-front {
   z-index: 2;
   transform: rotateY(0deg);
   pointer-events: auto;
+  background-color: #ffffff;
+  background-image: 
+    radial-gradient(circle at 50% 30%, rgba(2, 132, 199, 0.035) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, rgba(3, 105, 161, 0.018) 0px, rgba(3, 105, 161, 0.018) 1px, transparent 1px, transparent 10px),
+    repeating-linear-gradient(-45deg, rgba(15, 23, 42, 0.012) 0px, rgba(15, 23, 42, 0.012) 1px, transparent 1px, transparent 10px);
 }
 
 .card-face-back {
   transform: rotateY(180deg);
   z-index: 1;
   pointer-events: none;
+  background-color: #ffffff;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(14, 116, 144, 0.035) 0%, transparent 55%),
+    repeating-linear-gradient(60deg, rgba(30, 41, 59, 0.015) 0px, rgba(30, 41, 59, 0.015) 1px, transparent 1px, transparent 9px),
+    repeating-linear-gradient(-60deg, rgba(3, 105, 161, 0.018) 0px, rgba(3, 105, 161, 0.018) 1px, transparent 1px, transparent 9px);
 }
 
 .flip-card-inner.flipped .card-face-front {

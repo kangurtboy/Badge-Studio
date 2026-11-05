@@ -179,6 +179,8 @@ export class BadgeCanvasManager {
             top: data.top,
             maxWidth: data.width || 190,
             maxHeight: data.height || 240,
+            rx: data.rx || 0,
+            ry: data.ry || 0,
             name: data.name || 'Фотография',
           });
         }

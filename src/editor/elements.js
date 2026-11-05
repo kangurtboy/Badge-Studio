@@ -113,17 +113,17 @@ export class ElementFactory {
     });
   }
 
-  static async createImageFromUrl(url, { left = 50, top = 50, maxWidth = 190, maxHeight = 240, name = 'Фотография' } = {}) {
+  static async createImageFromUrl(url, { left = 50, top = 50, maxWidth = 190, maxHeight = 240, rx = 0, ry = 0, name = 'Фотография' } = {}) {
     try {
-      const img = await FabricImage.fromURL(url);
+      const img = await FabricImage.fromURL(url, { crossOrigin: 'anonymous' });
       
       // Calculate aspect ratio scale to fit inside maxWidth x maxHeight
-      const scaleX = maxWidth / img.width;
-      const scaleY = maxHeight / img.height;
-      const scale = Math.min(scaleX, scaleY, 1);
+      const scaleX = maxWidth / (img.width || 1);
+      const scaleY = maxHeight / (img.height || 1);
+      const scale = Math.min(scaleX, scaleY);
 
       img.set({
-        id: `img-${Date.now()}`,
+        id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
         name,
         left,
         top,
@@ -136,6 +136,17 @@ export class ElementFactory {
         transparentCorners: false,
         padding: 4,
       });
+
+      if (rx > 0) {
+        img.clipPath = new Rect({
+          width: img.width,
+          height: img.height,
+          rx: rx / scale,
+          ry: (ry || rx) / scale,
+          originX: 'center',
+          originY: 'center',
+        });
+      }
 
       return img;
     } catch (e) {
