@@ -37,6 +37,7 @@ export class BadgeCanvasManager {
     this.backGuides = new AlignmentGuidelines(this.backCanvas);
 
     this.activeSide = 'front'; // 'front' | 'back'
+    this.isLoading = false;
     this.setupEvents(this.frontCanvas, 'front');
     this.setupEvents(this.backCanvas, 'back');
   }
@@ -54,6 +55,7 @@ export class BadgeCanvasManager {
 
   setupEvents(canvas, side) {
     const triggerSelection = () => {
+      if (this.isLoading) return;
       if (this.activeSide === side) {
         const activeObj = canvas.getActiveObject();
         this.onSelect(activeObj, side);
@@ -63,6 +65,7 @@ export class BadgeCanvasManager {
     canvas.on('selection:created', triggerSelection);
     canvas.on('selection:updated', triggerSelection);
     canvas.on('selection:cleared', () => {
+      if (this.isLoading) return;
       if (this.activeSide === side) {
         this.onSelect(null, side);
       }
@@ -70,6 +73,7 @@ export class BadgeCanvasManager {
 
     // Live update coordinates while dragging, scaling, rotating
     const triggerLive = () => {
+      if (this.isLoading) return;
       if (this.activeSide === side) {
         const activeObj = canvas.getActiveObject();
         if (activeObj) {
@@ -83,7 +87,9 @@ export class BadgeCanvasManager {
     canvas.on('object:rotating', triggerLive);
 
     const triggerModify = () => {
-      this.onModify(side);
+      if (!this.isLoading) {
+        this.onModify(side);
+      }
     };
 
     canvas.on('object:modified', triggerModify);
@@ -92,6 +98,7 @@ export class BadgeCanvasManager {
   }
 
   async loadTemplate(canvas, templateData) {
+    this.isLoading = true;
     canvas.clear();
     canvas.backgroundColor = templateData.background || '#FFFFFF';
 
@@ -105,6 +112,7 @@ export class BadgeCanvasManager {
     }
 
     canvas.renderAll();
+    this.isLoading = false;
   }
 
   async createFabricObject(data) {

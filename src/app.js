@@ -51,7 +51,7 @@ export class App {
     try {
       await openDB();
       const savedProject = await loadProject('current-project');
-      if (savedProject && savedProject.version === '3.0' && savedProject.cards && savedProject.cards.length > 0) {
+      if (savedProject && savedProject.version === '4.0' && savedProject.cards && savedProject.cards.length > 0) {
         this.cards = savedProject.cards;
         this.currentCardId = savedProject.currentCardId || this.cards[0].id;
         if (savedProject.settings) {
@@ -59,13 +59,6 @@ export class App {
         }
       } else {
         this.loadSampleData();
-        await this.autoSaveManager.saveNow({
-          id: 'current-project',
-          version: '3.0',
-          cards: this.cards,
-          currentCardId: this.currentCardId,
-          settings: this.settings,
-        });
       }
     } catch (e) {
       console.warn('Could not load from IndexedDB, using sample data:', e);
@@ -73,7 +66,16 @@ export class App {
     }
 
     this.sidebar.setCards(this.cards, this.currentCardId);
-    this.loadCardIntoEditor(this.currentCardId);
+    await this.loadCardIntoEditor(this.currentCardId);
+
+    // Save clean initial state with version 4.0
+    await this.autoSaveManager.saveNow({
+      id: 'current-project',
+      version: '4.0',
+      cards: this.cards,
+      currentCardId: this.currentCardId,
+      settings: this.settings,
+    });
 
     // Initial snapshot for history
     this.snapshotHistory();
@@ -323,12 +325,17 @@ export class App {
   }
 
   syncCurrentCardToMemory() {
+    if (!this.badgeEditor || this.badgeEditor.canvasManager.isLoading) return;
     const card = this.cards.find((c) => c.id === this.currentCardId);
     if (!card) return;
 
     const data = this.badgeEditor.getCurrentCardData();
-    card.front = data.front;
-    card.back = data.back;
+    if (data.front && Array.isArray(data.front.elements) && data.front.elements.length > 0) {
+      card.front = data.front;
+    }
+    if (data.back && Array.isArray(data.back.elements) && data.back.elements.length > 0) {
+      card.back = data.back;
+    }
   }
 
   addNewCard() {
@@ -524,7 +531,7 @@ export class App {
     this.syncCurrentCardToMemory();
     this.autoSaveManager.schedule({
       id: 'current-project',
-      version: '3.0',
+      version: '4.0',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -759,7 +766,7 @@ export class App {
         this.syncCurrentCardToMemory();
         this.autoSaveManager.saveNow({
           id: 'current-project',
-          version: '3.0',
+          version: '4.0',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,
