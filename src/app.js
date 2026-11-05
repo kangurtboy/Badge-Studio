@@ -16,6 +16,8 @@ import { RecoveryManager } from './storage/recovery.js';
 import { initIcons } from './utils/icons.js';
 import { CanvasTransformations } from './editor/transformations.js';
 import { ElementFactory } from './editor/elements.js';
+import { SheetLayoutEngine } from './printing/layout.js';
+import { AlignmentEngine } from './printing/alignment.js';
 
 export class App {
   constructor(rootEl) {
@@ -211,11 +213,16 @@ export class App {
     // Print Preview Mode
     this.printPreview = new PrintPreview({
       container: this.rootEl.querySelector('#print-view-container'),
-      onExecutePrint: () => {
+      onExecutePrint: (printOptions) => {
+        this.preparePrintDOM(printOptions);
         window.print();
       },
       onTestPrint: () => {
-        window.print();
+        const printContainer = this.rootEl.querySelector('#print-container');
+        if (printContainer) {
+          printContainer.innerHTML = AlignmentEngine.generateCalibrationTestSheet();
+          window.print();
+        }
       },
     });
 
@@ -282,7 +289,8 @@ export class App {
       this.a4Editor.setCards(this.cards);
     } else if (mode === 'print') {
       this.syncCurrentCardToMemory();
-      this.preparePrintDOM();
+      this.printPreview.setCards(this.cards);
+      this.preparePrintDOM(this.printPreview.printOptions);
     }
 
     initIcons(this.rootEl);
@@ -510,25 +518,179 @@ export class App {
     });
   }
 
-  preparePrintDOM() {
+  preparePrintDOM(printOptions = {}) {
     const printContainer = this.rootEl.querySelector('#print-container');
     if (!printContainer) return;
 
-    printContainer.innerHTML = `
-      <div class="print-page">
-        <div class="print-grid" style="display: grid; grid-template-columns: repeat(2, 90mm); gap: 10mm; padding: 15mm;">
-          ${this.cards
-            .map(
-              (c) => `
-            <div class="print-badge-item" style="width: 90mm; height: 55mm; border: 0.5px solid #E2E8F0; padding: 4mm;">
-              <div style="font-weight: bold; font-size: 11pt;">${c.name}</div>
-              <div style="font-size: 9pt; color: #475569;">${c.group} • ${c.studentId}</div>
-            </div>
-          `
-            )
-            .join('')}
+    const options = {
+      mode: printOptions.mode || 'both',
+      flipEdge: printOptions.flipEdge || 'long',
+      offsetX: printOptions.offsetX || 0,
+      offsetY: printOptions.offsetY || 0,
+    };
+
+    const layoutEngine = new SheetLayoutEngine({
+      cardWidthMm: 90,
+      cardHeightMm: 55,
+      marginTopMm: 12,
+      marginBottomMm: 12,
+      marginLeftMm: 12,
+      marginRightMm: 12,
+      gapXMm: 4,
+      gapYMm: 4,
+      columnMode: 'auto',
+    });
+
+    const { slots: frontSlots, grid } = layoutEngine.getSlotsForCards(this.cards.length, 0);
+    const backSlots = AlignmentEngine.getBackSheetSlots(frontSlots, grid, {
+      flipEdge: options.flipEdge,
+      offsetX: options.offsetX,
+      offsetY: options.offsetY,
+    });
+
+    const isBoth = options.mode === 'both';
+    const isFront = options.mode === 'front-only' || isBoth;
+    const isBack = options.mode === 'back-only' || isBoth;
+
+    let pagesHtml = '';
+
+    if (isFront) {
+      pagesHtml += `
+        <div class="print-page" style="width: 210mm; height: 297mm; position: relative; background: #FFFFFF; box-sizing: border-box; overflow: hidden;">
+          ${this.renderPrintBadges(frontSlots, 'front')}
+          ${this.renderPrintCropMarks(frontSlots, layoutEngine)}
         </div>
-      </div>
+      `;
+    }
+
+    if (isBack) {
+      pagesHtml += `
+        <div class="print-page" style="width: 210mm; height: 297mm; position: relative; background: #FFFFFF; box-sizing: border-box; overflow: hidden;">
+          ${this.renderPrintBadges(backSlots, 'back')}
+          ${this.renderPrintCropMarks(backSlots, layoutEngine)}
+        </div>
+      `;
+    }
+
+    printContainer.innerHTML = pagesHtml;
+  }
+
+  renderPrintBadges(slots, side) {
+    return slots
+      .map((slot) => {
+        const card = this.cards[slot.cardIndex];
+        if (!card) return '';
+
+        const isFront = side === 'front';
+        const studentName = card.name || `Студент #${slot.cardIndex + 1}`;
+        const studentGroup = card.group || 'П-302';
+        const studentId = card.studentId || `ID-2026-${String(slot.cardIndex + 1).padStart(4, '0')}`;
+        const login = `${studentName.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '.')}.stud@kt.tj`;
+
+        if (isFront) {
+          return `
+            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
+              <!-- Header banner -->
+              <div style="background-color: #1E3A8A; color: #FFFFFF; height: 9mm; padding: 1.5mm 3mm; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+                <span style="font-size: 7.5pt; font-weight: bold; letter-spacing: 0.02em;">КОЛЛЕҶИ ТЕХНОЛОГИИ ДАВЛАТӢ</span>
+                <span style="font-size: 6pt; opacity: 0.85;">ID-CARD</span>
+              </div>
+
+              <!-- Main badge body -->
+              <div style="display: flex; gap: 3mm; padding: 2.5mm 3mm; box-sizing: border-box; height: 42mm;">
+                <!-- Student Photo Box -->
+                <div style="width: 24mm; height: 32mm; background-color: #F1F5F9; border: 0.2mm solid #94A3B8; border-radius: 1mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <span style="font-size: 6.5pt; font-weight: bold; color: #64748B;">ФОТО 3×4</span>
+                </div>
+
+                <!-- Student Information -->
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <div style="font-size: 8.5pt; font-weight: bold; color: #0F172A; line-height: 1.2;">
+                      ${studentName}
+                    </div>
+                    <div style="font-size: 6.5pt; color: #475569; margin-top: 1mm;">
+                      Ихтисос: Барномасозӣ дар Web
+                    </div>
+                    <div style="font-size: 6.5pt; color: #475569;">
+                      Гурӯҳ: <strong>${studentGroup}</strong> (Курси 3)
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style="font-size: 6pt; color: #64748B;">Студенческий билет:</div>
+                    <div style="font-size: 8pt; font-weight: bold; color: #2563EB;">${studentId}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom stripe -->
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 2mm; background-color: #2563EB;"></div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #94A3B8; background: #F8FAFC; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
+              <!-- Header banner -->
+              <div style="background-color: #334155; color: #FFFFFF; height: 8mm; padding: 1.5mm 3mm; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+                <span style="font-size: 7pt; font-weight: bold;">МАЪЛУМОТИ ХИДМАТӢ ВА ДАСТРАСӢ</span>
+                <span style="font-size: 6pt; opacity: 0.85;">#${slot.cardIndex + 1}</span>
+              </div>
+
+              <!-- Back body -->
+              <div style="padding: 2.5mm 3mm; box-sizing: border-box; display: flex; gap: 3mm;">
+                <div style="flex: 1; min-width: 0;">
+                  <div style="background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; padding: 1.5mm 2mm; margin-bottom: 2mm;">
+                    <div style="font-size: 6pt; color: #64748B;">Логин (Номи корбар):</div>
+                    <div style="font-size: 7.5pt; font-weight: bold; color: #0F172A; white-space: nowrap; overflow: hidden;">${login}</div>
+                    <div style="font-size: 6pt; color: #64748B; margin-top: 0.5mm;">Пароль (Рамз): <strong style="color: #0F172A;">KT#2026!</strong></div>
+                  </div>
+
+                  <div style="font-size: 5.5pt; color: #475569; line-height: 1.3;">
+                    • Бейҷик ҳуҷҷати расмии донишҷӯ мебошад.<br/>
+                    • Ҳангоми гум шудан ба шуъбаи таълим хабар диҳед.<br/>
+                    • Тел: +992 (37) 221-45-88 | www.kt.tj
+                  </div>
+                </div>
+
+                <!-- QR Simulation box -->
+                <div style="width: 22mm; height: 22mm; background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="18mm" height="18mm" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="1.8">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                    <rect x="6" y="6" width="1" height="1" fill="#0F172A"/>
+                    <rect x="17" y="6" width="1" height="1" fill="#0F172A"/>
+                    <rect x="6" y="17" width="1" height="1" fill="#0F172A"/>
+                  </svg>
+                  <span style="font-size: 4.5pt; font-weight: bold; color: #64748B; margin-top: 0.5mm;">СКАНИРОВАТЬ</span>
+                </div>
+              </div>
+
+              <!-- Bottom stripe -->
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1.5mm; background-color: #475569;"></div>
+            </div>
+          `;
+        }
+      })
+      .join('');
+  }
+
+  renderPrintCropMarks(slots, layoutEngine) {
+    let svgContent = '';
+
+    slots.forEach((slot) => {
+      const marks = layoutEngine.generateCropMarks(slot);
+      marks.forEach((m) => {
+        svgContent += `<line x1="${m.x1}mm" y1="${m.y1}mm" x2="${m.x2}mm" y2="${m.y2}mm" stroke="#475569" stroke-width="0.2mm" />`;
+      });
+    });
+
+    return `
+      <svg style="position: absolute; inset: 0; width: 210mm; height: 297mm; pointer-events: none; z-index: 20;">
+        ${svgContent}
+      </svg>
     `;
   }
 
