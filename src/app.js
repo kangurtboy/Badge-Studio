@@ -12,6 +12,7 @@ import { createDefaultBack } from './templates/defaultBack.js';
 import { HistoryManager } from './editor/history.js';
 import { AutoSaveManager } from './storage/autosave.js';
 import { loadProject, openDB } from './storage/indexedDB.js';
+import { RecoveryManager } from './storage/recovery.js';
 import { initIcons } from './utils/icons.js';
 import { CanvasTransformations } from './editor/transformations.js';
 import { ElementFactory } from './editor/elements.js';
@@ -225,6 +226,34 @@ export class App {
         this.settings = { ...this.settings, ...newSettings };
         this.badgeEditor.setAnimationEnabled(this.settings.animationEnabled);
         this.a4Editor.setAnimationEnabled(this.settings.animationEnabled);
+        this.scheduleAutoSave();
+      },
+      onExportBackup: () => {
+        this.syncCurrentCardToMemory();
+        RecoveryManager.exportProject({
+          cards: this.cards,
+          currentCardId: this.currentCardId,
+          settings: this.settings,
+        });
+      },
+      onImportBackup: async (importedProject) => {
+        if (importedProject && Array.isArray(importedProject.cards)) {
+          this.cards = importedProject.cards;
+          this.currentCardId = importedProject.currentCardId || this.cards[0]?.id;
+          if (importedProject.settings) {
+            this.settings = { ...this.settings, ...importedProject.settings };
+          }
+          this.sidebar.setCards(this.cards, this.currentCardId);
+          await this.loadCardIntoEditor(this.currentCardId);
+          this.snapshotHistory();
+          this.scheduleAutoSave();
+        }
+      },
+      onResetProject: async () => {
+        this.loadSampleData();
+        this.sidebar.setCards(this.cards, this.currentCardId);
+        await this.loadCardIntoEditor(this.currentCardId);
+        this.snapshotHistory();
         this.scheduleAutoSave();
       },
     });
