@@ -51,7 +51,7 @@ export class App {
     try {
       await openDB();
       const savedProject = await loadProject('current-project');
-      if (savedProject && savedProject.version === '4.0' && savedProject.cards && savedProject.cards.length > 0) {
+      if (savedProject && savedProject.version === '5.0-stitch-exact' && savedProject.cards && savedProject.cards.length > 0) {
         this.cards = savedProject.cards;
         this.currentCardId = savedProject.currentCardId || this.cards[0].id;
         if (savedProject.settings) {
@@ -66,12 +66,12 @@ export class App {
     }
 
     this.sidebar.setCards(this.cards, this.currentCardId);
-    await this.loadCardIntoEditor(this.currentCardId);
+    this.loadCardIntoEditor(this.currentCardId);
 
-    // Save clean initial state with version 4.0
+    // Save clean initial state with version 5.0-stitch-exact
     await this.autoSaveManager.saveNow({
       id: 'current-project',
-      version: '4.0',
+      version: '5.0-stitch-exact',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -85,42 +85,71 @@ export class App {
   }
 
   loadSampleData() {
-    const defaultFront = createDefaultFront();
-    const defaultBack = createDefaultBack();
-
     this.cards = [
       {
         id: 'card-1',
         name: 'Раҳимова Нигина Рустамовна',
-        surname: '',
         group: '2-790106',
         studentId: '2-790106',
         specialty: 'кори ҳамширагӣ',
-        front: defaultFront,
-        back: defaultBack,
+        photoSrc: '/assets/student-nigina.jpg',
+        data: {
+          title1: 'КОЛЛЕҶИ ТИББИИ',
+          title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
+          title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
+          idNumber: '2-790106',
+          nameLine1: 'РАҲИМОВА',
+          nameLine2: 'НИГИНА РУСТАМОВНА',
+          specialty: 'кори ҳамширагӣ',
+          cohort: '2024–2028',
+          directorName: 'Сафарзода З.И.',
+          photoSrc: '/assets/student-nigina.jpg',
+          emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
+          emblemMedical: '/assets/medical-emblem-clean.png',
+          backTitle: 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)',
+          validity: 'EXP: 01/07/2028',
+          rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.',
+          rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.',
+          rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.',
+          moodleLogin: 'gr26111',
+          moodlePass: 'Student1#',
+          barcodeNumber: '2-790106',
+          addressLine1: 'ҶТ, вилояти Хатлон,',
+          addressLine2: 'ноҳияи Темурмалик,',
+          addressLine3: 'ҷ.д Кангурт',
+        },
       },
       {
         id: 'card-2',
         name: 'Саидов Фирӯз Ҷамшедович',
-        surname: '',
         group: '2-790106',
         studentId: '2-790107',
         specialty: 'кори табобатӣ',
-        front: {
-          ...defaultFront,
-          elements: defaultFront.elements.map((el) => {
-            if (el.id === 'student-name-1') return { ...el, text: 'САИДОВ' };
-            if (el.id === 'student-name-2') return { ...el, text: 'ФИРӮЗ ҶАМШЕДОВИЧ' };
-            if (el.id === 'specialty-value') return { ...el, text: 'кори табобатӣ' };
-            return el;
-          }),
-        },
-        back: {
-          ...defaultBack,
-          elements: defaultBack.elements.map((el) => {
-            if (el.id === 'login-pill-val') return { ...el, text: 'gr26112' };
-            return el;
-          }),
+        photoSrc: '/assets/student-nigina.jpg',
+        data: {
+          title1: 'КОЛЛЕҶИ ТИББИИ',
+          title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
+          title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
+          idNumber: '2-790107',
+          nameLine1: 'САИДОВ',
+          nameLine2: 'ФИРӮЗ ҶАМШЕДОВИЧ',
+          specialty: 'кори табобатӣ',
+          cohort: '2024–2028',
+          directorName: 'Сафарзода З.И.',
+          photoSrc: '/assets/student-nigina.jpg',
+          emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
+          emblemMedical: '/assets/medical-emblem-clean.png',
+          backTitle: 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)',
+          validity: 'EXP: 01/07/2028',
+          rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.',
+          rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.',
+          rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.',
+          moodleLogin: 'gr26112',
+          moodlePass: 'Student1#',
+          barcodeNumber: '2-790107',
+          addressLine1: 'ҶТ, вилояти Хатлон,',
+          addressLine2: 'ноҳияи Темурмалик,',
+          addressLine3: 'ҷ.д Кангурт',
         },
       },
     ];
@@ -180,6 +209,9 @@ export class App {
       },
       onCanvasModify: () => {
         this.handleCanvasModified();
+      },
+      onPhotoClick: (src) => {
+        this.photoEditorModal.open(src, null);
       },
     });
 
@@ -317,25 +349,23 @@ export class App {
     this.sidebar.setCards(this.cards, id);
   }
 
-  async loadCardIntoEditor(id) {
+  loadCardIntoEditor(id) {
     const card = this.cards.find((c) => c.id === id);
     if (!card) return;
-    await this.badgeEditor.loadCardData(card);
-    this.propertyInspector.setSelectedObject(null, this.badgeEditor.canvasManager.activeSide);
+    this.badgeEditor.loadCardData(card);
   }
 
   syncCurrentCardToMemory() {
-    if (!this.badgeEditor || this.badgeEditor.canvasManager.isLoading) return;
+    if (!this.badgeEditor) return;
     const card = this.cards.find((c) => c.id === this.currentCardId);
     if (!card) return;
 
-    const data = this.badgeEditor.getCurrentCardData();
-    if (data.front && Array.isArray(data.front.elements) && data.front.elements.length > 0) {
-      card.front = data.front;
-    }
-    if (data.back && Array.isArray(data.back.elements) && data.back.elements.length > 0) {
-      card.back = data.back;
-    }
+    const current = this.badgeEditor.getCurrentCardData();
+    card.data = current.data;
+    card.name = current.name;
+    card.studentId = current.studentId;
+    card.specialty = current.specialty;
+    card.photoSrc = current.photoSrc;
   }
 
   addNewCard() {
@@ -418,30 +448,13 @@ export class App {
     }
   }
 
-  async handleApplyCroppedPhoto(resultDataUrl, targetObj) {
-    const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
-    const imgObj = await ElementFactory.createImageFromUrl(resultDataUrl, {
-      left: targetObj ? targetObj.left : 60,
-      top: targetObj ? targetObj.top : 100,
-      maxWidth: targetObj ? targetObj.getScaledWidth() : 180,
-      maxHeight: targetObj ? targetObj.getScaledHeight() : 230,
-      name: 'Фото студента',
-    });
-
-    if (imgObj) {
-      if (targetObj) {
-        canvas.remove(targetObj);
-      }
-      canvas.add(imgObj);
-      canvas.setActiveObject(imgObj);
-      canvas.renderAll();
-      this.propertyInspector.setSelectedObject(imgObj, this.badgeEditor.canvasManager.activeSide);
-      this.handleCanvasModified();
-    }
+  async handleApplyCroppedPhoto(resultDataUrl) {
+    this.badgeEditor.setPhoto(resultDataUrl);
+    this.handleCanvasModified();
   }
 
-  async handleUploadImage(dataUrl, targetObj) {
-    this.photoEditorModal.open(dataUrl, targetObj);
+  async handleUploadImage(dataUrl) {
+    this.photoEditorModal.open(dataUrl, null);
   }
 
   handleUpdateElement(obj, props) {
@@ -531,7 +544,7 @@ export class App {
     this.syncCurrentCardToMemory();
     this.autoSaveManager.schedule({
       id: 'current-project',
-      version: '4.0',
+      version: '5.0-stitch-exact',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -766,7 +779,7 @@ export class App {
         this.syncCurrentCardToMemory();
         this.autoSaveManager.saveNow({
           id: 'current-project',
-          version: '4.0',
+          version: '5.0-stitch-exact',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,
