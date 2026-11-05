@@ -82,29 +82,34 @@ export class App {
     this.cards = [
       {
         id: 'card-1',
-        name: 'Райҳонаи Маҳмадсаид',
-        group: '2-790106-102',
-        studentId: 'ID-2-790106-102',
+        name: 'Раҳимова Нигина',
+        surname: 'Маҳмадсаидзода',
+        group: '2-790106',
+        studentId: '2-790106',
+        specialty: 'Кори ҳамширагӣ',
         front: defaultFront,
         back: defaultBack,
       },
       {
         id: 'card-2',
-        name: 'Каримов Саид Акрамович',
-        group: '2-790106-102',
-        studentId: 'ID-2-790106-103',
+        name: 'Саидов Фирӯз',
+        surname: 'Ҷамшедович',
+        group: '2-790106',
+        studentId: '2-790107',
+        specialty: 'Кори табобатӣ',
         front: {
           ...defaultFront,
           elements: defaultFront.elements.map((el) => {
-            if (el.id === 'field-nom-value') return { ...el, text: 'Саид' };
-            if (el.id === 'field-patronymic-value') return { ...el, text: 'Акрамович' };
+            if (el.id === 'student-first-name') return { ...el, text: 'Саидов Фирӯз' };
+            if (el.id === 'student-surname') return { ...el, text: 'Ҷамшедович' };
+            if (el.id === 'label-specialty') return { ...el, text: 'Ихтисос:  Кори табобатӣ' };
             return el;
           }),
         },
         back: {
           ...defaultBack,
           elements: defaultBack.elements.map((el) => {
-            if (el.id === 'login-value') return { ...el, text: 'said.karimov@ktd.tj' };
+            if (el.id === 'moodle-login-val') return { ...el, text: 'gr26112' };
             return el;
           }),
         },
@@ -590,89 +595,88 @@ export class App {
         if (isFront) {
           return `
             <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
-              <!-- Flag ribbon stripes at top -->
-              <div style="height: 2.5mm; display: flex; flex-direction: column;">
-                <div style="height: 1mm; background-color: #CC1122;"></div>
-                <div style="height: 0.5mm; background-color: #FFFFFF;"></div>
-                <div style="height: 1mm; background-color: #009944;"></div>
-              </div>
-
-              <!-- Institution 2-line title -->
-              <div style="text-align: center; padding: 1.5mm 1mm 1mm 1mm; line-height: 1.2;">
-                <div style="font-size: 6pt; font-weight: bold; color: #1E293B;">КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ</div>
-                <div style="font-size: 5.8pt; font-weight: bold; color: #1E293B;">ТИББИИ ХАТЛОН ДАР НОҲИЯИ ДАНҒАРА</div>
+              <!-- Header with Emblems -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.5mm 2.5mm 1mm 2.5mm; border-bottom: 0.2mm solid #E2E8F0;">
+                <img src="/assets/gerb-tajikistan-clean.png" style="width: 7.5mm; height: 7.5mm; object-fit: contain;" />
+                <div style="text-align: center; flex: 1; padding: 0 1.5mm;">
+                  <div style="font-size: 5.2pt; font-weight: bold; color: #1E293B; line-height: 1.15;">КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ</div>
+                  <div style="font-size: 5pt; font-weight: bold; color: #1E293B; line-height: 1.15;">ТИББИИ ХАТЛОН ДАР НОҲИЯИ ТЕМУРМАЛИК</div>
+                </div>
+                <img src="/assets/medical-emblem-clean.png" style="width: 7mm; height: 7mm; object-fit: contain;" />
               </div>
 
               <!-- Main badge body -->
-              <div style="display: flex; gap: 2.5mm; padding: 1mm 2.5mm; box-sizing: border-box;">
+              <div style="display: flex; gap: 2.5mm; padding: 2mm 2.5mm 1mm 2.5mm; box-sizing: border-box;">
                 <!-- Student Photo Box -->
-                <div style="width: 22mm; height: 29mm; background-color: #F1F5F9; border: 0.25mm solid #1E293B; border-radius: 0.5mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <span style="font-size: 5.5pt; font-weight: bold; color: #64748B;">ФОТО 3×4</span>
+                <div style="width: 22mm; height: 28mm; border: 0.25mm solid #334155; border-radius: 0.5mm; overflow: hidden; flex-shrink: 0; background: #F8FAFC;">
+                  <img src="/assets/student-nigina.jpg" style="width: 100%; height: 100%; object-fit: cover;" />
                 </div>
 
                 <!-- Student Information -->
                 <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                  <!-- Specialty Code Pill -->
-                  <div style="background-color: #6C8EA4; color: #0F172A; font-size: 7.5pt; font-weight: bold; text-align: center; padding: 0.8mm 0; border-radius: 1mm; margin-bottom: 1mm;">
-                    ${studentGroup || '2-790106-102'}
+                  <!-- ID Pill -->
+                  <div style="display: inline-block; background-color: #ECFEFF; border: 0.2mm solid #A5F3FC; border-radius: 1mm; padding: 0.5mm 2mm; width: fit-content;">
+                    <span style="font-size: 6pt; font-weight: bold; color: #0E7490; font-family: monospace;">ID: 2-790106</span>
                   </div>
 
-                  <div style="font-size: 6.5pt; color: #1E293B; line-height: 1.35;">
-                    <div><strong>Насаб:</strong></div>
-                    <div><strong>Ном:</strong> ${studentName}</div>
-                    <div><strong>Номи падар:</strong> Маҳмадсаид</div>
+                  <div style="margin: 0.5mm 0;">
+                    <div style="font-size: 5pt; font-weight: bold; color: #64748B;">НОМУ НАСАБ:</div>
+                    <div style="font-size: 7.8pt; font-weight: 800; color: #0F172A; line-height: 1.1;">${studentName}</div>
+                    <div style="font-size: 6.5pt; font-weight: bold; color: #334155;">${card.surname || 'Маҳмадсаидзода'}</div>
                   </div>
 
-                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 5.5pt; color: #1E293B; margin-top: 1mm;">
-                    <span><strong>Директор</strong></span>
-                    <span style="color: #1D4ED8; font-style: italic; font-weight: bold;">Баротзода</span>
-                    <span><strong>Баротзода А.Ҳ.</strong></span>
+                  <div style="font-size: 5.5pt; color: #334155; line-height: 1.25;">
+                    <div><strong>Ихтисос:</strong> Кори ҳамширагӣ</div>
+                    <div><strong>Соли таҳсил:</strong> 2024–2028</div>
                   </div>
                 </div>
+              </div>
+
+              <!-- Footer with Director -->
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 7mm; background: #F8FAFC; border-top: 0.2mm solid #E2E8F0; display: flex; align-items: center; justify-content: center; gap: 3mm; font-size: 5.5pt; color: #334155;">
+                <span><strong>Директор:</strong></span>
+                <span style="font-family: 'Times New Roman', serif; font-style: italic; font-weight: bold; font-size: 7pt; color: #1D4ED8;">Сафарзода</span>
+                <span><strong>Сафарзода З.И.</strong></span>
               </div>
             </div>
           `;
         } else {
           return `
-            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #94A3B8; background: #F8FAFC; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
-              <!-- Header banner -->
-              <div style="background-color: #1E293B; color: #FFFFFF; height: 6mm; padding: 1mm 2mm; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
-                <span style="font-size: 5.5pt; font-weight: bold;">КОЛЛЕҶИ ТИББИИ ДДТХ ДАР НОҲИЯИ ДАНҒАРА</span>
-                <span style="font-size: 5pt; opacity: 0.85;">#${slot.cardIndex + 1}</span>
+            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
+              <!-- Header with Validity -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.2mm 2.5mm; border-bottom: 0.2mm solid #E2E8F0;">
+                <span style="font-size: 5.5pt; font-weight: bold; color: #0F172A;">ҚОИДАҲОИ ИСТИФОДАИ ШАҲОДАТНОМА</span>
+                <span style="font-size: 4.8pt; font-weight: bold; color: #065F46; background: #ECFDF5; border: 0.2mm solid #A7F3D0; padding: 0.3mm 1mm; border-radius: 0.5mm;">ЭЪТИБОР: 2024–2028</span>
               </div>
 
-              <!-- Back body -->
-              <div style="padding: 2mm 2.5mm; box-sizing: border-box; display: flex; gap: 2.5mm;">
-                <div style="flex: 1; min-width: 0;">
-                  <div style="background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; padding: 1.2mm 1.5mm; margin-bottom: 1.5mm;">
-                    <div style="font-size: 5.5pt; color: #64748B;">Логин: <strong style="color: #0F172A;">${login}</strong></div>
-                    <div style="font-size: 5.5pt; color: #64748B;">Рамз: <strong style="color: #0F172A;">KTD#2026!dangara</strong></div>
-                  </div>
+              <!-- Regulations -->
+              <div style="padding: 1mm 2.5mm; font-size: 4.8pt; color: #334155; line-height: 1.25;">
+                <div>1. Шаҳодатнома ҳуҷҷати расмии донишҷӯ буда, ба дигарон додан манъ аст.</div>
+                <div>2. Дар ҳолати гум кардан ба маъмурияти коллеҷ хабар диҳед.</div>
+                <div>3. Ҳангоми ворид шудан ба маркази тестӣ пешниҳод карда мешавад.</div>
+              </div>
 
-                  <div style="font-size: 5pt; color: #475569; line-height: 1.25;">
-                    • Доштани бейҷик дар машғулиятҳои клиникӣ ҳатмист.<br/>
-                    • Ҳангоми гум шудан ба шуъбаи таълим муроҷиат намоед.<br/>
-                    • Тел: +992 (3312) 2-25-50 | www.ktd-khatlon.tj
-                  </div>
-                </div>
-
-                <!-- QR Simulation box -->
-                <div style="width: 20mm; height: 20mm; background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <svg width="15mm" height="15mm" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="1.8">
-                    <rect x="3" y="3" width="7" height="7"/>
-                    <rect x="14" y="3" width="7" height="7"/>
-                    <rect x="14" y="14" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/>
-                    <rect x="6" y="6" width="1" height="1" fill="#0F172A"/>
-                    <rect x="17" y="6" width="1" height="1" fill="#0F172A"/>
-                    <rect x="6" y="17" width="1" height="1" fill="#0F172A"/>
-                  </svg>
-                  <span style="font-size: 4pt; font-weight: bold; color: #64748B; margin-top: 0.5mm;">СКАНИРОВАТЬ</span>
+              <!-- Moodle Box -->
+              <div style="margin: 0.5mm 2.5mm; background: #F8FAFC; border: 0.2mm solid #CBD5E1; border-radius: 1mm; padding: 1mm 1.5mm;">
+                <div style="font-size: 4.6pt; font-weight: bold; color: #0F172A; margin-bottom: 0.5mm;">МАЪЛУМОТИ ВОРИДШАВӢ БА СИСТЕМАИ ТЕСТӢ (MOODLE)</div>
+                <div style="display: flex; gap: 2mm; font-size: 5.2pt;">
+                  <span style="background: #FFFFFF; border: 0.2mm solid #E2E8F0; padding: 0.5mm 1.5mm; border-radius: 0.5mm;">Логин: <strong style="color: #0E7490; font-family: monospace;">gr26111</strong></span>
+                  <span style="background: #FFFFFF; border: 0.2mm solid #E2E8F0; padding: 0.5mm 1.5mm; border-radius: 0.5mm;">Парол: <strong style="color: #0F172A; font-family: monospace;">Student1#</strong></span>
                 </div>
               </div>
 
-              <!-- Bottom stripe -->
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1.2mm; background-color: #334155;"></div>
+              <!-- Bottom Barcode & Address -->
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.2mm 2.5mm; border-top: 0.2mm solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; background: #FFFFFF;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="width: 25mm; height: 5mm; background: #0F172A; border-radius: 0.5mm;"></div>
+                  <span style="font-size: 4.5pt; font-family: monospace; font-weight: bold; margin-top: 0.3mm;">2-790106</span>
+                </div>
+
+                <div style="font-size: 4.6pt; color: #475569; text-align: right; line-height: 1.2;">
+                  <span style="font-weight: bold; color: #0F172A;">Суроға:</span> вилояти Хатлон, ноҳияи Темурмалик,<br/>
+                  ҷамоати деҳоти <strong>Кангурт</strong>
+                </div>
+              </div>
             </div>
           `;
         }

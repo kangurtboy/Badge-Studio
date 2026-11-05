@@ -174,59 +174,60 @@ export class A4Editor {
             <div class="a4-card-cell-inner ${this.isAllFlipped ? 'flipped' : ''} ${!this.animationEnabled ? 'no-animation' : ''}" data-id="${card.id}" style="border: 0.5px solid #CBD5E1;">
               
               <!-- Front Side Face -->
-              <div class="a4-face a4-face-front" style="padding: 7px;">
-                <div style="background-color: #1E3A8A; color: #FFFFFF; padding: 2px 5px; border-radius: 2px; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
-                  <span>КОЛЛЕҶИ ТЕХНОЛОГИӢ</span>
-                  <span style="font-size: 7px; opacity: 0.8;">#${slot.cardIndex + 1}</span>
+              <div class="a4-face a4-face-front" style="padding: 6px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 0.5px solid #E2E8F0; padding-bottom: 2px;">
+                  <img src="/assets/gerb-tajikistan-clean.png" style="width: 14px; height: 14px; object-fit: contain;" />
+                  <span style="font-size: 7px; font-weight: 800; color: #1E293B; text-align: center; line-height: 1.1;">
+                    КОЛЛЕҶИ ТИББИИ ДДТХ ТЕМУРМАЛИК
+                  </span>
+                  <img src="/assets/medical-emblem-clean.png" style="width: 13px; height: 13px; object-fit: contain;" />
                 </div>
 
                 <div style="display: flex; gap: 7px; align-items: center; margin: 3px 0;">
-                  <div style="width: 38px; height: 48px; background-color: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 7px; color: #64748B; flex-shrink: 0;">
-                    <i data-lucide="image" style="width: 12px; height: 12px; opacity: 0.7;"></i>
-                    <span>ФОТО</span>
+                  <div style="width: 38px; height: 48px; border: 1px solid #334155; border-radius: 2px; overflow: hidden; flex-shrink: 0; background: #F8FAFC;">
+                    <img src="/assets/student-nigina.jpg" style="width: 100%; height: 100%; object-fit: cover;" />
                   </div>
 
                   <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 9.5px; font-weight: 700; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <span style="font-size: 7px; font-family: monospace; font-weight: bold; color: #0E7490; background: #ECFEFF; border: 0.5px solid #A5F3FC; padding: 1px 4px; border-radius: 2px;">
+                      ID: 2-790106
+                    </span>
+                    <div style="font-size: 9.5px; font-weight: 800; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;">
                       ${studentName}
                     </div>
-                    <div style="font-size: 7.5px; color: #64748B; margin-top: 1px;">
-                      Ихтисос: Барномасозӣ
-                    </div>
                     <div style="font-size: 7.5px; color: #475569; font-weight: 600;">
-                      ${studentGroup} • <span style="color: #2563EB;">${studentId}</span>
+                      ${card.surname || 'Маҳмадсаидзода'}
+                    </div>
+                    <div style="font-size: 7px; color: #64748B;">
+                      Ихтисос: Кори ҳамширагӣ
                     </div>
                   </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #F1F5F9; padding-top: 2px; font-size: 7px; color: #94A3B8;">
-                  <span>ЛИЦЕВАЯ СТОРОНА</span>
-                  <span>${slot.widthMm} × ${slot.heightMm} мм</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid #E2E8F0; padding-top: 2px; font-size: 6.5px; color: #475569;">
+                  <span><strong>Директор:</strong> Сафарзода З.И.</span>
+                  <span>85.6 × 54 мм</span>
                 </div>
               </div>
 
               <!-- Back Side Face -->
-              <div class="a4-face a4-face-back" style="padding: 7px;">
-                <div style="background-color: #334155; color: #FFFFFF; padding: 2px 5px; border-radius: 2px; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: space-between;">
-                  <span>МАЪЛУМОТИ ХИДМАТӢ</span>
-                  <span style="font-size: 7px; opacity: 0.8;">#${slot.cardIndex + 1}</span>
+              <div class="a4-face a4-face-back" style="padding: 6px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 0.5px solid #E2E8F0; padding-bottom: 2px;">
+                  <span style="font-size: 7px; font-weight: 800; color: #0F172A;">ҚОИДАҲОИ ИСТИФОДА</span>
+                  <span style="font-size: 6.5px; font-weight: bold; color: #065F46; background: #ECFDF5; border: 0.5px solid #A7F3D0; padding: 0.5px 3px; border-radius: 2px;">2024–2028</span>
                 </div>
 
-                <div style="display: flex; gap: 7px; align-items: center; margin: 3px 0;">
-                  <div style="flex: 1; min-width: 0; font-size: 7.5px;">
-                    <div style="color: #64748B;">Логин:</div>
-                    <div style="font-weight: 600; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${login}</div>
-                    <div style="color: #64748B; margin-top: 1px;">Пароль: <span style="font-weight: 600; color: #0F172A;">KT#2026!</span></div>
-                  </div>
-
-                  <div style="width: 36px; height: 36px; background-color: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <i data-lucide="qr-code" style="width: 20px; height: 20px; color: #0F172A;"></i>
+                <div style="margin: 3px 0; background: #F8FAFC; border: 0.5px solid #CBD5E1; border-radius: 3px; padding: 3px 5px;">
+                  <div style="font-size: 6px; font-weight: bold; color: #0F172A;">СИСТЕМАИ ТЕСТӢ (MOODLE):</div>
+                  <div style="display: flex; gap: 4px; font-size: 7px; margin-top: 1px;">
+                    <span>Логин: <strong style="color: #0E7490; font-family: monospace;">gr26111</strong></span>
+                    <span>Парол: <strong style="font-family: monospace;">Student1#</strong></span>
                   </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E2E8F0; padding-top: 2px; font-size: 7px; color: #94A3B8;">
-                  <span>ОБРАТНАЯ СТОРОНА</span>
-                  <span>Тел: 221-45-88</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid #E2E8F0; padding-top: 2px; font-size: 6.5px; color: #475569;">
+                  <span>Штрих-код: <strong>2-790106</strong></span>
+                  <span>н. Темурмалик, <strong>Кангурт</strong></span>
                 </div>
               </div>
 

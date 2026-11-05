@@ -344,6 +344,7 @@ export class PropertyInspector {
         <div class="property-row">
           <span class="property-label">Стандарт размера</span>
           <select id="prop-badge-standard" style="width: 150px;">
+            <option value="cr80" ${this.badgeSettings.standard === 'cr80' ? 'selected' : ''}>85.6 × 54 мм (CR-80)</option>
             <option value="90x55" ${this.badgeSettings.standard === '90x55' ? 'selected' : ''}>90 × 55 мм</option>
             <option value="85x55" ${this.badgeSettings.standard === '85x55' ? 'selected' : ''}>85 × 55 мм (ID-1)</option>
             <option value="custom" ${this.badgeSettings.standard === 'custom' ? 'selected' : ''}>Пользовательский</option>

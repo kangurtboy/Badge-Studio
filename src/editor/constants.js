@@ -1,6 +1,11 @@
 // Standards and constants for Badge Studio
 
 export const BADGE_STANDARDS = {
+  'cr80': {
+    name: '85.6 × 54 мм (Стандарт CR-80 / ID-1)',
+    widthMm: 85.6,
+    heightMm: 54,
+  },
   '90x55': {
     name: '90 × 55 мм (Стандарт РФ/СНГ)',
     widthMm: 90,
@@ -13,8 +18,8 @@ export const BADGE_STANDARDS = {
   },
   'custom': {
     name: 'Пользовательский размер',
-    widthMm: 90,
-    heightMm: 55,
+    widthMm: 85.6,
+    heightMm: 54,
   }
 };
 
