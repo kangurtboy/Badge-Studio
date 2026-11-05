@@ -10,8 +10,8 @@ export class BadgeEditor {
     this.animationEnabled = animationEnabled;
 
     this.zoom = 1;
-    this.canvasWidth = 720;
-    this.canvasHeight = 440;
+    this.canvasWidth = 660;
+    this.canvasHeight = 417;
 
     this.render();
     this.initCanvasAndFlip();

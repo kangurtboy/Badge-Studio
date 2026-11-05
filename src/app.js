@@ -51,7 +51,7 @@ export class App {
     try {
       await openDB();
       const savedProject = await loadProject('current-project');
-      if (savedProject && savedProject.version === '2.0' && savedProject.cards && savedProject.cards.length > 0) {
+      if (savedProject && savedProject.version === '3.0' && savedProject.cards && savedProject.cards.length > 0) {
         this.cards = savedProject.cards;
         this.currentCardId = savedProject.currentCardId || this.cards[0].id;
         if (savedProject.settings) {
@@ -61,7 +61,7 @@ export class App {
         this.loadSampleData();
         await this.autoSaveManager.saveNow({
           id: 'current-project',
-          version: '2.0',
+          version: '3.0',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,
@@ -89,34 +89,34 @@ export class App {
     this.cards = [
       {
         id: 'card-1',
-        name: 'Раҳимова Нигина',
-        surname: 'Маҳмадсаидзода',
+        name: 'Раҳимова Нигина Рустамовна',
+        surname: '',
         group: '2-790106',
         studentId: '2-790106',
-        specialty: 'Кори ҳамширагӣ',
+        specialty: 'кори ҳамширагӣ',
         front: defaultFront,
         back: defaultBack,
       },
       {
         id: 'card-2',
-        name: 'Саидов Фирӯз',
-        surname: 'Ҷамшедович',
+        name: 'Саидов Фирӯз Ҷамшедович',
+        surname: '',
         group: '2-790106',
         studentId: '2-790107',
-        specialty: 'Кори табобатӣ',
+        specialty: 'кори табобатӣ',
         front: {
           ...defaultFront,
           elements: defaultFront.elements.map((el) => {
-            if (el.id === 'student-first-name') return { ...el, text: 'Саидов Фирӯз' };
-            if (el.id === 'student-surname') return { ...el, text: 'Ҷамшедович' };
-            if (el.id === 'label-specialty') return { ...el, text: 'Ихтисос:  Кори табобатӣ' };
+            if (el.id === 'student-name-1') return { ...el, text: 'САИДОВ' };
+            if (el.id === 'student-name-2') return { ...el, text: 'ФИРӮЗ ҶАМШЕДОВИЧ' };
+            if (el.id === 'specialty-value') return { ...el, text: 'кори табобатӣ' };
             return el;
           }),
         },
         back: {
           ...defaultBack,
           elements: defaultBack.elements.map((el) => {
-            if (el.id === 'moodle-login-val') return { ...el, text: 'gr26112' };
+            if (el.id === 'login-pill-val') return { ...el, text: 'gr26112' };
             return el;
           }),
         },
@@ -524,7 +524,7 @@ export class App {
     this.syncCurrentCardToMemory();
     this.autoSaveManager.schedule({
       id: 'current-project',
-      version: '2.0',
+      version: '3.0',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -602,48 +602,48 @@ export class App {
 
         if (isFront) {
           return `
-            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
+            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; border-radius: 2mm; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
               <!-- Header with Emblems -->
               <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.5mm 2.5mm 1mm 2.5mm; border-bottom: 0.2mm solid #E2E8F0;">
                 <img src="/assets/gerb-tajikistan-clean.png" style="width: 7.5mm; height: 7.5mm; object-fit: contain;" />
-                <div style="text-align: center; flex: 1; padding: 0 1.5mm;">
-                  <div style="font-size: 5.2pt; font-weight: bold; color: #1E293B; line-height: 1.15;">КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ</div>
-                  <div style="font-size: 5pt; font-weight: bold; color: #1E293B; line-height: 1.15;">ТИББИИ ХАТЛОН ДАР НОҲИЯИ ТЕМУРМАЛИК</div>
+                <div style="text-align: center; flex: 1; padding: 0 1.5mm; line-height: 1.15;">
+                  <div style="font-size: 4.8pt; font-weight: bold; color: #475569;">КОЛЛЕҶИ ТИББИИ</div>
+                  <div style="font-size: 5.4pt; font-weight: 800; color: #0F172A;">ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН</div>
+                  <div style="font-size: 4.8pt; font-weight: bold; color: #082F49;">ДАР НОҲИЯИ ТЕМУРМАЛИК</div>
                 </div>
-                <img src="/assets/medical-emblem-clean.png" style="width: 7mm; height: 7mm; object-fit: contain;" />
+                <img src="/assets/medical-emblem-clean.png" style="width: 7.2mm; height: 7.2mm; object-fit: contain;" />
               </div>
 
               <!-- Main badge body -->
               <div style="display: flex; gap: 2.5mm; padding: 2mm 2.5mm 1mm 2.5mm; box-sizing: border-box;">
                 <!-- Student Photo Box -->
-                <div style="width: 22mm; height: 28mm; border: 0.25mm solid #334155; border-radius: 0.5mm; overflow: hidden; flex-shrink: 0; background: #F8FAFC;">
+                <div style="width: 21mm; height: 27mm; border: 0.2mm solid #CBD5E1; border-radius: 1mm; overflow: hidden; flex-shrink: 0; background: #F8FAFC;">
                   <img src="/assets/student-nigina.jpg" style="width: 100%; height: 100%; object-fit: cover;" />
                 </div>
 
                 <!-- Student Information -->
                 <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                  <!-- ID Pill -->
-                  <div style="display: inline-block; background-color: #ECFEFF; border: 0.2mm solid #A5F3FC; border-radius: 1mm; padding: 0.5mm 2mm; width: fit-content;">
-                    <span style="font-size: 6pt; font-weight: bold; color: #0E7490; font-family: monospace;">ID: 2-790106</span>
+                  <!-- Dark Navy ID Pill -->
+                  <div style="display: inline-block; background-color: #082F49; border-radius: 0.8mm; padding: 0.4mm 2.5mm; width: fit-content;">
+                    <span style="font-size: 6.2pt; font-weight: bold; color: #FFFFFF; font-family: monospace;">2-790106</span>
                   </div>
 
                   <div style="margin: 0.5mm 0;">
-                    <div style="font-size: 5pt; font-weight: bold; color: #64748B;">НОМУ НАСАБ:</div>
-                    <div style="font-size: 7.8pt; font-weight: 800; color: #0F172A; line-height: 1.1;">${studentName}</div>
-                    <div style="font-size: 6.5pt; font-weight: bold; color: #334155;">${card.surname || 'Маҳмадсаидзода'}</div>
+                    <div style="font-size: 8.5pt; font-weight: 900; color: #0F172A; line-height: 1.05;">РАҲИМОВА</div>
+                    <div style="font-size: 7.2pt; font-weight: 900; color: #0F172A; line-height: 1.05;">НИГИНА РУСТАМОВНА</div>
                   </div>
 
-                  <div style="font-size: 5.5pt; color: #334155; line-height: 1.25;">
-                    <div><strong>Ихтисос:</strong> Кори ҳамширагӣ</div>
-                    <div><strong>Соли таҳсил:</strong> 2024–2028</div>
+                  <div style="font-size: 5.2pt; color: #334155; line-height: 1.25;">
+                    <div><span style="color: #64748B;">Ихтисос:</span> <strong style="color: #082F49;">кори ҳамширагӣ</strong></div>
+                    <div style="color: #475569;"><span style="color: #059669; font-weight: bold;">•</span> Соли таҳсил: 2024–2028</div>
                   </div>
                 </div>
               </div>
 
               <!-- Footer with Director -->
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 7mm; background: #F8FAFC; border-top: 0.2mm solid #E2E8F0; display: flex; align-items: center; justify-content: center; gap: 3mm; font-size: 5.5pt; color: #334155;">
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 6.5mm; background: #F8FAFC; border-top: 0.2mm solid #E2E8F0; display: flex; align-items: center; justify-content: center; gap: 3mm; font-size: 5.2pt; color: #334155;">
                 <span><strong>Директор:</strong></span>
-                <span style="font-family: 'Times New Roman', serif; font-style: italic; font-weight: bold; font-size: 7pt; color: #1D4ED8;">Сафарзода</span>
+                <span style="font-family: 'Times New Roman', serif; font-style: italic; font-weight: bold; font-size: 6.8pt; color: #1E40AF;">Сафарзода</span>
                 <span><strong>Сафарзода З.И.</strong></span>
               </div>
             </div>
@@ -759,7 +759,7 @@ export class App {
         this.syncCurrentCardToMemory();
         this.autoSaveManager.saveNow({
           id: 'current-project',
-          version: '2.0',
+          version: '3.0',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,
