@@ -82,29 +82,29 @@ export class App {
     this.cards = [
       {
         id: 'card-1',
-        name: 'Раҳимов Алишер Ҷамшедович',
-        group: 'П-302',
-        studentId: 'ID-2026-0847',
+        name: 'Райҳонаи Маҳмадсаид',
+        group: '2-790106-102',
+        studentId: 'ID-2-790106-102',
         front: defaultFront,
         back: defaultBack,
       },
       {
         id: 'card-2',
-        name: 'Каримова Мадина Рустамовна',
-        group: 'П-302',
-        studentId: 'ID-2026-0848',
+        name: 'Каримов Саид Акрамович',
+        group: '2-790106-102',
+        studentId: 'ID-2-790106-103',
         front: {
           ...defaultFront,
           elements: defaultFront.elements.map((el) => {
-            if (el.id === 'student-name') return { ...el, text: 'КАРИМОВА МАДИНА РУСТАМОВНА' };
-            if (el.id === 'student-id-value') return { ...el, text: 'ID-2026-0848' };
+            if (el.id === 'field-nom-value') return { ...el, text: 'Саид' };
+            if (el.id === 'field-patronymic-value') return { ...el, text: 'Акрамович' };
             return el;
           }),
         },
         back: {
           ...defaultBack,
           elements: defaultBack.elements.map((el) => {
-            if (el.id === 'login-value') return { ...el, text: 'madina.karimova@kt.tj' };
+            if (el.id === 'login-value') return { ...el, text: 'said.karimov@ktd.tj' };
             return el;
           }),
         },
@@ -590,72 +590,75 @@ export class App {
         if (isFront) {
           return `
             <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
-              <!-- Header banner -->
-              <div style="background-color: #1E3A8A; color: #FFFFFF; height: 9mm; padding: 1.5mm 3mm; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
-                <span style="font-size: 7.5pt; font-weight: bold; letter-spacing: 0.02em;">КОЛЛЕҶИ ТЕХНОЛОГИИ ДАВЛАТӢ</span>
-                <span style="font-size: 6pt; opacity: 0.85;">ID-CARD</span>
+              <!-- Flag ribbon stripes at top -->
+              <div style="height: 2.5mm; display: flex; flex-direction: column;">
+                <div style="height: 1mm; background-color: #CC1122;"></div>
+                <div style="height: 0.5mm; background-color: #FFFFFF;"></div>
+                <div style="height: 1mm; background-color: #009944;"></div>
+              </div>
+
+              <!-- Institution 2-line title -->
+              <div style="text-align: center; padding: 1.5mm 1mm 1mm 1mm; line-height: 1.2;">
+                <div style="font-size: 6pt; font-weight: bold; color: #1E293B;">КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ</div>
+                <div style="font-size: 5.8pt; font-weight: bold; color: #1E293B;">ТИББИИ ХАТЛОН ДАР НОҲИЯИ ДАНҒАРА</div>
               </div>
 
               <!-- Main badge body -->
-              <div style="display: flex; gap: 3mm; padding: 2.5mm 3mm; box-sizing: border-box; height: 42mm;">
+              <div style="display: flex; gap: 2.5mm; padding: 1mm 2.5mm; box-sizing: border-box;">
                 <!-- Student Photo Box -->
-                <div style="width: 24mm; height: 32mm; background-color: #F1F5F9; border: 0.2mm solid #94A3B8; border-radius: 1mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <span style="font-size: 6.5pt; font-weight: bold; color: #64748B;">ФОТО 3×4</span>
+                <div style="width: 22mm; height: 29mm; background-color: #F1F5F9; border: 0.25mm solid #1E293B; border-radius: 0.5mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <span style="font-size: 5.5pt; font-weight: bold; color: #64748B;">ФОТО 3×4</span>
                 </div>
 
                 <!-- Student Information -->
                 <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                  <div>
-                    <div style="font-size: 8.5pt; font-weight: bold; color: #0F172A; line-height: 1.2;">
-                      ${studentName}
-                    </div>
-                    <div style="font-size: 6.5pt; color: #475569; margin-top: 1mm;">
-                      Ихтисос: Барномасозӣ дар Web
-                    </div>
-                    <div style="font-size: 6.5pt; color: #475569;">
-                      Гурӯҳ: <strong>${studentGroup}</strong> (Курси 3)
-                    </div>
+                  <!-- Specialty Code Pill -->
+                  <div style="background-color: #6C8EA4; color: #0F172A; font-size: 7.5pt; font-weight: bold; text-align: center; padding: 0.8mm 0; border-radius: 1mm; margin-bottom: 1mm;">
+                    ${studentGroup || '2-790106-102'}
                   </div>
 
-                  <div>
-                    <div style="font-size: 6pt; color: #64748B;">Студенческий билет:</div>
-                    <div style="font-size: 8pt; font-weight: bold; color: #2563EB;">${studentId}</div>
+                  <div style="font-size: 6.5pt; color: #1E293B; line-height: 1.35;">
+                    <div><strong>Насаб:</strong></div>
+                    <div><strong>Ном:</strong> ${studentName}</div>
+                    <div><strong>Номи падар:</strong> Маҳмадсаид</div>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 5.5pt; color: #1E293B; margin-top: 1mm;">
+                    <span><strong>Директор</strong></span>
+                    <span style="color: #1D4ED8; font-style: italic; font-weight: bold;">Баротзода</span>
+                    <span><strong>Баротзода А.Ҳ.</strong></span>
                   </div>
                 </div>
               </div>
-
-              <!-- Bottom stripe -->
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 2mm; background-color: #2563EB;"></div>
             </div>
           `;
         } else {
           return `
             <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #94A3B8; background: #F8FAFC; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
               <!-- Header banner -->
-              <div style="background-color: #334155; color: #FFFFFF; height: 8mm; padding: 1.5mm 3mm; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
-                <span style="font-size: 7pt; font-weight: bold;">МАЪЛУМОТИ ХИДМАТӢ ВА ДАСТРАСӢ</span>
-                <span style="font-size: 6pt; opacity: 0.85;">#${slot.cardIndex + 1}</span>
+              <div style="background-color: #1E293B; color: #FFFFFF; height: 6mm; padding: 1mm 2mm; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;">
+                <span style="font-size: 5.5pt; font-weight: bold;">КОЛЛЕҶИ ТИББИИ ДДТХ ДАР НОҲИЯИ ДАНҒАРА</span>
+                <span style="font-size: 5pt; opacity: 0.85;">#${slot.cardIndex + 1}</span>
               </div>
 
               <!-- Back body -->
-              <div style="padding: 2.5mm 3mm; box-sizing: border-box; display: flex; gap: 3mm;">
+              <div style="padding: 2mm 2.5mm; box-sizing: border-box; display: flex; gap: 2.5mm;">
                 <div style="flex: 1; min-width: 0;">
-                  <div style="background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; padding: 1.5mm 2mm; margin-bottom: 2mm;">
-                    <div style="font-size: 6pt; color: #64748B;">Логин (Номи корбар):</div>
-                    <div style="font-size: 7.5pt; font-weight: bold; color: #0F172A; white-space: nowrap; overflow: hidden;">${login}</div>
-                    <div style="font-size: 6pt; color: #64748B; margin-top: 0.5mm;">Пароль (Рамз): <strong style="color: #0F172A;">KT#2026!</strong></div>
+                  <div style="background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; padding: 1.2mm 1.5mm; margin-bottom: 1.5mm;">
+                    <div style="font-size: 5.5pt; color: #64748B;">Логин: <strong style="color: #0F172A;">${login}</strong></div>
+                    <div style="font-size: 5.5pt; color: #64748B;">Рамз: <strong style="color: #0F172A;">KTD#2026!dangara</strong></div>
                   </div>
 
-                  <div style="font-size: 5.5pt; color: #475569; line-height: 1.3;">
-                    • Бейҷик ҳуҷҷати расмии донишҷӯ мебошад.<br/>
-                    • Ҳангоми гум шудан ба шуъбаи таълим хабар диҳед.<br/>
-                    • Тел: +992 (37) 221-45-88 | www.kt.tj
+                  <div style="font-size: 5pt; color: #475569; line-height: 1.25;">
+                    • Доштани бейҷик дар машғулиятҳои клиникӣ ҳатмист.<br/>
+                    • Ҳангоми гум шудан ба шуъбаи таълим муроҷиат намоед.<br/>
+                    • Тел: +992 (3312) 2-25-50 | www.ktd-khatlon.tj
                   </div>
                 </div>
 
                 <!-- QR Simulation box -->
-                <div style="width: 22mm; height: 22mm; background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <svg width="18mm" height="18mm" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="1.8">
+                <div style="width: 20mm; height: 20mm; background: #FFFFFF; border: 0.2mm solid #CBD5E1; border-radius: 1mm; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="15mm" height="15mm" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="1.8">
                     <rect x="3" y="3" width="7" height="7"/>
                     <rect x="14" y="3" width="7" height="7"/>
                     <rect x="14" y="14" width="7" height="7"/>
@@ -664,12 +667,12 @@ export class App {
                     <rect x="17" y="6" width="1" height="1" fill="#0F172A"/>
                     <rect x="6" y="17" width="1" height="1" fill="#0F172A"/>
                   </svg>
-                  <span style="font-size: 4.5pt; font-weight: bold; color: #64748B; margin-top: 0.5mm;">СКАНИРОВАТЬ</span>
+                  <span style="font-size: 4pt; font-weight: bold; color: #64748B; margin-top: 0.5mm;">СКАНИРОВАТЬ</span>
                 </div>
               </div>
 
               <!-- Bottom stripe -->
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1.5mm; background-color: #475569;"></div>
+              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1.2mm; background-color: #334155;"></div>
             </div>
           `;
         }
