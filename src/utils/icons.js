@@ -1,0 +1,82 @@
+import {
+  createIcons,
+  Plus,
+  Trash2,
+  Copy,
+  Undo2,
+  Redo2,
+  Settings,
+  Printer,
+  Eye,
+  RotateCw,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Type,
+  Image,
+  Square,
+  Circle,
+  QrCode,
+  Layers,
+  Search,
+  Check,
+  AlertCircle,
+  FileText,
+  Grid3X3,
+  Sliders,
+  ChevronDown,
+  X,
+  Upload,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Bold,
+  Italic,
+  Move
+} from 'lucide';
+
+export const appIcons = {
+  Plus,
+  Trash2,
+  Copy,
+  Undo2,
+  Redo2,
+  Settings,
+  Printer,
+  Eye,
+  RotateCw,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Type,
+  Image,
+  Square,
+  Circle,
+  QrCode,
+  Layers,
+  Search,
+  Check,
+  AlertCircle,
+  FileText,
+  Grid3X3,
+  Sliders,
+  ChevronDown,
+  X,
+  Upload,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Bold,
+  Italic,
+  Move
+};
+
+export function initIcons(container = document) {
+  createIcons({
+    icons: appIcons,
+    nameAttr: 'data-lucide',
+    attrs: {
+      class: 'icon'
+    }
+  });
+}
