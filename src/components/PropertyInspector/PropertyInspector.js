@@ -10,6 +10,7 @@ export class PropertyInspector {
     onAlignElement,
     onDuplicateElement,
     onUploadImage,
+    onEditPhoto,
     onUpdateBadgeSettings,
   }) {
     this.container = container;
@@ -20,6 +21,7 @@ export class PropertyInspector {
     this.onAlignElement = onAlignElement;
     this.onDuplicateElement = onDuplicateElement;
     this.onUploadImage = onUploadImage;
+    this.onEditPhoto = onEditPhoto || (() => {});
     this.onUpdateBadgeSettings = onUpdateBadgeSettings;
 
     this.activeObject = null;
@@ -295,10 +297,13 @@ export class PropertyInspector {
           ? `
         <div class="panel-section">
           <div class="section-header">
-            <span class="section-title">Параметры изображения</span>
+            <span class="section-title">Параметры фотографии</span>
           </div>
+          <button class="btn-primary" id="btn-edit-photo" style="width: 100%; margin-bottom: 8px;">
+            <i data-lucide="sliders"></i> Обрезка, рамка и фильтры
+          </button>
           <button class="btn-secondary" id="btn-replace-image" style="width: 100%;">
-            <i data-lucide="upload"></i> Заменить изображение
+            <i data-lucide="upload"></i> Заменить файл фото
           </button>
         </div>
       `
@@ -393,6 +398,12 @@ export class PropertyInspector {
 
     this.container.querySelector('#btn-replace-image')?.addEventListener('click', () => {
       if (fileInput) fileInput.click();
+    });
+
+    this.container.querySelector('#btn-edit-photo')?.addEventListener('click', () => {
+      if (this.activeObject) {
+        this.onEditPhoto(this.activeObject);
+      }
     });
 
     fileInput?.addEventListener('change', (e) => {

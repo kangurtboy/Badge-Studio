@@ -5,6 +5,7 @@ import { PropertyInspector } from './components/PropertyInspector/PropertyInspec
 import { A4Editor } from './components/A4Editor/A4Editor.js';
 import { PrintPreview } from './components/PrintPreview/PrintPreview.js';
 import { SettingsModal } from './components/Settings/SettingsModal.js';
+import { PhotoEditorModal } from './components/PhotoEditor/PhotoEditorModal.js';
 
 import { createDefaultFront } from './templates/defaultFront.js';
 import { createDefaultBack } from './templates/defaultBack.js';
@@ -41,6 +42,7 @@ export class App {
     this.renderLayout();
     this.initComponents();
     this.setupKeyboardShortcuts();
+    this.setupDragAndDrop();
 
     // Initialize IndexedDB and load last project or default
     try {
@@ -122,6 +124,7 @@ export class App {
         <div id="properties-mount"></div>
       </main>
       <div id="settings-mount"></div>
+      <div id="photo-editor-mount"></div>
       <div id="print-container"></div>
     `;
   }
@@ -172,8 +175,24 @@ export class App {
       onReorderElement: (obj, dir) => this.handleReorderElement(obj, dir),
       onAlignElement: (obj, alignType) => this.handleAlignElement(obj, alignType),
       onDuplicateElement: (obj) => this.handleDuplicateElement(obj),
-      onUploadImage: (dataUrl, targetObj) => this.handleUploadImage(dataUrl, targetObj),
+      onUploadImage: (dataUrl, targetObj) => {
+        this.photoEditorModal.open(dataUrl, targetObj);
+      },
+      onEditPhoto: (targetObj) => {
+        const src = targetObj.getSrc ? targetObj.getSrc() : targetObj._element?.src;
+        if (src) {
+          this.photoEditorModal.open(src, targetObj);
+        }
+      },
       onUpdateBadgeSettings: (settings) => this.handleUpdateBadgeSettings(settings),
+    });
+
+    // Photo Editor Modal
+    this.photoEditorModal = new PhotoEditorModal({
+      container: this.rootEl.querySelector('#photo-editor-mount'),
+      onApplyPhoto: (resultDataUrl, targetObj) => {
+        this.handleApplyCroppedPhoto(resultDataUrl, targetObj);
+      },
     });
 
     // A4 Editor Mode
@@ -343,16 +362,18 @@ export class App {
     }
   }
 
-  async handleUploadImage(dataUrl, targetObj) {
+  async handleApplyCroppedPhoto(resultDataUrl, targetObj) {
     const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
-    const imgObj = await ElementFactory.createImageFromUrl(dataUrl, {
+    const imgObj = await ElementFactory.createImageFromUrl(resultDataUrl, {
       left: targetObj ? targetObj.left : 60,
       top: targetObj ? targetObj.top : 100,
+      maxWidth: targetObj ? targetObj.getScaledWidth() : 180,
+      maxHeight: targetObj ? targetObj.getScaledHeight() : 230,
       name: 'Фото студента',
     });
 
     if (imgObj) {
-      if (targetObj && targetObj.type === 'image') {
+      if (targetObj) {
         canvas.remove(targetObj);
       }
       canvas.add(imgObj);
@@ -361,6 +382,10 @@ export class App {
       this.propertyInspector.setSelectedObject(imgObj, this.badgeEditor.canvasManager.activeSide);
       this.handleCanvasModified();
     }
+  }
+
+  async handleUploadImage(dataUrl, targetObj) {
+    this.photoEditorModal.open(dataUrl, targetObj);
   }
 
   handleUpdateElement(obj, props) {
@@ -476,6 +501,36 @@ export class App {
         </div>
       </div>
     `;
+  }
+
+  setupDragAndDrop() {
+    const centerMount = this.rootEl.querySelector('#center-view-mount');
+    if (!centerMount) return;
+
+    centerMount.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      centerMount.style.outline = '2px dashed #3B82F6';
+    });
+
+    centerMount.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      centerMount.style.outline = 'none';
+    });
+
+    centerMount.addEventListener('drop', (e) => {
+      e.preventDefault();
+      centerMount.style.outline = 'none';
+
+      const file = e.dataTransfer.files[0];
+      if (file && (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const activeObj = this.badgeEditor.canvasManager.getActiveCanvas().getActiveObject();
+          this.photoEditorModal.open(event.target.result, activeObj);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   }
 
   setupKeyboardShortcuts() {
