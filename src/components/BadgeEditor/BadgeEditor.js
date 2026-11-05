@@ -168,14 +168,14 @@ export class BadgeEditor {
     this.flipController.setAnimationEnabled(enabled);
   }
 
-  loadCardData(cardData) {
+  async loadCardData(cardData) {
     if (!cardData) return;
 
     if (cardData.front) {
-      this.canvasManager.loadTemplate(this.canvasManager.frontCanvas, cardData.front);
+      await this.canvasManager.loadTemplate(this.canvasManager.frontCanvas, cardData.front);
     }
     if (cardData.back) {
-      this.canvasManager.loadTemplate(this.canvasManager.backCanvas, cardData.back);
+      await this.canvasManager.loadTemplate(this.canvasManager.backCanvas, cardData.back);
     }
   }
 

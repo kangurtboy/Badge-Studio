@@ -205,6 +205,7 @@ export class App {
       onSaveSettings: (newSettings) => {
         this.settings = { ...this.settings, ...newSettings };
         this.badgeEditor.setAnimationEnabled(this.settings.animationEnabled);
+        this.a4Editor.setAnimationEnabled(this.settings.animationEnabled);
         this.scheduleAutoSave();
       },
     });
@@ -246,10 +247,10 @@ export class App {
     this.sidebar.setCards(this.cards, id);
   }
 
-  loadCardIntoEditor(id) {
+  async loadCardIntoEditor(id) {
     const card = this.cards.find((c) => c.id === id);
     if (!card) return;
-    this.badgeEditor.loadCardData(card);
+    await this.badgeEditor.loadCardData(card);
     this.propertyInspector.setSelectedObject(null, this.badgeEditor.canvasManager.activeSide);
   }
 
