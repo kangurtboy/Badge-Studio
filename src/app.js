@@ -12,6 +12,8 @@ import { HistoryManager } from './editor/history.js';
 import { AutoSaveManager } from './storage/autosave.js';
 import { loadProject, openDB } from './storage/indexedDB.js';
 import { initIcons } from './utils/icons.js';
+import { CanvasTransformations } from './editor/transformations.js';
+import { ElementFactory } from './editor/elements.js';
 
 export class App {
   constructor(rootEl) {
@@ -153,6 +155,9 @@ export class App {
       onElementSelect: (obj, side) => {
         this.propertyInspector?.setSelectedObject(obj, side);
       },
+      onLiveUpdate: (obj) => {
+        this.propertyInspector?.updateLiveValues(obj);
+      },
       onCanvasModify: () => {
         this.handleCanvasModified();
       },
@@ -165,14 +170,17 @@ export class App {
       onUpdateElement: (obj, props) => this.handleUpdateElement(obj, props),
       onDeleteElement: (obj) => this.handleDeleteElement(obj),
       onReorderElement: (obj, dir) => this.handleReorderElement(obj, dir),
+      onAlignElement: (obj, alignType) => this.handleAlignElement(obj, alignType),
+      onDuplicateElement: (obj) => this.handleDuplicateElement(obj),
+      onUploadImage: (dataUrl, targetObj) => this.handleUploadImage(dataUrl, targetObj),
       onUpdateBadgeSettings: (settings) => this.handleUpdateBadgeSettings(settings),
     });
 
     // A4 Editor Mode
     this.a4Editor = new A4Editor({
       container: this.rootEl.querySelector('#a4-view-container'),
-      onFlipAll: (flipped) => {
-        // mass flip cards
+      onFlipAll: () => {
+        // mass flip
       },
       onCardSelect: (id) => {
         this.selectCard(id);
@@ -315,12 +323,41 @@ export class App {
 
   handleAddElement(data) {
     const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
-    const obj = this.badgeEditor.canvasManager.createFabricObject(data);
+    let obj = null;
+
+    if (data.type === 'text') {
+      obj = ElementFactory.createText({ text: data.text || 'Новый текст / Матн' });
+    } else if (data.type === 'rect') {
+      obj = ElementFactory.createRect({ width: data.width || 150, height: data.height || 80, fill: data.fill || '#3B82F6' });
+    } else if (data.type === 'circle') {
+      obj = ElementFactory.createCircle({ radius: data.radius || 40, fill: data.fill || '#3B82F6' });
+    }
+
     if (obj) {
       canvas.add(obj);
       canvas.setActiveObject(obj);
       canvas.renderAll();
       this.propertyInspector.setSelectedObject(obj, this.badgeEditor.canvasManager.activeSide);
+      this.handleCanvasModified();
+    }
+  }
+
+  async handleUploadImage(dataUrl, targetObj) {
+    const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
+    const imgObj = await ElementFactory.createImageFromUrl(dataUrl, {
+      left: targetObj ? targetObj.left : 60,
+      top: targetObj ? targetObj.top : 100,
+      name: 'Фото студента',
+    });
+
+    if (imgObj) {
+      if (targetObj && targetObj.type === 'image') {
+        canvas.remove(targetObj);
+      }
+      canvas.add(imgObj);
+      canvas.setActiveObject(imgObj);
+      canvas.renderAll();
+      this.propertyInspector.setSelectedObject(imgObj, this.badgeEditor.canvasManager.activeSide);
       this.handleCanvasModified();
     }
   }
@@ -343,19 +380,29 @@ export class App {
     this.handleCanvasModified();
   }
 
-  handleReorderElement(obj, direction) {
+  handleReorderElement(obj, action) {
     const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
-    if (direction === 'front') {
-      canvas.bringObjectToFront(obj);
-    } else {
-      canvas.sendObjectToBack(obj);
-    }
-    canvas.renderAll();
+    CanvasTransformations.reorderLayer(canvas, obj, action);
     this.handleCanvasModified();
   }
 
+  handleAlignElement(obj, alignType) {
+    const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
+    CanvasTransformations.align(canvas, obj, alignType);
+    this.propertyInspector.setSelectedObject(obj, this.badgeEditor.canvasManager.activeSide);
+    this.handleCanvasModified();
+  }
+
+  async handleDuplicateElement(obj) {
+    const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
+    const cloned = await CanvasTransformations.cloneObject(canvas, obj);
+    if (cloned) {
+      this.propertyInspector.setSelectedObject(cloned, this.badgeEditor.canvasManager.activeSide);
+      this.handleCanvasModified();
+    }
+  }
+
   handleUpdateBadgeSettings(settings) {
-    // updates width/height or bg
     const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
     const color = this.badgeEditor.canvasManager.activeSide === 'front' ? settings.frontBg : settings.backBg;
     canvas.backgroundColor = color;
@@ -412,7 +459,6 @@ export class App {
     const printContainer = this.rootEl.querySelector('#print-container');
     if (!printContainer) return;
 
-    // Render print sheets for media print
     printContainer.innerHTML = `
       <div class="print-page">
         <div class="print-grid" style="display: grid; grid-template-columns: repeat(2, 90mm); gap: 10mm; padding: 15mm;">
@@ -457,6 +503,16 @@ export class App {
         });
       }
 
+      // Ctrl+D = Duplicate Element
+      if (e.ctrlKey && e.key.toLowerCase() === 'd') {
+        const canvas = this.badgeEditor.canvasManager.getActiveCanvas();
+        const activeObj = canvas.getActiveObject();
+        if (activeObj && !activeObj.isEditing) {
+          e.preventDefault();
+          this.handleDuplicateElement(activeObj);
+        }
+      }
+
       // Delete key for selected element
       if (e.key === 'Delete' || e.key === 'Backspace') {
         const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
@@ -471,7 +527,6 @@ export class App {
       }
     });
 
-    // Window resize handler
     window.addEventListener('resize', () => {
       if (this.currentMode === 'editor') {
         this.badgeEditor.fitToViewport();

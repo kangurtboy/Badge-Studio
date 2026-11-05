@@ -1,12 +1,25 @@
 import { BADGE_STANDARDS, canvasPxToMm, mmToCanvasPx } from '../../editor/constants.js';
 
 export class PropertyInspector {
-  constructor({ container, onAddElement, onUpdateElement, onDeleteElement, onReorderElement, onUpdateBadgeSettings }) {
+  constructor({
+    container,
+    onAddElement,
+    onUpdateElement,
+    onDeleteElement,
+    onReorderElement,
+    onAlignElement,
+    onDuplicateElement,
+    onUploadImage,
+    onUpdateBadgeSettings,
+  }) {
     this.container = container;
     this.onAddElement = onAddElement;
     this.onUpdateElement = onUpdateElement;
     this.onDeleteElement = onDeleteElement;
     this.onReorderElement = onReorderElement;
+    this.onAlignElement = onAlignElement;
+    this.onDuplicateElement = onDuplicateElement;
+    this.onUploadImage = onUploadImage;
     this.onUpdateBadgeSettings = onUpdateBadgeSettings;
 
     this.activeObject = null;
@@ -28,6 +41,28 @@ export class PropertyInspector {
     this.render();
   }
 
+  updateLiveValues(obj) {
+    if (!obj || obj !== this.activeObject) return;
+
+    const leftMm = canvasPxToMm(obj.left);
+    const topMm = canvasPxToMm(obj.top);
+    const widthMm = canvasPxToMm(obj.getScaledWidth ? obj.getScaledWidth() : obj.width * (obj.scaleX || 1));
+    const heightMm = canvasPxToMm(obj.getScaledHeight ? obj.getScaledHeight() : obj.height * (obj.scaleY || 1));
+    const angle = Math.round(obj.angle || 0);
+
+    const leftInput = this.container.querySelector('#prop-left');
+    const topInput = this.container.querySelector('#prop-top');
+    const widthInput = this.container.querySelector('#prop-width');
+    const heightInput = this.container.querySelector('#prop-height');
+    const angleInput = this.container.querySelector('#prop-angle');
+
+    if (leftInput && document.activeElement !== leftInput) leftInput.value = leftMm;
+    if (topInput && document.activeElement !== topInput) topInput.value = topMm;
+    if (widthInput && document.activeElement !== widthInput) widthInput.value = widthMm;
+    if (heightInput && document.activeElement !== heightInput) heightInput.value = heightMm;
+    if (angleInput && document.activeElement !== angleInput) angleInput.value = angle;
+  }
+
   render() {
     this.container.innerHTML = `
       <aside class="app-properties-panel">
@@ -40,8 +75,8 @@ export class PropertyInspector {
             <button class="element-add-btn" id="btn-add-text" title="Добавить текстовый блок">
               <i data-lucide="type"></i> Текст
             </button>
-            <button class="element-add-btn" id="btn-add-photo" title="Добавить фото/рамку">
-              <i data-lucide="image"></i> Фото
+            <button class="element-add-btn" id="btn-add-photo" title="Загрузить фото или логотип">
+              <i data-lucide="upload"></i> Фото
             </button>
             <button class="element-add-btn" id="btn-add-rect" title="Добавить прямоугольник">
               <i data-lucide="square"></i> Прямоуг.
@@ -50,6 +85,7 @@ export class PropertyInspector {
               <i data-lucide="circle"></i> Круг
             </button>
           </div>
+          <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" style="display: none;" />
         </div>
 
         ${this.activeObject ? this.renderObjectInspector() : this.renderBadgeInspector()}
@@ -67,22 +103,28 @@ export class PropertyInspector {
     const isText = obj.type === 'text' || obj.type === 'i-text';
     const isRect = obj.type === 'rect';
     const isCircle = obj.type === 'circle';
+    const isImage = obj.type === 'image';
 
     const leftMm = canvasPxToMm(obj.left);
     const topMm = canvasPxToMm(obj.top);
-    const widthMm = canvasPxToMm(obj.width * (obj.scaleX || 1));
-    const heightMm = canvasPxToMm(obj.height * (obj.scaleY || 1));
+    const widthMm = canvasPxToMm(obj.getScaledWidth ? obj.getScaledWidth() : obj.width * (obj.scaleX || 1));
+    const heightMm = canvasPxToMm(obj.getScaledHeight ? obj.getScaledHeight() : obj.height * (obj.scaleY || 1));
     const angle = Math.round(obj.angle || 0);
     const opacity = Math.round((obj.opacity !== undefined ? obj.opacity : 1) * 100);
 
     return `
-      <!-- Object Identification & Position -->
+      <!-- Object Identification & Actions -->
       <div class="panel-section">
         <div class="section-header">
-          <span class="section-title">${obj.name || obj.type}</span>
-          <button class="btn-icon delete-btn" id="btn-delete-obj" title="Удалить элемент">
-            <i data-lucide="trash-2"></i>
-          </button>
+          <span class="section-title" title="${obj.name || obj.type}">${obj.name || obj.type}</span>
+          <div style="display: flex; gap: 4px;">
+            <button class="btn-icon" id="btn-clone-obj" title="Дублировать элемент (Ctrl+D)">
+              <i data-lucide="copy"></i>
+            </button>
+            <button class="btn-icon delete-btn" id="btn-delete-obj" title="Удалить элемент (Del)">
+              <i data-lucide="trash-2"></i>
+            </button>
+          </div>
         </div>
 
         <div class="property-row">
@@ -109,6 +151,33 @@ export class PropertyInspector {
         <div class="property-row">
           <span class="property-label">Прозрачность (%)</span>
           <input type="number" id="prop-opacity" class="property-input-number" value="${opacity}" min="0" max="100" />
+        </div>
+      </div>
+
+      <!-- Alignment Section -->
+      <div class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Выравнивание</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px;">
+          <button class="btn-secondary" id="align-left" title="По левому краю" style="padding: 6px 0;">
+            <i data-lucide="align-left"></i>
+          </button>
+          <button class="btn-secondary" id="align-center-h" title="По центру горизонтали" style="padding: 6px 0;">
+            <i data-lucide="align-center"></i>
+          </button>
+          <button class="btn-secondary" id="align-right" title="По правому краю" style="padding: 6px 0;">
+            <i data-lucide="align-right"></i>
+          </button>
+          <button class="btn-secondary" id="align-top" title="По верхнему краю" style="padding: 6px 0;">
+            <i data-lucide="arrow-up-to-line"></i>
+          </button>
+          <button class="btn-secondary" id="align-center-v" title="По центру вертикали" style="padding: 6px 0;">
+            <i data-lucide="minus"></i>
+          </button>
+          <button class="btn-secondary" id="align-bottom" title="По нижнему краю" style="padding: 6px 0;">
+            <i data-lucide="arrow-down-to-line"></i>
+          </button>
         </div>
       </div>
 
@@ -177,7 +246,7 @@ export class PropertyInspector {
 
       <!-- Shape Specific Properties -->
       ${
-        !isText
+        !isText && !isImage
           ? `
         <div class="panel-section">
           <div class="section-header">
@@ -220,17 +289,39 @@ export class PropertyInspector {
           : ''
       }
 
+      <!-- Image Specific Properties -->
+      ${
+        isImage
+          ? `
+        <div class="panel-section">
+          <div class="section-header">
+            <span class="section-title">Параметры изображения</span>
+          </div>
+          <button class="btn-secondary" id="btn-replace-image" style="width: 100%;">
+            <i data-lucide="upload"></i> Заменить изображение
+          </button>
+        </div>
+      `
+          : ''
+      }
+
       <!-- Layer Ordering -->
       <div class="panel-section">
         <div class="section-header">
-          <span class="section-title">Слои</span>
+          <span class="section-title">Порядок слоёв</span>
         </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn-secondary" id="btn-bring-front" style="flex: 1; font-size: 11px;">
-            <i data-lucide="layers"></i> Вперед
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+          <button class="btn-secondary" id="btn-layer-top" style="font-size: 11px;">
+            <i data-lucide="arrow-up-to-line"></i> На самый верх
           </button>
-          <button class="btn-secondary" id="btn-send-back" style="flex: 1; font-size: 11px;">
-            <i data-lucide="layers"></i> Назад
+          <button class="btn-secondary" id="btn-layer-up" style="font-size: 11px;">
+            <i data-lucide="arrow-up"></i> На шаг вперед
+          </button>
+          <button class="btn-secondary" id="btn-layer-down" style="font-size: 11px;">
+            <i data-lucide="arrow-down"></i> На шаг назад
+          </button>
+          <button class="btn-secondary" id="btn-layer-bottom" style="font-size: 11px;">
+            <i data-lucide="arrow-down-to-line"></i> В самый низ
           </button>
         </div>
       </div>
@@ -275,15 +366,17 @@ export class PropertyInspector {
 
       <div class="panel-section" style="color: var(--text-muted); font-size: 11px; line-height: 1.6;">
         <i data-lucide="move" style="vertical-align: middle; margin-right: 4px;"></i>
-        Кликните по любому элементу на карточке для редактирования его параметров, изменения текста или положения.
+        Кликните по любому элементу на карточке для редактирования его параметров, изменения текста, слоев или выравнивания.
       </div>
     `;
   }
 
   bindEvents() {
+    const fileInput = this.container.querySelector('#photo-file-input');
+
     // Add Element Buttons
     this.container.querySelector('#btn-add-text')?.addEventListener('click', () => {
-      this.onAddElement({ type: 'text', text: 'Новый текст' });
+      this.onAddElement({ type: 'text', text: 'Новый текст / Матн' });
     });
 
     this.container.querySelector('#btn-add-rect')?.addEventListener('click', () => {
@@ -295,17 +388,52 @@ export class PropertyInspector {
     });
 
     this.container.querySelector('#btn-add-photo')?.addEventListener('click', () => {
-      this.onAddElement({ type: 'photo-placeholder' });
+      if (fileInput) fileInput.click();
+    });
+
+    this.container.querySelector('#btn-replace-image')?.addEventListener('click', () => {
+      if (fileInput) fileInput.click();
+    });
+
+    fileInput?.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          this.onUploadImage(event.target.result, this.activeObject);
+          fileInput.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
     });
 
     // Object events
     if (this.activeObject) {
       const obj = this.activeObject;
 
+      this.container.querySelector('#btn-clone-obj')?.addEventListener('click', () => {
+        this.onDuplicateElement(obj);
+      });
+
       this.container.querySelector('#btn-delete-obj')?.addEventListener('click', () => {
         this.onDeleteElement(obj);
       });
 
+      // Alignments
+      this.container.querySelector('#align-left')?.addEventListener('click', () => this.onAlignElement(obj, 'left'));
+      this.container.querySelector('#align-center-h')?.addEventListener('click', () => this.onAlignElement(obj, 'centerH'));
+      this.container.querySelector('#align-right')?.addEventListener('click', () => this.onAlignElement(obj, 'right'));
+      this.container.querySelector('#align-top')?.addEventListener('click', () => this.onAlignElement(obj, 'top'));
+      this.container.querySelector('#align-center-v')?.addEventListener('click', () => this.onAlignElement(obj, 'centerV'));
+      this.container.querySelector('#align-bottom')?.addEventListener('click', () => this.onAlignElement(obj, 'bottom'));
+
+      // Layers
+      this.container.querySelector('#btn-layer-top')?.addEventListener('click', () => this.onReorderElement(obj, 'bringToFront'));
+      this.container.querySelector('#btn-layer-up')?.addEventListener('click', () => this.onReorderElement(obj, 'bringForward'));
+      this.container.querySelector('#btn-layer-down')?.addEventListener('click', () => this.onReorderElement(obj, 'sendBackwards'));
+      this.container.querySelector('#btn-layer-bottom')?.addEventListener('click', () => this.onReorderElement(obj, 'sendToBack'));
+
+      // Dimensions & Position
       this.container.querySelector('#prop-left')?.addEventListener('change', (e) => {
         const val = parseFloat(e.target.value) || 0;
         this.onUpdateElement(obj, { left: mmToCanvasPx(val) });
@@ -387,15 +515,6 @@ export class PropertyInspector {
       this.container.querySelector('#prop-corner-radius')?.addEventListener('change', (e) => {
         const r = parseFloat(e.target.value) || 0;
         this.onUpdateElement(obj, { rx: r, ry: r });
-      });
-
-      // Layers
-      this.container.querySelector('#btn-bring-front')?.addEventListener('click', () => {
-        this.onReorderElement(obj, 'front');
-      });
-
-      this.container.querySelector('#btn-send-back')?.addEventListener('click', () => {
-        this.onReorderElement(obj, 'back');
       });
     } else {
       // Badge standard changes

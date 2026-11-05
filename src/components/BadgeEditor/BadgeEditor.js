@@ -2,10 +2,11 @@ import { FlipCardController } from '../../animation/flipCard.js';
 import { BadgeCanvasManager } from '../../editor/canvas.js';
 
 export class BadgeEditor {
-  constructor({ container, onElementSelect, onCanvasModify, animationEnabled = true }) {
+  constructor({ container, onElementSelect, onCanvasModify, onLiveUpdate, animationEnabled = true }) {
     this.container = container;
     this.onElementSelect = onElementSelect;
     this.onCanvasModify = onCanvasModify;
+    this.onLiveUpdate = onLiveUpdate;
     this.animationEnabled = animationEnabled;
 
     this.zoom = 1;
@@ -87,6 +88,11 @@ export class BadgeEditor {
       height: this.canvasHeight,
       onSelect: (obj, side) => this.onElementSelect(obj, side),
       onModify: (side) => this.onCanvasModify(side),
+      onLiveUpdate: (obj, side) => {
+        if (this.onLiveUpdate) {
+          this.onLiveUpdate(obj, side);
+        }
+      }
     });
   }
 

@@ -32,7 +32,12 @@ import {
   AlignRight,
   Bold,
   Italic,
-  Move
+  Move,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpToLine,
+  ArrowDownToLine,
+  Minus
 } from 'lucide';
 
 export const appIcons = {
@@ -68,7 +73,12 @@ export const appIcons = {
   AlignRight,
   Bold,
   Italic,
-  Move
+  Move,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpToLine,
+  ArrowDownToLine,
+  Minus
 };
 
 export function initIcons(container = document) {

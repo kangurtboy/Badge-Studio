@@ -1,33 +1,40 @@
 import { Canvas, Rect, Circle, IText, Line, FabricImage } from 'fabric';
+import { AlignmentGuidelines } from './guidelines.js';
+import { ElementFactory } from './elements.js';
 
 export class BadgeCanvasManager {
-  constructor({ frontCanvasEl, backCanvasEl, width = 720, height = 440, onSelect, onModify }) {
+  constructor({ frontCanvasEl, backCanvasEl, width = 720, height = 440, onSelect, onModify, onLiveUpdate }) {
     this.width = width;
     this.height = height;
     this.onSelect = onSelect || (() => {});
     this.onModify = onModify || (() => {});
+    this.onLiveUpdate = onLiveUpdate || (() => {});
+
+    // Common styling for controls
+    const canvasConfig = {
+      width: this.width,
+      height: this.height,
+      preserveObjectStacking: true,
+      selectionColor: 'rgba(59, 130, 246, 0.12)',
+      selectionBorderColor: '#3B82F6',
+      selectionLineWidth: 1.5,
+    };
 
     // Initialize Front Canvas
     this.frontCanvas = new Canvas(frontCanvasEl, {
-      width: this.width,
-      height: this.height,
+      ...canvasConfig,
       backgroundColor: '#FFFFFF',
-      preserveObjectStacking: true,
-      selectionColor: 'rgba(59, 130, 246, 0.15)',
-      selectionBorderColor: '#3B82F6',
-      selectionLineWidth: 1.5,
     });
 
     // Initialize Back Canvas
     this.backCanvas = new Canvas(backCanvasEl, {
-      width: this.width,
-      height: this.height,
+      ...canvasConfig,
       backgroundColor: '#F8FAFC',
-      preserveObjectStacking: true,
-      selectionColor: 'rgba(59, 130, 246, 0.15)',
-      selectionBorderColor: '#3B82F6',
-      selectionLineWidth: 1.5,
     });
+
+    // Initialize alignment guidelines for both canvases
+    this.frontGuides = new AlignmentGuidelines(this.frontCanvas);
+    this.backGuides = new AlignmentGuidelines(this.backCanvas);
 
     this.activeSide = 'front'; // 'front' | 'back'
     this.setupEvents(this.frontCanvas, 'front');
@@ -61,6 +68,20 @@ export class BadgeCanvasManager {
       }
     });
 
+    // Live update coordinates while dragging, scaling, rotating
+    const triggerLive = () => {
+      if (this.activeSide === side) {
+        const activeObj = canvas.getActiveObject();
+        if (activeObj) {
+          this.onLiveUpdate(activeObj, side);
+        }
+      }
+    };
+
+    canvas.on('object:moving', triggerLive);
+    canvas.on('object:scaling', triggerLive);
+    canvas.on('object:rotating', triggerLive);
+
     const triggerModify = () => {
       this.onModify(side);
     };
@@ -70,23 +91,23 @@ export class BadgeCanvasManager {
     canvas.on('object:removed', triggerModify);
   }
 
-  loadTemplate(canvas, templateData) {
+  async loadTemplate(canvas, templateData) {
     canvas.clear();
     canvas.backgroundColor = templateData.background || '#FFFFFF';
 
     if (Array.isArray(templateData.elements)) {
-      templateData.elements.forEach((item) => {
-        const obj = this.createFabricObject(item);
+      for (const item of templateData.elements) {
+        const obj = await this.createFabricObject(item);
         if (obj) {
           canvas.add(obj);
         }
-      });
+      }
     }
 
     canvas.renderAll();
   }
 
-  createFabricObject(data) {
+  async createFabricObject(data) {
     let obj = null;
     const commonProps = {
       id: data.id || `el-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
@@ -97,6 +118,12 @@ export class BadgeCanvasManager {
       opacity: data.opacity !== undefined ? data.opacity : 1,
       selectable: data.selectable !== false,
       hasControls: data.selectable !== false,
+      cornerColor: '#3B82F6',
+      cornerStrokeColor: '#FFFFFF',
+      cornerStyle: 'circle',
+      cornerSize: 8,
+      transparentCorners: false,
+      padding: 4,
     };
 
     switch (data.type) {
@@ -132,6 +159,7 @@ export class BadgeCanvasManager {
         break;
 
       case 'text':
+      case 'i-text':
         obj = new IText(data.text || 'Текст / Матн', {
           ...commonProps,
           fontSize: data.fontSize || 16,
@@ -142,6 +170,18 @@ export class BadgeCanvasManager {
           textAlign: data.textAlign || 'left',
           lineHeight: data.lineHeight || 1.2,
         });
+        break;
+
+      case 'image':
+        if (data.src) {
+          obj = await ElementFactory.createImageFromUrl(data.src, {
+            left: data.left,
+            top: data.top,
+            maxWidth: data.width || 190,
+            maxHeight: data.height || 240,
+            name: data.name || 'Фотография',
+          });
+        }
         break;
 
       default:
@@ -188,6 +228,9 @@ export class BadgeCanvasManager {
       base.ry = obj.ry;
     } else if (obj.type === 'circle') {
       base.radius = Math.round(obj.radius * (obj.scaleX || 1));
+    } else if (obj.type === 'image') {
+      base.type = 'image';
+      base.src = obj.getSrc ? obj.getSrc() : obj._element?.src;
     }
 
     return base;
