@@ -9,21 +9,21 @@ export class BadgeEditor {
     this.onPhotoClick = onPhotoClick || (() => {});
     this.animationEnabled = animationEnabled;
 
-    this.zoom = 1.35; // Default optimal preview scale
-    this.cardWidth = 440; // Exact CR-80 visual width
-    this.cardHeight = 278; // Exact CR-80 visual height
+    this.zoom = 1.45; // Default optimal preview scale
+    this.cardWidth = 430; // Exact CR-80 visual width from Stitch
+    this.cardHeight = 270; // Exact CR-80 visual height from Stitch
 
     this.currentData = {
       // Front side
-      title1: 'КОЛЛЕҶИ ТИББИИ',
-      title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
-      title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
-      idNumber: '2-790106',
-      nameLine1: 'РАҲИМОВА',
-      nameLine2: 'НИГИНА РУСТАМОВНА',
-      specialty: 'кори ҳамширагӣ',
+      title1: 'КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
+      title2: 'ДАР НОҲИЯИ ДАНҒАРА',
+      idNumber: '2-790106-102',
+      fullName: 'РАҲИМОВА НИГИНА РУСТАМОВНА',
+      faculty: 'Факултети кори ҳамширагӣ',
+      course: 'Курси 2, гурӯҳи 102',
+      section: 'Шӯъбаи рӯзона',
       cohort: '2024–2028',
-      directorName: 'Сафарзода З.И.',
+      directorName: 'Баротзода А.Ҳ.',
       photoSrc: '/assets/student-nigina.jpg',
       emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
       emblemMedical: '/assets/medical-emblem-clean.png',
@@ -51,7 +51,7 @@ export class BadgeEditor {
       <div class="app-center-viewport" id="viewport-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; width: 100%; height: 100%;">
         <div class="viewport-grid-bg"></div>
 
-        <!-- 3D Perspective Flip Container (Exact Stitch CR-80) -->
+        <!-- 3D Perspective Flip Container (Exact Stitch CR-80 430px x 270px) -->
         <div class="flip-card-perspective" id="flip-perspective" style="width: ${this.cardWidth}px; height: ${this.cardHeight}px; transform: scale(${this.zoom}); transform-origin: center center;">
           <div class="flip-card-inner" id="flip-inner" style="width: 100%; height: 100%;">
             
@@ -150,7 +150,7 @@ export class BadgeEditor {
     });
 
     this.container.querySelector('#btn-zoom-fit')?.addEventListener('click', () => {
-      this.setZoom(1.35);
+      this.setZoom(1.45);
     });
 
     // Click on photo to replace / crop
@@ -200,7 +200,7 @@ export class BadgeEditor {
   }
 
   fitToViewport() {
-    this.setZoom(1.35);
+    this.setZoom(1.45);
   }
 
   setAnimationEnabled(enabled) {
@@ -224,16 +224,10 @@ export class BadgeEditor {
       this.currentData = { ...this.currentData, ...cardData.data };
     } else {
       if (cardData.name) {
-        const parts = cardData.name.trim().split(/\s+/);
-        if (parts.length >= 2) {
-          this.currentData.nameLine1 = parts[0].toUpperCase();
-          this.currentData.nameLine2 = parts.slice(1).join(' ').toUpperCase();
-        } else {
-          this.currentData.nameLine1 = cardData.name.toUpperCase();
-        }
+        this.currentData.fullName = cardData.name.toUpperCase();
       }
       if (cardData.studentId) this.currentData.idNumber = cardData.studentId;
-      if (cardData.specialty) this.currentData.specialty = cardData.specialty;
+      if (cardData.specialty) this.currentData.faculty = cardData.specialty;
       if (cardData.photoSrc) this.currentData.photoSrc = cardData.photoSrc;
     }
 
@@ -264,9 +258,9 @@ export class BadgeEditor {
   getCurrentCardData() {
     return {
       data: { ...this.currentData },
-      name: `${this.currentData.nameLine1} ${this.currentData.nameLine2}`.trim(),
+      name: this.currentData.fullName,
       studentId: this.currentData.idNumber,
-      specialty: this.currentData.specialty,
+      specialty: this.currentData.faculty,
       photoSrc: this.currentData.photoSrc,
     };
   }

@@ -633,7 +633,7 @@ export class App {
   }
 
   renderPrintBadges(slots, side) {
-    const scaleFactor = 85.6 / (440 * 0.2645833);
+    const scaleFactor = 85.6 / (430 * 0.2645833);
 
     return slots
       .map((slot) => {
@@ -649,7 +649,7 @@ export class App {
 
         return `
           <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; overflow: hidden; box-sizing: border-box; border-radius: 2mm;">
-            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left;">
+            <div style="width: 430px; height: 270px; transform: scale(${scaleFactor}); transform-origin: top left;">
               ${renderedHtml}
             </div>
           </div>
