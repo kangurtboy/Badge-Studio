@@ -159,8 +159,8 @@ export class A4Editor {
         const slotW = Math.round(slot.widthMm * pxPerMm);
         const slotH = Math.round(slot.heightMm * pxPerMm);
 
-        // Native card is 430 x 270 px
-        const scaleFactor = slotW / 430;
+        // Native card is 440 x 278 px
+        const scaleFactor = slotW / 440;
 
         const cardData = card.data || card;
         const renderedCardHtml = this.isAllFlipped
@@ -169,7 +169,7 @@ export class A4Editor {
 
         return `
           <div class="a4-card-slot" data-id="${card.id}" title="Нажмите для редактирования карточки" style="position: absolute; left: ${slotLeft}px; top: ${slotTop}px; width: ${slotW}px; height: ${slotH}px; overflow: hidden; cursor: pointer; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); transition: transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 0 0 2px #0284C7'" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'">
-            <div style="width: 430px; height: 270px; transform: scale(${scaleFactor}); transform-origin: top left; pointer-events: none;">
+            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left; pointer-events: none;">
               ${renderedCardHtml}
             </div>
           </div>

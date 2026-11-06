@@ -9,36 +9,37 @@ export class BadgeEditor {
     this.onPhotoClick = onPhotoClick || (() => {});
     this.animationEnabled = animationEnabled;
 
-    this.zoom = 1.45; // Default optimal preview scale
-    this.cardWidth = 430; // Exact CR-80 visual width from Stitch
-    this.cardHeight = 270; // Exact CR-80 visual height from Stitch
+    this.zoom = 1.35; // Default optimal preview scale
+    this.cardWidth = 440; // Exact CR-80 visual width from Stitch
+    this.cardHeight = 278; // Exact CR-80 visual height from Stitch
 
     this.currentData = {
       // Front side
-      title1: 'КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
-      title2: 'ДАР НОҲИЯИ ДАНҒАРА',
-      idNumber: '2-790106-102',
-      fullName: 'РАҲИМОВА НИГИНА РУСТАМОВНА',
-      faculty: 'Факултети кори ҳамширагӣ',
-      course: 'Курси 2, гурӯҳи 102',
-      section: 'Шӯъбаи рӯзона',
+      title1: 'КОЛЛЕҶИ ТИББИИ',
+      title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
+      title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
+      idNumber: '2-790106',
+      nameLine1: 'РАҲИМОВА',
+      nameLine2: 'НИГИНА РУСТАМОВНА',
+      specialty: 'кори ҳамширагӣ',
       cohort: '2024–2028',
-      directorName: 'Баротзода А.Ҳ.',
+      directorName: 'Сафарзода З.И.',
       photoSrc: '/assets/student-nigina.jpg',
       emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
       emblemMedical: '/assets/medical-emblem-clean.png',
 
       // Back side
-      backTitle: 'Қоидаҳои истифодаи шаҳодатнома',
-      validity: 'VALID UNTIL: 01/07/2028',
-      rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар ноҳияи Данғара мебошад.',
-      rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона нишон додани он ҳатмист.',
-      rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан фавран ба деканат хабар диҳед.',
-      bloodGroup: 'A(II) Rh+ (Positive)',
-      contactPhone: '+992 (3312) 2-24-45',
-      barcodeNumber: '2-790106-102',
+      backTitle: 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)',
+      validity: 'EXP: 01/07/2028',
+      rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.',
+      rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.',
+      rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.',
+      moodleLogin: 'gr26111',
+      moodlePass: 'Student1#',
+      barcodeNumber: '2-790106',
       addressCity: 'ҶТ, вилояти Хатлон,',
-      addressStreet: 'н. Данғара, кӯч. Марказӣ',
+      addressDistrict: 'ноҳияи Темурмалик,',
+      addressVillage: 'ҷ.д Кангурт',
     };
 
     this.render();
@@ -51,7 +52,7 @@ export class BadgeEditor {
       <div class="app-center-viewport" id="viewport-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; width: 100%; height: 100%;">
         <div class="viewport-grid-bg"></div>
 
-        <!-- 3D Perspective Flip Container (Exact Stitch CR-80 430px x 270px) -->
+        <!-- 3D Perspective Flip Container (Exact Stitch CR-80 440px x 278px) -->
         <div class="flip-card-perspective" id="flip-perspective" style="width: ${this.cardWidth}px; height: ${this.cardHeight}px; transform: scale(${this.zoom}); transform-origin: center center;">
           <div class="flip-card-inner" id="flip-inner" style="width: 100%; height: 100%;">
             
@@ -150,7 +151,7 @@ export class BadgeEditor {
     });
 
     this.container.querySelector('#btn-zoom-fit')?.addEventListener('click', () => {
-      this.setZoom(1.45);
+      this.setZoom(1.35);
     });
 
     // Click on photo to replace / crop
@@ -200,7 +201,7 @@ export class BadgeEditor {
   }
 
   fitToViewport() {
-    this.setZoom(1.45);
+    this.setZoom(1.35);
   }
 
   setAnimationEnabled(enabled) {
@@ -224,10 +225,16 @@ export class BadgeEditor {
       this.currentData = { ...this.currentData, ...cardData.data };
     } else {
       if (cardData.name) {
-        this.currentData.fullName = cardData.name.toUpperCase();
+        const parts = cardData.name.trim().split(/\s+/);
+        if (parts.length >= 2) {
+          this.currentData.nameLine1 = parts[0].toUpperCase();
+          this.currentData.nameLine2 = parts.slice(1).join(' ').toUpperCase();
+        } else {
+          this.currentData.nameLine1 = cardData.name.toUpperCase();
+        }
       }
       if (cardData.studentId) this.currentData.idNumber = cardData.studentId;
-      if (cardData.specialty) this.currentData.faculty = cardData.specialty;
+      if (cardData.specialty) this.currentData.specialty = cardData.specialty;
       if (cardData.photoSrc) this.currentData.photoSrc = cardData.photoSrc;
     }
 
@@ -258,9 +265,9 @@ export class BadgeEditor {
   getCurrentCardData() {
     return {
       data: { ...this.currentData },
-      name: this.currentData.fullName,
+      name: `${this.currentData.nameLine1} ${this.currentData.nameLine2}`.trim(),
       studentId: this.currentData.idNumber,
-      specialty: this.currentData.faculty,
+      specialty: this.currentData.specialty,
       photoSrc: this.currentData.photoSrc,
     };
   }

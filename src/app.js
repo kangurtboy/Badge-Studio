@@ -50,7 +50,7 @@ export class App {
     try {
       await openDB();
       const savedProject = await loadProject('current-project');
-      if (savedProject && savedProject.version === '6.0-stitch-exact' && savedProject.cards && savedProject.cards.length > 0) {
+      if (savedProject && savedProject.version === '7.0-stitch-exact' && savedProject.cards && savedProject.cards.length > 0) {
         this.cards = savedProject.cards;
         this.currentCardId = savedProject.currentCardId || this.cards[0].id;
         if (savedProject.settings) {
@@ -67,10 +67,10 @@ export class App {
     this.sidebar.setCards(this.cards, this.currentCardId);
     this.loadCardIntoEditor(this.currentCardId);
 
-    // Save clean initial state with version 6.0-stitch-exact
+    // Save clean initial state with version 7.0-stitch-exact
     await this.autoSaveManager.saveNow({
       id: 'current-project',
-      version: '6.0-stitch-exact',
+      version: '7.0-stitch-exact',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -88,15 +88,15 @@ export class App {
       {
         id: 'card-1',
         name: 'Раҳимова Нигина Рустамовна',
-        group: '2-790106-102',
-        studentId: '2-790106-102',
+        group: '2-790106',
+        studentId: '2-790106',
         specialty: 'кори ҳамширагӣ',
         photoSrc: '/assets/student-nigina.jpg',
         data: {
           title1: 'КОЛЛЕҶИ ТИББИИ',
           title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
-          title3: 'ДАР НОҲИЯИ ДАНҒАРА',
-          idNumber: '2-790106-102',
+          title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
+          idNumber: '2-790106',
           nameLine1: 'РАҲИМОВА',
           nameLine2: 'НИГИНА РУСТАМОВНА',
           specialty: 'кори ҳамширагӣ',
@@ -105,30 +105,31 @@ export class App {
           photoSrc: '/assets/student-nigina.jpg',
           emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
           emblemMedical: '/assets/medical-emblem-clean.png',
-          backTitle: 'Қоидаҳои истифодаи шаҳодатнома',
-          validity: 'VALID UNTIL: 01/07/2028',
-          rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар ноҳияи Данғара мебошад.',
-          rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона нишон додани он ҳатмист.',
-          rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан фавран ба деканат хабар диҳед.',
-          bloodGroup: 'A(II) Rh+ (Positive)',
-          contactPhone: '+992 (3312) 2-24-45',
-          barcodeNumber: '2-790106-102',
+          backTitle: 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)',
+          validity: 'EXP: 01/07/2028',
+          rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.',
+          rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.',
+          rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.',
+          moodleLogin: 'gr26111',
+          moodlePass: 'Student1#',
+          barcodeNumber: '2-790106',
           addressCity: 'ҶТ, вилояти Хатлон,',
-          addressStreet: 'н. Данғара, кӯч. Марказӣ',
+          addressDistrict: 'ноҳияи Темурмалик,',
+          addressVillage: 'ҷ.д Кангурт',
         },
       },
       {
         id: 'card-2',
         name: 'Саидов Фирӯз Ҷамшедович',
-        group: '2-790106-102',
-        studentId: '2-790106-103',
+        group: '2-790106',
+        studentId: '2-790107',
         specialty: 'кори табобатӣ',
         photoSrc: '/assets/student-nigina.jpg',
         data: {
           title1: 'КОЛЛЕҶИ ТИББИИ',
           title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
-          title3: 'ДАР НОҲИЯИ ДАНҒАРА',
-          idNumber: '2-790106-103',
+          title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
+          idNumber: '2-790107',
           nameLine1: 'САИДОВ',
           nameLine2: 'ФИРӮЗ ҶАМШЕДОВИЧ',
           specialty: 'кори табобатӣ',
@@ -137,16 +138,17 @@ export class App {
           photoSrc: '/assets/student-nigina.jpg',
           emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
           emblemMedical: '/assets/medical-emblem-clean.png',
-          backTitle: 'Қоидаҳои истифодаи шаҳодатнома',
-          validity: 'VALID UNTIL: 01/07/2028',
-          rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар ноҳияи Данғара мебошад.',
-          rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона нишон додани он ҳатмист.',
-          rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан фавран ба деканат хабар диҳед.',
-          bloodGroup: 'B(III) Rh+ (Positive)',
-          contactPhone: '+992 (3312) 2-24-45',
-          barcodeNumber: '2-790106-103',
+          backTitle: 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)',
+          validity: 'EXP: 01/07/2028',
+          rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.',
+          rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.',
+          rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.',
+          moodleLogin: 'gr26112',
+          moodlePass: 'Student1#',
+          barcodeNumber: '2-790107',
           addressCity: 'ҶТ, вилояти Хатлон,',
-          addressStreet: 'н. Данғара, кӯч. Марказӣ',
+          addressDistrict: 'ноҳияи Темурмалик,',
+          addressVillage: 'ҷ.д Кангурт',
         },
       },
     ];
@@ -568,7 +570,7 @@ export class App {
     this.syncCurrentCardToMemory();
     this.autoSaveManager.schedule({
       id: 'current-project',
-      version: '5.0-stitch-exact',
+      version: '7.0-stitch-exact',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -633,7 +635,7 @@ export class App {
   }
 
   renderPrintBadges(slots, side) {
-    const scaleFactor = 85.6 / (430 * 0.2645833);
+    const scaleFactor = 85.6 / (440 * 0.2645833);
 
     return slots
       .map((slot) => {
@@ -649,7 +651,7 @@ export class App {
 
         return `
           <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; overflow: hidden; box-sizing: border-box; border-radius: 2mm;">
-            <div style="width: 430px; height: 270px; transform: scale(${scaleFactor}); transform-origin: top left;">
+            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left;">
               ${renderedHtml}
             </div>
           </div>
@@ -725,7 +727,7 @@ export class App {
         this.syncCurrentCardToMemory();
         this.autoSaveManager.saveNow({
           id: 'current-project',
-          version: '5.0-stitch-exact',
+          version: '7.0-stitch-exact',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,
