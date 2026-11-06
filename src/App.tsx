@@ -414,7 +414,7 @@ function Barcode({ value }: { value: string }) {
 }
 
 function BadgeCorners() {
-  return <div className="badge-corners" aria-hidden="true"><i /><i /><i /><i /></div>;
+  return null;
 }
 
 function BadgeArtwork({

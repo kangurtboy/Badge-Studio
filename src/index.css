@@ -1269,25 +1269,8 @@ input:focus-visible,
 }
 
 .badge-corners {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
+  display: none;
 }
-
-.badge-corners i {
-  position: absolute;
-  width: 2.2cqw;
-  height: 2.2cqw;
-  border-color: rgba(100, 116, 139, .4);
-  border-style: solid;
-  border-width: 0;
-}
-
-.badge-corners i:nth-child(1) { top: 0; left: 0; border-top-width: .25mm; border-left-width: .25mm; }
-.badge-corners i:nth-child(2) { top: 0; right: 0; border-top-width: .25mm; border-right-width: .25mm; }
-.badge-corners i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: .25mm; border-left-width: .25mm; }
-.badge-corners i:nth-child(4) { right: 0; bottom: 0; border-right-width: .25mm; border-bottom-width: .25mm; }
 
 .editable-text {
   min-width: .4em;
