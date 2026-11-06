@@ -67,10 +67,13 @@ function createInitialWorkspace(): Workspace {
       const parsed = JSON.parse(saved) as Partial<Workspace>;
       if (Array.isArray(parsed.students)) {
         const students = parsed.students.slice(0, MAX_BADGES).map((item) => normalizeStudent(item));
-        const selectedId = students.some((item) => item?.id === parsed.selectedId)
-          ? (parsed.selectedId as string)
-          : students.find((item): item is Student => item !== null)?.id ?? null;
-        return { students, selectedId };
+        const activeStudents = students.filter((item): item is Student => item !== null);
+        if (activeStudents.length > 0) {
+          const selectedId = students.some((item) => item?.id === parsed.selectedId)
+            ? (parsed.selectedId as string)
+            : activeStudents[0].id;
+          return { students, selectedId };
+        }
       }
     }
   } catch {
@@ -173,8 +176,25 @@ function EditableText({
   className?: string;
   onChange: (value: string) => void;
 }) {
+  const spanRef = useRef<HTMLSpanElement | null>(null);
+  const isFocusedRef = useRef(false);
+
+  useEffect(() => {
+    if (spanRef.current && !isFocusedRef.current) {
+      if (spanRef.current.textContent !== value) {
+        spanRef.current.textContent = value;
+      }
+    }
+  }, [value]);
+
   return (
     <span
+      ref={(el) => {
+        spanRef.current = el;
+        if (el && !isFocusedRef.current && el.textContent !== value) {
+          el.textContent = value;
+        }
+      }}
       className={`editable-text ${className}`}
       contentEditable
       suppressContentEditableWarning
@@ -183,16 +203,25 @@ function EditableText({
       aria-label={label}
       data-placeholder={placeholder}
       title="Нажмите, чтобы изменить"
-      onInput={(event) => onChange(event.currentTarget.textContent?.replace(/[\n\r]/g, " ") ?? "")}
+      onFocus={() => {
+        isFocusedRef.current = true;
+      }}
+      onBlur={(event) => {
+        isFocusedRef.current = false;
+        const newText = event.currentTarget.textContent?.replace(/[\n\r]/g, " ") ?? "";
+        onChange(newText);
+      }}
+      onInput={(event) => {
+        const newText = event.currentTarget.textContent?.replace(/[\n\r]/g, " ") ?? "";
+        onChange(newText);
+      }}
       onKeyDown={(event: KeyboardEvent<HTMLSpanElement>) => {
         if (event.key === "Enter") {
           event.preventDefault();
           event.currentTarget.blur();
         }
       }}
-    >
-      {value}
-    </span>
+    />
   );
 }
 
@@ -586,7 +615,12 @@ export default function App() {
       ? preferredIndex
       : slots.findIndex((student) => student === null);
     if (availableIndex < 0) return;
-    const newStudent = makeNewStudent(slots, availableIndex);
+
+    // First student is always the official DEMO_STUDENT; subsequent students are clean empty cards
+    const newStudent = students.length === 0 && availableIndex === 0
+      ? { ...DEMO_STUDENT, id: `student-${Date.now()}-0` }
+      : makeNewStudent(slots, availableIndex);
+
     setWorkspace((current) => {
       const next = Array.from({ length: MAX_BADGES }, (_, index) => current.students[index] ?? null);
       next[availableIndex] = newStudent;
@@ -626,8 +660,8 @@ export default function App() {
       } catch {
         // The visible workspace is still cleared if storage is blocked.
       }
-      setWorkspace({ students: [], selectedId: null });
-      setToast("Локальные данные удалены.");
+      setWorkspace({ students: [DEMO_STUDENT], selectedId: DEMO_STUDENT.id });
+      setToast("Лист сброшен: первый бейдж — демонстрационный студент.");
     } else if (dialog === "remove" && selected) {
       const nextSlots = [...slots];
       nextSlots[selectedIndex] = null;
@@ -695,38 +729,25 @@ export default function App() {
                   </button>
                 </div>
 
-                <div className="zoom-bar">
+                <div className="zoom-slider-wrap" title="Масштабирование листа A4">
+                  <span className="zoom-label">Масштаб:</span>
+                  <input
+                    type="range"
+                    className="zoom-range-input"
+                    min="0.5"
+                    max="1.7"
+                    step="0.05"
+                    value={zoom}
+                    onChange={(e) => setZoom(Number(e.target.value))}
+                    title={`Масштаб: ${Math.round(zoom * 100)}%`}
+                  />
                   <button
                     type="button"
-                    className="zoom-btn"
-                    title="Уменьшить масштаб (Ctrl + колесо вниз)"
-                    onClick={() => setZoom((z) => Math.max(0.5, Math.round((z - 0.1) * 10) / 10))}
-                  >
-                    <Icon name="minus" size={14} />
-                  </button>
-                  <button
-                    type="button"
-                    className="zoom-val-btn"
+                    className="zoom-percent-badge"
                     title="Сбросить масштаб на 100%"
                     onClick={() => setZoom(1)}
                   >
                     {Math.round(zoom * 100)}%
-                  </button>
-                  <button
-                    type="button"
-                    className="zoom-btn"
-                    title="Увеличить масштаб (Ctrl + колесо вверх)"
-                    onClick={() => setZoom((z) => Math.min(2.0, Math.round((z + 0.1) * 10) / 10))}
-                  >
-                    <Icon name="plus" size={14} />
-                  </button>
-                  <button
-                    type="button"
-                    className="zoom-btn"
-                    title="По размеру экрана"
-                    onClick={() => setZoom(0.85)}
-                  >
-                    <Icon name="maximize" size={12} />
                   </button>
                 </div>
 
