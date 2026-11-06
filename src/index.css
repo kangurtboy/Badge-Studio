@@ -1030,7 +1030,7 @@ input:focus-visible,
 .flip-control {
   position: absolute;
   z-index: 10;
-  top: 6px;
+  bottom: 6px;
   right: 6px;
   width: 26px;
   height: 26px;
