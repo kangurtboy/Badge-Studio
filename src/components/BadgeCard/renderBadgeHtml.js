@@ -1,5 +1,6 @@
-// Exact 1:1 Pixel-Perfect Stitch HTML Renderer
-// Direct extraction from Stitch screen: "Бейджик донишҷӯ (Front & Back) — Танҳо карточка" (id: c6157384b31d4fd288db056a7db58098)
+// Reusable pixel-perfect badge HTML renderer
+// Exact dimensions: 96 x 67 mm ratio (480px x 335px on screen)
+// Used identically across: BadgeEditor, A4Editor, and Print Engine
 
 export function renderBadgeFrontHtml(data = {}, options = {}) {
   const { isEditable = false, style = '' } = options;
@@ -20,38 +21,41 @@ export function renderBadgeFrontHtml(data = {}, options = {}) {
   const editableAttr = (field) => isEditable ? `contenteditable="true" data-field="${field}"` : '';
 
   return `
-    <div class="card-face card-face-front" style="width: 440px; height: 278px; border-radius: 15px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(0,0,0,0.04); border: 1px solid rgba(203, 213, 225, 0.8); ${style}">
+    <div class="card-face card-face-front" style="width: 480px; height: 335px; border-radius: 14px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08); border: 1px solid rgba(203, 213, 225, 0.8); ${style}">
       
       <!-- Guilloche security waves background layer -->
       <div class="absolute inset-0 bg-guilloche-front pointer-events-none z-0" style="position: absolute; inset: 0; pointer-events: none; z-index: 0;"></div>
 
-      <!-- Header with emblems and college name -->
-      <div style="position: relative; z-index: 10; padding: 10px 16px 4px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-        <div style="width: 48px; height: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-          <img src="${emblemTajik}" alt="Герби Ҷумҳурии Тоҷикистон" style="width: 100%; height: 100%; object-fit: contain;" />
+      <!-- Header with equal size transparent logos and college name -->
+      <div style="position: relative; z-index: 10; padding: 12px 18px 6px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid rgba(241, 245, 249, 0.9);">
+        <!-- Left Logo: State Emblem (46x46 px transparent) -->
+        <div style="width: 46px; height: 46px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: transparent;">
+          <img src="${emblemTajik}" alt="Герби Тоҷикистон" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; background: transparent;" />
         </div>
         
+        <!-- Center College 3-line Title -->
         <div style="flex: 1; text-align: center; padding: 0 4px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-          <div ${editableAttr('title1')} style="font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; line-height: 1.2;">
+          <div ${editableAttr('title1')} style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; line-height: 1.2;">
             ${t1}
           </div>
-          <div ${editableAttr('title2')} style="font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; color: #0F172A; line-height: 1.2; margin-top: 2px;">
+          <div ${editableAttr('title2')} style="font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; color: #0F172A; line-height: 1.2; margin-top: 2px;">
             ${t2}
           </div>
-          <div ${editableAttr('title3')} style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #082F49; line-height: 1.2; margin-top: 2px;">
+          <div ${editableAttr('title3')} style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #082F49; line-height: 1.2; margin-top: 2px;">
             ${t3}
           </div>
         </div>
 
-        <div style="width: 48px; height: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-          <img src="${emblemMed}" alt="Эмблемаи тиббӣ" style="width: 100%; height: 100%; object-fit: contain;" />
+        <!-- Right Logo: Medical Snake (46x46 px transparent) -->
+        <div style="width: 46px; height: 46px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: transparent;">
+          <img src="${emblemMed}" alt="Эмблемаи тиббӣ" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; background: transparent;" />
         </div>
       </div>
 
       <!-- Main Body: Student Photo + Info -->
-      <div style="position: relative; z-index: 10; padding: 4px 16px; display: flex; align-items: center; gap: 14px; flex: 1;">
+      <div style="position: relative; z-index: 10; padding: 6px 18px; display: flex; align-items: center; gap: 16px; flex: 1;">
         <!-- Student Photo with rounded corners and border -->
-        <div class="student-photo-container" style="width: 102px; height: 132px; flex-shrink: 0; border-radius: 6px; overflow: hidden; border: 1px solid #CBD5E1; box-shadow: 0 1px 3px rgba(0,0,0,0.1); background-color: #F1F5F9; position: relative; cursor: ${isEditable ? 'pointer' : 'default'};">
+        <div class="student-photo-container" style="width: 112px; height: 145px; flex-shrink: 0; border-radius: 6px; overflow: hidden; border: 1px solid #CBD5E1; box-shadow: 0 1px 3px rgba(0,0,0,0.1); background-color: #F1F5F9; position: relative; cursor: ${isEditable ? 'pointer' : 'default'};">
           <img src="${photo}" alt="Акси донишҷӯ" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           ${
             isEditable
@@ -66,26 +70,26 @@ export function renderBadgeFrontHtml(data = {}, options = {}) {
         
         <!-- Information block -->
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
-          <!-- ID Badge pill -->
-          <div style="display: inline-flex; align-items: center; align-self: flex-start; background-color: #082F49; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; padding: 3px 10px; border-radius: 4px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; box-shadow: 0 1px 2px rgba(0,0,0,0.08);">
+          <!-- ID Badge pill without -102 suffix -->
+          <div style="display: inline-flex; align-items: center; align-self: flex-start; background-color: #082F49; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; padding: 3px 12px; border-radius: 4px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; box-shadow: 0 1px 2px rgba(0,0,0,0.08);">
             <span ${editableAttr('idNumber')}>${idNum}</span>
           </div>
           
           <!-- Student Full Name (enlarged uppercase) -->
           <div>
-            <h3 style="font-size: 15.5px; font-weight: 900; letter-spacing: -0.01em; color: #0F172A; text-transform: uppercase; line-height: 1.15; margin: 0;">
+            <h3 style="font-size: 17px; font-weight: 900; letter-spacing: -0.01em; color: #0F172A; text-transform: uppercase; line-height: 1.15; margin: 0;">
               <span ${editableAttr('nameLine1')}>${name1}</span><br/>
               <span ${editableAttr('nameLine2')}>${name2}</span>
             </h3>
           </div>
           
           <!-- Specialty and Academic Cohort -->
-          <div style="font-size: 10px; line-height: 1.3; color: #334155; margin-top: 2px;">
-            <p style="font-size: 11px; font-weight: 700; color: #082F49; margin: 0; display: flex; align-items: center; gap: 4px;">
+          <div style="font-size: 11px; line-height: 1.3; color: #334155; margin-top: 3px;">
+            <p style="font-size: 12px; font-weight: 700; color: #082F49; margin: 0; display: flex; align-items: center; gap: 4px;">
               <span style="color: #64748B; font-weight: 400;">Ихтисос:</span>
               <span ${editableAttr('specialty')}>${spec}</span>
             </p>
-            <p style="font-size: 10px; font-weight: 500; color: #475569; margin: 3px 0 0 0; display: flex; align-items: center; gap: 5px;">
+            <p style="font-size: 11px; font-weight: 500; color: #475569; margin: 3px 0 0 0; display: flex; align-items: center; gap: 5px;">
               <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669; display: inline-block; flex-shrink: 0;"></span>
               <span>Соли таҳсил: <strong ${editableAttr('cohort')}>${cohort}</strong></span>
             </p>
@@ -94,15 +98,15 @@ export function renderBadgeFrontHtml(data = {}, options = {}) {
       </div>
 
       <!-- Footer: Director Authorization -->
-      <div style="position: relative; z-index: 10; padding: 6px 16px; background-color: rgba(248, 250, 252, 0.95); border-top: 1px solid rgba(226, 232, 240, 0.8); display: flex; align-items: center; justify-content: center; font-size: 8.5px;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <span style="font-weight: 700; color: #334155; font-size: 9.5px;">Директор:</span>
-          <div style="position: relative; display: flex; align-items: center; gap: 6px;">
-            <svg style="width: 80px; height: 24px; color: #1E40AF; opacity: 0.9;" fill="none" stroke="currentColor" viewBox="0 0 120 40">
+      <div style="position: relative; z-index: 10; padding: 8px 18px; background-color: rgba(248, 250, 252, 0.95); border-top: 1px solid rgba(226, 232, 240, 0.8); display: flex; align-items: center; justify-content: center; font-size: 9px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+          <span style="font-weight: 700; color: #334155; font-size: 10.5px;">Директор:</span>
+          <div style="position: relative; display: flex; align-items: center; gap: 8px;">
+            <svg style="width: 85px; height: 26px; color: #1E40AF; opacity: 0.9;" fill="none" stroke="currentColor" viewBox="0 0 120 40">
               <path d="M5 25 C 20 5, 25 35, 38 18 C 45 7, 50 30, 65 15 C 75 5, 80 32, 95 20 C 105 12, 110 25, 118 10" stroke-linecap="round" stroke-width="2"></path>
               <path d="M15 28 L 70 24" stroke-linecap="round" stroke-width="1.2"></path>
             </svg>
-            <span ${editableAttr('directorName')} style="font-weight: 700; color: #0F172A; font-size: 9.5px; letter-spacing: 0.02em;">
+            <span ${editableAttr('directorName')} style="font-weight: 700; color: #0F172A; font-size: 10.5px; letter-spacing: 0.02em;">
               ${director}
             </span>
           </div>
@@ -136,23 +140,23 @@ export function renderBadgeBackHtml(data = {}, options = {}) {
   const editableAttr = (field) => isEditable ? `contenteditable="true" data-field="${field}"` : '';
 
   return `
-    <div class="card-face card-face-back" style="width: 440px; height: 278px; border-radius: 15px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(0,0,0,0.04); border: 1px solid rgba(203, 213, 225, 0.8); ${style}">
+    <div class="card-face card-face-back" style="width: 480px; height: 335px; border-radius: 14px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08); border: 1px solid rgba(203, 213, 225, 0.8); ${style}">
       
       <!-- Guilloche security background -->
       <div class="absolute inset-0 bg-guilloche-back pointer-events-none z-0" style="position: absolute; inset: 0; pointer-events: none; z-index: 0;"></div>
 
       <!-- Header: Official title & Validity date -->
-      <div style="position: relative; z-index: 10; padding: 10px 16px 6px 16px; border-bottom: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; justify-content: space-between;">
-        <span ${editableAttr('backTitle')} style="font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: #0F172A;">
+      <div style="position: relative; z-index: 10; padding: 12px 18px 6px 18px; border-bottom: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; justify-content: space-between;">
+        <span ${editableAttr('backTitle')} style="font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: #0F172A;">
           ${backTitle}
         </span>
-        <span style="font-size: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #065F46; background-color: #ECFDF5; padding: 2px 8px; border-radius: 4px; border: 1px solid #A7F3D0;">
+        <span style="font-size: 8.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #065F46; background-color: #ECFDF5; padding: 2.5px 9px; border-radius: 4px; border: 1px solid #A7F3D0;">
           <span ${editableAttr('validity')}>${validity}</span>
         </span>
       </div>
 
       <!-- Campus Regulations / Terms of Use -->
-      <div style="position: relative; z-index: 10; padding: 4px 16px; font-size: 8px; color: #475569; display: flex; flex-direction: column; gap: 4px; line-height: 1.35;">
+      <div style="position: relative; z-index: 10; padding: 6px 18px; font-size: 8.5px; color: #475569; display: flex; flex-direction: column; gap: 5px; line-height: 1.4;">
         <div style="display: flex; align-items: flex-start; gap: 6px;">
           <span style="font-weight: 700; color: #0284C7; flex-shrink: 0;">1.</span>
           <span ${editableAttr('rule1')}>${r1}</span>
@@ -168,28 +172,28 @@ export function renderBadgeBackHtml(data = {}, options = {}) {
       </div>
 
       <!-- Moodle Credentials Container -->
-      <div style="position: relative; z-index: 10; margin: 0 16px; padding: 6px 10px; background-color: rgba(248, 250, 252, 0.95); border-radius: 6px; border: 1px solid #CBD5E1; display: flex; flex-direction: column; gap: 4px;">
-        <div style="display: flex; align-items: center; gap: 4px;">
+      <div style="position: relative; z-index: 10; margin: 0 18px; padding: 8px 12px; background-color: rgba(248, 250, 252, 0.95); border-radius: 6px; border: 1px solid #CBD5E1; display: flex; flex-direction: column; gap: 5px;">
+        <div style="display: flex; align-items: center; gap: 5px;">
           <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669; display: inline-block;"></span>
-          <span style="font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #082F49;">СИСТЕМАИ ТЕСТӢ / MOODLE</span>
+          <span style="font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #082F49;">СИСТЕМАИ ТЕСТӢ / MOODLE</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 8px; font-family: 'JetBrains Mono', monospace;">
-          <div style="background: #FFFFFF; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 4px;">
-            <span style="color: #64748B; font-size: 6.5px; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;">Логин:</span>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 9px; font-family: 'JetBrains Mono', monospace;">
+          <div style="background: #FFFFFF; padding: 3px 10px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 5px;">
+            <span style="color: #64748B; font-size: 7px; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;">Логин:</span>
             <strong ${editableAttr('moodleLogin')} style="color: #0F172A;">${login}</strong>
           </div>
-          <div style="background: #FFFFFF; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 4px;">
-            <span style="color: #64748B; font-size: 6.5px; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;">Парол:</span>
+          <div style="background: #FFFFFF; padding: 3px 10px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 5px;">
+            <span style="color: #64748B; font-size: 7px; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;">Парол:</span>
             <strong ${editableAttr('moodlePass')} style="color: #082F49;">${pass}</strong>
           </div>
         </div>
       </div>
 
       <!-- Barcode, QR Code & College Address -->
-      <div style="position: relative; z-index: 10; padding: 8px 16px; border-top: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #FFFFFF;">
-        <!-- Code128 Barcode -->
+      <div style="position: relative; z-index: 10; padding: 10px 18px; border-top: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; justify-content: space-between; gap: 14px; background: #FFFFFF;">
+        <!-- Code128 Barcode without -102 suffix -->
         <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
-          <div style="height: 32px; width: 175px; display: flex; align-items: stretch; gap: 1.5px; background: #FFFFFF;">
+          <div style="height: 34px; width: 190px; display: flex; align-items: stretch; gap: 1.5px; background: #FFFFFF;">
             <div style="width: 2px; background: #000;"></div><div style="width: 1px; background: #fff;"></div><div style="width: 3px; background: #000;"></div><div style="width: 1px; background: #fff;"></div>
             <div style="width: 1px; background: #000;"></div><div style="width: 2px; background: #000;"></div><div style="width: 2px; background: #fff;"></div><div style="width: 3px; background: #000;"></div>
             <div style="width: 1px; background: #fff;"></div><div style="width: 2px; background: #000;"></div><div style="width: 1px; background: #fff;"></div><div style="width: 1px; background: #000;"></div>
@@ -200,19 +204,19 @@ export function renderBadgeBackHtml(data = {}, options = {}) {
             <div style="width: 2px; background: #000;"></div><div style="width: 2px; background: #fff;"></div><div style="width: 3px; background: #000;"></div><div style="width: 1px; background: #fff;"></div>
             <div style="width: 1px; background: #000;"></div><div style="width: 2px; background: #000;"></div><div style="width: 1px; background: #fff;"></div><div style="width: 2px; background: #000;"></div>
           </div>
-          <span ${editableAttr('barcodeNumber')} style="font-size: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.1em; color: #1E293B; margin-top: 2px;">
+          <span ${editableAttr('barcodeNumber')} style="font-size: 9px; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.1em; color: #1E293B; margin-top: 2px;">
             ${barcode}
           </span>
         </div>
 
         <!-- QR Verification & Official Location -->
-        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-          <div style="width: 36px; height: 36px; background-color: #0F172A; padding: 2px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+          <div style="width: 40px; height: 40px; background-color: #0F172A; padding: 2px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
             <svg style="width: 100%; height: 100%; color: #FFFFFF;" fill="currentColor" viewBox="0 0 24 24">
               <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h2v2h-2v-2zm-4 0h2v2h-2v-2zm4 4h2v2h-2v-2zm-4 4h2v2h-2v-2zm2-2h2v2h-2v-2zm-2-4h2v2h-2v-2z"></path>
             </svg>
           </div>
-          <div style="font-size: 7px; color: #475569; line-height: 1.25;">
+          <div style="font-size: 8px; color: #475569; line-height: 1.3;">
             <span style="font-weight: 700; color: #0F172A; display: block;">Суроға:</span>
             <span ${editableAttr('addressCity')}>${addrCity}</span><br/>
             <span ${editableAttr('addressDistrict')}>${addrDistrict}</span><br/>

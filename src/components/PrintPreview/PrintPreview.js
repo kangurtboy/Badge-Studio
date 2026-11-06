@@ -1,5 +1,6 @@
 import { AlignmentEngine } from '../../printing/alignment.js';
 import { SheetLayoutEngine } from '../../printing/layout.js';
+import { renderBadgeFrontHtml, renderBadgeBackHtml } from '../BadgeCard/renderBadgeHtml.js';
 
 export class PrintPreview {
   constructor({ container, onExecutePrint, onTestPrint }) {
@@ -16,14 +17,14 @@ export class PrintPreview {
 
     this.cards = [];
     this.layoutConfig = {
-      cardWidthMm: 90,
-      cardHeightMm: 55,
+      cardWidthMm: 96,
+      cardHeightMm: 67,
       marginTopMm: 12,
       marginBottomMm: 12,
-      marginLeftMm: 12,
-      marginRightMm: 12,
-      gapXMm: 4,
-      gapYMm: 4,
+      marginLeftMm: 8,
+      marginRightMm: 8,
+      gapXMm: 2,
+      gapYMm: 3,
       columnMode: 'auto',
     };
 
@@ -181,20 +182,15 @@ export class PrintPreview {
         const widthPx = Math.round(slot.widthMm * scale);
         const heightPx = Math.round(slot.heightMm * scale);
 
-        const studentName = card.name || `Студент #${slot.cardIndex + 1}`;
-        const isFront = side === 'front';
+        const cardData = card.data || card;
+        const renderedHtml = side === 'front'
+          ? renderBadgeFrontHtml(cardData, { isEditable: false })
+          : renderBadgeBackHtml(cardData, { isEditable: false });
 
         return `
-          <div style="position: absolute; left: ${leftPx}px; top: ${topPx}px; width: ${widthPx}px; height: ${heightPx}px; border: 0.5px solid ${isFront ? '#CBD5E1' : '#94A3B8'}; border-radius: 3px; background-color: ${isFront ? '#FFFFFF' : '#F1F5F9'}; padding: 4px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; overflow: hidden;">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 6.5px; font-weight: bold; color: ${isFront ? '#1E3A8A' : '#334155'};">
-              <span>#${slot.cardIndex + 1} ${isFront ? 'ЛИЦЕВАЯ' : 'ОБРАТНАЯ'}</span>
-              <span>Кол. ${slot.column + 1}</span>
-            </div>
-            <div style="font-size: 8px; font-weight: 700; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              ${studentName}
-            </div>
-            <div style="font-size: 6.5px; color: #64748B; text-align: right;">
-              ${slot.widthMm} × ${slot.heightMm} мм
+          <div style="position: absolute; left: ${leftPx}px; top: ${topPx}px; width: ${widthPx}px; height: ${heightPx}px; overflow: hidden; box-sizing: border-box; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="width: 480px; height: 335px; transform: scale(${widthPx / 480}); transform-origin: top left; pointer-events: none;">
+              ${renderedHtml}
             </div>
           </div>
         `;

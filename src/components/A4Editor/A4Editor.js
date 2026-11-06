@@ -12,17 +12,17 @@ export class A4Editor {
     this.currentPageIndex = 0;
     this.cards = [];
 
-    // Layout configuration
+    // Layout configuration for 96 x 67 mm badge size
     this.layoutConfig = {
       orientation: 'portrait',
-      cardWidthMm: 85.6,
-      cardHeightMm: 54,
+      cardWidthMm: 96,
+      cardHeightMm: 67,
       marginTopMm: 12,
       marginBottomMm: 12,
-      marginLeftMm: 12,
-      marginRightMm: 12,
-      gapXMm: 4,
-      gapYMm: 4,
+      marginLeftMm: 8,
+      marginRightMm: 8,
+      gapXMm: 2,
+      gapYMm: 3,
       columnMode: 'auto',
       showCropMarks: true,
     };
@@ -159,8 +159,8 @@ export class A4Editor {
         const slotW = Math.round(slot.widthMm * pxPerMm);
         const slotH = Math.round(slot.heightMm * pxPerMm);
 
-        // Native card is 440 x 278 px
-        const scaleFactor = slotW / 440;
+        // Native card is 480 x 335 px (96 x 67 mm)
+        const scaleFactor = slotW / 480;
 
         const cardData = card.data || card;
         const renderedCardHtml = this.isAllFlipped
@@ -169,7 +169,7 @@ export class A4Editor {
 
         return `
           <div class="a4-card-slot" data-id="${card.id}" title="Нажмите для редактирования карточки" style="position: absolute; left: ${slotLeft}px; top: ${slotTop}px; width: ${slotW}px; height: ${slotH}px; overflow: hidden; cursor: pointer; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); transition: transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 0 0 2px #0284C7'" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'">
-            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left; pointer-events: none;">
+            <div style="width: 480px; height: 335px; transform: scale(${scaleFactor}); transform-origin: top left; pointer-events: none;">
               ${renderedCardHtml}
             </div>
           </div>

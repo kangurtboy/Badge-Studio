@@ -129,7 +129,7 @@ export class PropertyInspector {
 
           <div class="property-row">
             <span class="property-label">Формат</span>
-            <span style="font-weight: 700; color: #0284C7; font-size: 11px;">CR-80 (85.60 × 53.98 мм)</span>
+            <span style="font-weight: 700; color: #0284C7; font-size: 11px;">96 × 67 мм</span>
           </div>
 
           <div class="property-row">

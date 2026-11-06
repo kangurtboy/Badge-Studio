@@ -589,14 +589,14 @@ export class App {
     };
 
     const layoutEngine = new SheetLayoutEngine({
-      cardWidthMm: 90,
-      cardHeightMm: 55,
+      cardWidthMm: 96,
+      cardHeightMm: 67,
       marginTopMm: 12,
       marginBottomMm: 12,
-      marginLeftMm: 12,
-      marginRightMm: 12,
-      gapXMm: 4,
-      gapYMm: 4,
+      marginLeftMm: 8,
+      marginRightMm: 8,
+      gapXMm: 2,
+      gapYMm: 3,
       columnMode: 'auto',
     });
 
@@ -635,7 +635,7 @@ export class App {
   }
 
   renderPrintBadges(slots, side) {
-    const scaleFactor = 85.6 / (440 * 0.2645833);
+    const scaleFactor = 96 / (480 * 0.2645833);
 
     return slots
       .map((slot) => {
@@ -651,7 +651,7 @@ export class App {
 
         return `
           <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; overflow: hidden; box-sizing: border-box; border-radius: 2mm;">
-            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left;">
+            <div style="width: 480px; height: 335px; transform: scale(${scaleFactor}); transform-origin: top left;">
               ${renderedHtml}
             </div>
           </div>

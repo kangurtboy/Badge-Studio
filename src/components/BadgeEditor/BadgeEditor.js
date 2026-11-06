@@ -9,9 +9,9 @@ export class BadgeEditor {
     this.onPhotoClick = onPhotoClick || (() => {});
     this.animationEnabled = animationEnabled;
 
-    this.zoom = 1.35; // Default optimal preview scale
-    this.cardWidth = 440; // Exact CR-80 visual width from Stitch
-    this.cardHeight = 278; // Exact CR-80 visual height from Stitch
+    this.zoom = 1.25; // Proportional preview scale
+    this.cardWidth = 480; // 96mm in proportion
+    this.cardHeight = 335; // 67mm in proportion
 
     this.currentData = {
       // Front side
