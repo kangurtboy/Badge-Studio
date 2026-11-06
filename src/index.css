@@ -427,15 +427,15 @@ input:focus-visible,
   justify-content: center;
   align-items: flex-start;
   flex: 0 0 auto;
+  margin: auto;
+  transform-origin: center top;
   transition: transform 140ms ease-out;
 }
 
 .sheet-page {
   position: relative;
-  width: auto;
-  height: min(100%, 790px);
-  max-width: 100%;
-  aspect-ratio: 210 / 297;
+  width: 558px;
+  height: 790px;
   flex: 0 0 auto;
   overflow: visible;
   background: #fff;
@@ -598,6 +598,7 @@ input:focus-visible,
 }
 
 .photo-frame {
+  position: relative;
   height: 84%;
   aspect-ratio: .765;
   flex: 0 0 auto;
@@ -619,11 +620,13 @@ input:focus-visible,
 }
 
 .photo-frame img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
-  transform-origin: center;
 }
 
 .photo-empty {
