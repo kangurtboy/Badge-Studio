@@ -50,7 +50,7 @@ export class App {
     try {
       await openDB();
       const savedProject = await loadProject('current-project');
-      if (savedProject && savedProject.version === '7.0-stitch-exact' && savedProject.cards && savedProject.cards.length > 0) {
+      if (savedProject && savedProject.version === '8.0-stitch-exact' && savedProject.cards && savedProject.cards.length > 0) {
         this.cards = savedProject.cards;
         this.currentCardId = savedProject.currentCardId || this.cards[0].id;
         if (savedProject.settings) {
@@ -67,10 +67,10 @@ export class App {
     this.sidebar.setCards(this.cards, this.currentCardId);
     this.loadCardIntoEditor(this.currentCardId);
 
-    // Save clean initial state with version 7.0-stitch-exact
+    // Save clean initial state with version 8.0-stitch-exact
     await this.autoSaveManager.saveNow({
       id: 'current-project',
-      version: '7.0-stitch-exact',
+      version: '8.0-stitch-exact',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -595,7 +595,7 @@ export class App {
     this.syncCurrentCardToMemory();
     this.autoSaveManager.schedule({
       id: 'current-project',
-      version: '7.0-stitch-exact',
+      version: '8.0-stitch-exact',
       cards: this.cards,
       currentCardId: this.currentCardId,
       settings: this.settings,
@@ -752,7 +752,7 @@ export class App {
         this.syncCurrentCardToMemory();
         this.autoSaveManager.saveNow({
           id: 'current-project',
-          version: '7.0-stitch-exact',
+          version: '8.0-stitch-exact',
           cards: this.cards,
           currentCardId: this.currentCardId,
           settings: this.settings,
