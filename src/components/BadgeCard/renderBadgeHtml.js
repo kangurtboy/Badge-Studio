@@ -4,14 +4,13 @@
 export function renderBadgeFrontHtml(data = {}, options = {}) {
   const {
     isEditable = false,
-    scale = 1,
     style = '',
   } = options;
 
   const t1 = data.title1 || 'КОЛЛЕҶИ ТИББИИ';
   const t2 = data.title2 || 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН';
-  const t3 = data.title3 || 'ДАР НОҲИЯИ ТЕМУРМАЛИК';
-  const idNum = data.idNumber || data.studentId || '2-790106';
+  const t3 = data.title3 || 'ДАР НОҲИЯИ ДАНҒАРА';
+  const idNum = data.idNumber || data.studentId || '2-790106-102';
   const name1 = data.nameLine1 || (data.name ? data.name.split(' ')[0] : 'РАҲИМОВА');
   const name2 = data.nameLine2 || (data.name ? data.name.split(' ').slice(1).join(' ') : 'НИГИНА РУСТАМОВНА');
   const spec = data.specialty || 'кори ҳамширагӣ';
@@ -122,76 +121,72 @@ export function renderBadgeFrontHtml(data = {}, options = {}) {
 export function renderBadgeBackHtml(data = {}, options = {}) {
   const {
     isEditable = false,
-    scale = 1,
     style = '',
   } = options;
 
-  const backTitle = data.backTitle || 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)';
-  const validity = data.validity || 'EXP: 01/07/2028';
-  const r1 = data.rule1 || '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.';
-  const r2 = data.rule2 || '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.';
-  const r3 = data.rule3 || '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.';
-  const login = data.moodleLogin || 'gr26111';
-  const pass = data.moodlePass || 'Student1#';
-  const barcode = data.barcodeNumber || data.studentId || '2-790106';
-  const addr1 = data.addressLine1 || 'ҶТ, вилояти Хатлон,';
-  const addr2 = data.addressLine2 || 'ноҳияи Темурмалик,';
-  const addr3 = data.addressLine3 || 'ҷ.д Кангурт';
+  const backTitle = data.backTitle || 'Қоидаҳои истифодаи шаҳодатнома';
+  const validity = data.validity || 'VALID UNTIL: 01/07/2028';
+  const r1 = data.rule1 || '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар ноҳияи Данғара мебошад.';
+  const r2 = data.rule2 || '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона нишон додани он ҳатмист.';
+  const r3 = data.rule3 || '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан фавран ба деканат хабар диҳед.';
+  const blood = data.bloodGroup || 'A(II) Rh+ (Positive)';
+  const phone = data.contactPhone || '+992 (3312) 2-24-45';
+  const barcode = data.barcodeNumber || data.idNumber || data.studentId || '2-790106-102';
+  const addrCity = data.addressCity || 'ҶТ, вилояти Хатлон,';
+  const addrStreet = data.addressStreet || 'н. Данғара, кӯч. Марказӣ';
 
   const editableAttr = (field) => isEditable ? `contenteditable="true" data-field="${field}"` : '';
 
   return `
     <div class="card-face card-face-back" style="width: 440px; height: 278px; border-radius: 15px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; ${style}">
       
-      <!-- Back Header: Title & Validity -->
-      <div style="position: relative; z-index: 10; padding: 10px 16px 6px 16px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
-        <span ${editableAttr('backTitle')} style="font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: #0F172A;">
+      <!-- Back Header: Official title & Validity date -->
+      <div style="position: relative; z-index: 10; padding: 10px 16px 5px 16px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
+        <span ${editableAttr('backTitle')} style="font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #334155;">
           ${backTitle}
         </span>
-        <span style="font-size: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #065F46; background-color: #ECFDF5; padding: 2px 8px; border-radius: 4px; border: 1px solid #A7F3D0;">
+        <span style="font-size: 7.5px; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #065F46; background-color: #ECFDF5; padding: 2px 7px; border-radius: 4px; border: 1px solid #A7F3D0;">
           <span ${editableAttr('validity')}>${validity}</span>
         </span>
       </div>
 
-      <!-- Campus Regulations (3 Points) -->
-      <div style="position: relative; z-index: 10; padding: 4px 16px; font-size: 8px; color: #475569; display: flex; flex-direction: column; gap: 4px; line-height: 1.35;">
-        <div style="display: flex; align-items: flex-start; gap: 6px;">
+      <!-- Campus Regulations List -->
+      <div style="position: relative; z-index: 10; padding: 4px 16px; font-size: 7.5px; color: #475569; display: flex; flex-direction: column; gap: 3.5px; line-height: 1.35;">
+        <div style="display: flex; align-items: flex-start; gap: 5px;">
           <span style="font-weight: 700; color: #0284C7; flex-shrink: 0;">1.</span>
           <span ${editableAttr('rule1')}>${r1}</span>
         </div>
-        <div style="display: flex; align-items: flex-start; gap: 6px;">
+        <div style="display: flex; align-items: flex-start; gap: 5px;">
           <span style="font-weight: 700; color: #0284C7; flex-shrink: 0;">2.</span>
           <span ${editableAttr('rule2')}>${r2}</span>
         </div>
-        <div style="display: flex; align-items: flex-start; gap: 6px;">
+        <div style="display: flex; align-items: flex-start; gap: 5px;">
           <span style="font-weight: 700; color: #0284C7; flex-shrink: 0;">3.</span>
           <span ${editableAttr('rule3')}>${r3}</span>
         </div>
       </div>
 
-      <!-- Moodle Login Box -->
-      <div style="position: relative; z-index: 10; margin: 0 16px; padding: 6px 10px; background-color: #F8FAFC; border-radius: 6px; border: 1px solid #CBD5E1; display: flex; flex-direction: column; gap: 4px;">
-        <div style="display: flex; align-items: center; gap: 4px;">
-          <span style="width: 6px; height: 6px; border-radius: 50%; background-color: #059669; display: inline-block;"></span>
-          <span style="font-size: 7.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #082F49;">СИСТЕМАИ ТЕСТӢ / MOODLE</span>
+      <!-- Medical Emergency & Blood Group Chip (From Stitch) -->
+      <div style="position: relative; z-index: 10; margin: 0 16px; padding: 6px 12px; background-color: #F1F5F9; border-radius: 6px; border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <span style="font-size: 6.5px; text-transform: uppercase; font-weight: 700; color: #64748B; display: block;">Гурӯҳи хун / Резус-омил:</span>
+          <span ${editableAttr('bloodGroup')} style="font-size: 10px; font-weight: 900; color: #BE123C; font-family: 'JetBrains Mono', monospace;">
+            ${blood}
+          </span>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 8.5px; font-family: 'JetBrains Mono', monospace;">
-          <div style="background: #FFFFFF; padding: 2px 8px; border-radius: 4px; border: 1px solid #E2E8F0; display: flex; align-items: center; gap: 4px;">
-            <span style="color: #64748B; font-size: 7px; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;">Логин:</span>
-            <strong ${editableAttr('moodleLogin')} style="color: #0F172A;">${login}</strong>
-          </div>
-          <div style="background: #FFFFFF; padding: 2px 8px; border-radius: 4px; border: 1px solid #E2E8F0; display: flex; align-items: center; gap: 4px;">
-            <span style="color: #64748B; font-size: 7px; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 600;">Парол:</span>
-            <strong ${editableAttr('moodlePass')} style="color: #082F49;">${pass}</strong>
-          </div>
+        <div style="text-align: right;">
+          <span style="font-size: 6.5px; text-transform: uppercase; font-weight: 700; color: #64748B; display: block;">Телефон барои тамос:</span>
+          <span ${editableAttr('contactPhone')} style="font-size: 8.5px; font-weight: 600; color: #1E293B;">
+            ${phone}
+          </span>
         </div>
       </div>
 
-      <!-- Bottom Section: Barcode, QR Code & Address -->
-      <div style="position: relative; z-index: 10; padding: 8px 16px; border-top: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #FFFFFF;">
-        <!-- Barcode Simulation -->
+      <!-- Barcode & QR code validation section -->
+      <div style="position: relative; z-index: 10; padding: 6px 16px 8px 16px; border-top: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(255, 255, 255, 0.95);">
+        <!-- Simulated Code128 Barcode -->
         <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
-          <div style="height: 30px; width: 175px; display: flex; align-items: stretch; gap: 1.5px; background: #FFFFFF;">
+          <div style="height: 30px; width: 175px; display: flex; align-items: stretch; gap: 1.5px; background: #FFFFFF; padding: 2px;">
             <div style="width: 2.5px; background: #000;"></div><div style="width: 1px; background: #fff;"></div><div style="width: 3.5px; background: #000;"></div><div style="width: 1px; background: #fff;"></div>
             <div style="width: 1.5px; background: #000;"></div><div style="width: 2.5px; background: #000;"></div><div style="width: 2px; background: #fff;"></div><div style="width: 3px; background: #000;"></div>
             <div style="width: 1.5px; background: #fff;"></div><div style="width: 2px; background: #000;"></div><div style="width: 1px; background: #fff;"></div><div style="width: 1.5px; background: #000;"></div>
@@ -202,23 +197,22 @@ export function renderBadgeBackHtml(data = {}, options = {}) {
             <div style="width: 2px; background: #000;"></div><div style="width: 2px; background: #fff;"></div><div style="width: 3px; background: #000;"></div><div style="width: 1px; background: #fff;"></div>
             <div style="width: 1px; background: #000;"></div><div style="width: 2px; background: #000;"></div><div style="width: 1px; background: #fff;"></div><div style="width: 2px; background: #000;"></div>
           </div>
-          <span ${editableAttr('barcodeNumber')} style="font-size: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.1em; color: #1E293B; margin-top: 2px;">
+          <span ${editableAttr('barcodeNumber')} style="font-size: 7.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.1em; color: #1E293B; margin-top: 1px;">
             ${barcode}
           </span>
         </div>
 
-        <!-- QR Code & Address -->
+        <!-- Simulated QR code & Address -->
         <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-          <div style="width: 36px; height: 36px; background-color: #0F172A; padding: 2px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 38px; height: 38px; background-color: #0F172A; padding: 2px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
             <svg style="width: 100%; height: 100%; color: #FFFFFF;" fill="currentColor" viewBox="0 0 24 24">
               <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h2v2h-2v-2zm-4 0h2v2h-2v-2zm4 4h2v2h-2v-2zm-4 4h2v2h-2v-2zm2-2h2v2h-2v-2zm-2-4h2v2h-2v-2z"></path>
             </svg>
           </div>
-          <div style="font-size: 7.5px; color: #475569; line-height: 1.25;">
-            <span style="font-weight: 700; color: #0F172A; display: block;">Суроға:</span>
-            <span ${editableAttr('addressLine1')}>${addr1}</span><br/>
-            <span ${editableAttr('addressLine2')}>${addr2}</span><br/>
-            <strong ${editableAttr('addressLine3')} style="color: #082F49;">${addr3}</strong>
+          <div style="font-size: 6.5px; color: #64748B; line-height: 1.3;">
+            <span style="font-weight: 700; color: #334155; display: block;">Суроға:</span>
+            <span ${editableAttr('addressCity')}>${addrCity}</span><br/>
+            <strong ${editableAttr('addressStreet')} style="color: #082F49;">${addrStreet}</strong>
           </div>
         </div>
       </div>
@@ -226,7 +220,7 @@ export function renderBadgeBackHtml(data = {}, options = {}) {
       <!-- Bottom National Flag Trim (4px) -->
       <div class="tajik-ribbon-bar"></div>
 
-      <!-- Corner Crop Marks for card edges -->
+      <!-- Corner print crop guides -->
       <div style="position: absolute; top: 0; left: 0; width: 8px; height: 8px; border-top: 1px solid rgba(148, 163, 184, 0.5); border-left: 1px solid rgba(148, 163, 184, 0.5); pointer-events: none;"></div>
       <div style="position: absolute; top: 0; right: 0; width: 8px; height: 8px; border-top: 1px solid rgba(148, 163, 184, 0.5); border-right: 1px solid rgba(148, 163, 184, 0.5); pointer-events: none;"></div>
       <div style="position: absolute; bottom: 0; left: 0; width: 8px; height: 8px; border-bottom: 1px solid rgba(148, 163, 184, 0.5); border-left: 1px solid rgba(148, 163, 184, 0.5); pointer-events: none;"></div>

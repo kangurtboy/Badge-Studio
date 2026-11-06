@@ -64,7 +64,7 @@ export class PropertyInspector {
               ? `
             <div class="property-row">
               <span class="property-label">ID студента</span>
-              <input type="text" id="field-id-input" value="${this.cardData.idNumber || '2-790106'}" style="width: 160px; font-family: monospace; font-weight: bold;" />
+              <input type="text" id="field-id-input" value="${this.cardData.idNumber || '2-790106-102'}" style="width: 160px; font-family: monospace; font-weight: bold;" />
             </div>
 
             <div class="property-row">
@@ -95,27 +95,27 @@ export class PropertyInspector {
               : `
             <div class="property-row">
               <span class="property-label">Срок действия</span>
-              <input type="text" id="field-validity-input" value="${this.cardData.validity || 'EXP: 01/07/2028'}" style="width: 160px; font-family: monospace;" />
+              <input type="text" id="field-validity-input" value="${this.cardData.validity || 'VALID UNTIL: 01/07/2028'}" style="width: 160px; font-family: monospace;" />
             </div>
 
             <div class="property-row">
-              <span class="property-label">Moodle Логин</span>
-              <input type="text" id="field-login-input" value="${this.cardData.moodleLogin || 'gr26111'}" style="width: 160px; font-family: monospace;" />
+              <span class="property-label">Гурӯҳи хун</span>
+              <input type="text" id="field-blood-input" value="${this.cardData.bloodGroup || 'A(II) Rh+ (Positive)'}" style="width: 160px; font-family: monospace; font-weight: bold; color: #BE123C;" />
             </div>
 
             <div class="property-row">
-              <span class="property-label">Moodle Пароль</span>
-              <input type="text" id="field-pass-input" value="${this.cardData.moodlePass || 'Student1#'}" style="width: 160px; font-family: monospace;" />
+              <span class="property-label">Телефон</span>
+              <input type="text" id="field-phone-input" value="${this.cardData.contactPhone || '+992 (3312) 2-24-45'}" style="width: 160px;" />
             </div>
 
             <div class="property-row">
               <span class="property-label">Штрих-код</span>
-              <input type="text" id="field-barcode-input" value="${this.cardData.barcodeNumber || '2-790106'}" style="width: 160px; font-family: monospace;" />
+              <input type="text" id="field-barcode-input" value="${this.cardData.barcodeNumber || '2-790106-102'}" style="width: 160px; font-family: monospace;" />
             </div>
 
             <div class="property-row">
-              <span class="property-label">Суроға</span>
-              <input type="text" id="field-addr-input" value="${this.cardData.addressLine3 || 'ҷ.д Кангурт'}" style="width: 160px;" />
+              <span class="property-label">Суроға (кӯча)</span>
+              <input type="text" id="field-addr-input" value="${this.cardData.addressStreet || 'н. Данғара, кӯч. Марказӣ'}" style="width: 160px;" />
             </div>
           `
           }
@@ -187,9 +187,9 @@ export class PropertyInspector {
     bindSync('#field-director-input', 'directorName');
 
     bindSync('#field-validity-input', 'validity');
-    bindSync('#field-login-input', 'moodleLogin');
-    bindSync('#field-pass-input', 'moodlePass');
+    bindSync('#field-blood-input', 'bloodGroup');
+    bindSync('#field-phone-input', 'contactPhone');
     bindSync('#field-barcode-input', 'barcodeNumber');
-    bindSync('#field-addr-input', 'addressLine3');
+    bindSync('#field-addr-input', 'addressStreet');
   }
 }
