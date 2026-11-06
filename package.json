@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "fabric": "^7.4.0",
     "lucide": "^1.16.0"
   },
   "devDependencies": {

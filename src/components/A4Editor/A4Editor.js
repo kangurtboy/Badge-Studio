@@ -1,4 +1,5 @@
 import { SheetLayoutEngine } from '../../printing/layout.js';
+import { renderBadgeFrontHtml, renderBadgeBackHtml } from '../BadgeCard/renderBadgeHtml.js';
 
 export class A4Editor {
   constructor({ container, onFlipAll, onCardSelect, animationEnabled = true }) {
@@ -14,8 +15,8 @@ export class A4Editor {
     // Layout configuration
     this.layoutConfig = {
       orientation: 'portrait',
-      cardWidthMm: 90,
-      cardHeightMm: 55,
+      cardWidthMm: 85.6,
+      cardHeightMm: 54,
       marginTopMm: 12,
       marginBottomMm: 12,
       marginLeftMm: 12,
@@ -37,10 +38,6 @@ export class A4Editor {
 
   setAnimationEnabled(enabled) {
     this.animationEnabled = enabled;
-    const inners = this.container.querySelectorAll('.a4-card-cell-inner');
-    inners.forEach((inner) => {
-      inner.classList.toggle('no-animation', !enabled);
-    });
   }
 
   render() {
@@ -48,8 +45,8 @@ export class A4Editor {
     const { slots, grid, totalPages } = this.layoutEngine.getSlotsForCards(this.cards.length, this.currentPageIndex);
 
     const isLandscape = this.layoutConfig.orientation === 'landscape';
-    // Visual screen pixel scale for A4 sheet (approx 2.6 px per mm for crisp view)
-    const pxPerMm = 2.65;
+    // Visual screen pixel scale for A4 sheet (approx 2.75 px per mm)
+    const pxPerMm = 2.75;
     const sheetPxW = Math.round(grid.pageW * pxPerMm);
     const sheetPxH = Math.round(grid.pageH * pxPerMm);
 
@@ -74,7 +71,6 @@ export class A4Editor {
               <option value="auto" ${this.layoutConfig.columnMode === 'auto' ? 'selected' : ''}>Авто-колонки (${grid.columns})</option>
               <option value="2" ${this.layoutConfig.columnMode === '2' ? 'selected' : ''}>2 колонки</option>
               <option value="3" ${this.layoutConfig.columnMode === '3' ? 'selected' : ''}>3 колонки</option>
-              <option value="4" ${this.layoutConfig.columnMode === '4' ? 'selected' : ''}>4 колонки</option>
             </select>
           </div>
 
@@ -94,14 +90,13 @@ export class A4Editor {
             </button>
           </div>
 
-          <!-- Crop marks & Margins -->
+          <!-- Crop marks & Pagination -->
           <div style="display: flex; align-items: center; gap: 10px; font-size: 11px;">
             <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
               <input type="checkbox" id="a4-crop-marks" ${this.layoutConfig.showCropMarks ? 'checked' : ''} style="cursor: pointer;" />
               <span>Линии обрезки</span>
             </label>
 
-            <!-- Page switcher if multiple pages -->
             ${
               totalPages > 1
                 ? `
@@ -120,14 +115,14 @@ export class A4Editor {
           </div>
         </div>
 
-        <!-- Info / Diagnostic Strip -->
+        <!-- Info Diagnostic Strip -->
         <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; color: var(--text-secondary); width: 100%; max-width: 960px; padding: 0 4px;">
-          <span>Сетка листа: <strong>${grid.columns} колонок × ${grid.rows} строк</strong> (${grid.capacityPerPage} шт./лист)</span>
+          <span>Сетка: <strong>${grid.columns} колонок × ${grid.rows} строк</strong> (${grid.capacityPerPage} шт./лист)</span>
           <span>•</span>
           <span>Всего карточек: <strong>${this.cards.length}</strong> (Листов: <strong>${totalPages}</strong>)</span>
           <span>•</span>
-          <span style="color: ${grid.fits ? 'var(--success)' : 'var(--danger)'};">
-            ${grid.fits ? 'Карточки идеально помещаются на формате A4' : 'Внимание: выбранный размер карточки превышает полезную область листа!'}
+          <span style="color: var(--success); font-weight: 500;">
+            Стандарт CR-80 (85.60 × 53.98 мм) — Pixel-Perfect Stitch Layout
           </span>
         </div>
 
@@ -164,73 +159,18 @@ export class A4Editor {
         const slotW = Math.round(slot.widthMm * pxPerMm);
         const slotH = Math.round(slot.heightMm * pxPerMm);
 
-        const studentName = card.name || `Студент #${slot.cardIndex + 1}`;
-        const studentGroup = card.group || 'П-302';
-        const studentId = card.studentId || `ID-2026-${String(slot.cardIndex + 1).padStart(4, '0')}`;
-        const login = `${studentName.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '.')}.stud@kt.tj`;
+        // Native card is 440 x 278 px
+        const scaleFactor = slotW / 440;
+
+        const cardData = card.data || card;
+        const renderedCardHtml = this.isAllFlipped
+          ? renderBadgeBackHtml(cardData, { isEditable: false })
+          : renderBadgeFrontHtml(cardData, { isEditable: false });
 
         return `
-          <div class="a4-card-cell-perspective" style="position: absolute; left: ${slotLeft}px; top: ${slotTop}px; width: ${slotW}px; height: ${slotH}px;">
-            <div class="a4-card-cell-inner ${this.isAllFlipped ? 'flipped' : ''} ${!this.animationEnabled ? 'no-animation' : ''}" data-id="${card.id}" style="border: 0.5px solid #CBD5E1;">
-              
-              <!-- Front Side Face -->
-              <div class="a4-face a4-face-front" style="padding: 6px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 0.5px solid #E2E8F0; padding-bottom: 2px;">
-                  <img src="/assets/gerb-tajikistan-clean.png" style="width: 14px; height: 14px; object-fit: contain;" />
-                  <span style="font-size: 7px; font-weight: 800; color: #1E293B; text-align: center; line-height: 1.1;">
-                    КОЛЛЕҶИ ТИББИИ ДДТХ ТЕМУРМАЛИК
-                  </span>
-                  <img src="/assets/medical-emblem-clean.png" style="width: 13px; height: 13px; object-fit: contain;" />
-                </div>
-
-                <div style="display: flex; gap: 7px; align-items: center; margin: 3px 0;">
-                  <div style="width: 38px; height: 48px; border: 1px solid #334155; border-radius: 2px; overflow: hidden; flex-shrink: 0; background: #F8FAFC;">
-                    <img src="/assets/student-nigina.jpg" style="width: 100%; height: 100%; object-fit: cover;" />
-                  </div>
-
-                  <div style="flex: 1; min-width: 0;">
-                    <span style="font-size: 7px; font-family: monospace; font-weight: bold; color: #0E7490; background: #ECFEFF; border: 0.5px solid #A5F3FC; padding: 1px 4px; border-radius: 2px;">
-                      ID: 2-790106
-                    </span>
-                    <div style="font-size: 9.5px; font-weight: 800; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;">
-                      ${studentName}
-                    </div>
-                    <div style="font-size: 7.5px; color: #475569; font-weight: 600;">
-                      ${card.surname || 'Маҳмадсаидзода'}
-                    </div>
-                    <div style="font-size: 7px; color: #64748B;">
-                      Ихтисос: Кори ҳамширагӣ
-                    </div>
-                  </div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid #E2E8F0; padding-top: 2px; font-size: 6.5px; color: #475569;">
-                  <span><strong>Директор:</strong> Сафарзода З.И.</span>
-                  <span>85.6 × 54 мм</span>
-                </div>
-              </div>
-
-              <!-- Back Side Face -->
-              <div class="a4-face a4-face-back" style="padding: 6px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 0.5px solid #E2E8F0; padding-bottom: 2px;">
-                  <span style="font-size: 7px; font-weight: 800; color: #0F172A;">ҚОИДАҲОИ ИСТИФОДА</span>
-                  <span style="font-size: 6.5px; font-weight: bold; color: #065F46; background: #ECFDF5; border: 0.5px solid #A7F3D0; padding: 0.5px 3px; border-radius: 2px;">2024–2028</span>
-                </div>
-
-                <div style="margin: 3px 0; background: #F8FAFC; border: 0.5px solid #CBD5E1; border-radius: 3px; padding: 3px 5px;">
-                  <div style="font-size: 6px; font-weight: bold; color: #0F172A;">СИСТЕМАИ ТЕСТӢ (MOODLE):</div>
-                  <div style="display: flex; gap: 4px; font-size: 7px; margin-top: 1px;">
-                    <span>Логин: <strong style="color: #0E7490; font-family: monospace;">gr26111</strong></span>
-                    <span>Парол: <strong style="font-family: monospace;">Student1#</strong></span>
-                  </div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid #E2E8F0; padding-top: 2px; font-size: 6.5px; color: #475569;">
-                  <span>Штрих-код: <strong>2-790106</strong></span>
-                  <span>н. Темурмалик, <strong>Кангурт</strong></span>
-                </div>
-              </div>
-
+          <div class="a4-card-slot" data-id="${card.id}" title="Нажмите для редактирования карточки" style="position: absolute; left: ${slotLeft}px; top: ${slotTop}px; width: ${slotW}px; height: ${slotH}px; overflow: hidden; cursor: pointer; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.12); transition: transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 0 0 2px #0284C7'" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'">
+            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left; pointer-events: none;">
+              ${renderedCardHtml}
             </div>
           </div>
         `;
@@ -260,41 +200,39 @@ export class A4Editor {
   }
 
   bindEvents() {
-    // Orientation
     this.container.querySelector('#a4-orientation')?.addEventListener('change', (e) => {
       this.layoutConfig.orientation = e.target.value;
       this.render();
     });
 
-    // Columns
     this.container.querySelector('#a4-columns')?.addEventListener('change', (e) => {
       this.layoutConfig.columnMode = e.target.value;
       this.render();
     });
 
-    // Crop marks
     this.container.querySelector('#a4-crop-marks')?.addEventListener('change', (e) => {
       this.layoutConfig.showCropMarks = e.target.checked;
       this.render();
     });
 
-    // Flip Controls
     this.container.querySelector('#btn-a4-show-front')?.addEventListener('click', () => {
       this.isAllFlipped = false;
-      this.updateAllCardFaces();
+      this.render();
+      this.onFlipAll(false);
     });
 
     this.container.querySelector('#btn-a4-show-back')?.addEventListener('click', () => {
       this.isAllFlipped = true;
-      this.updateAllCardFaces();
+      this.render();
+      this.onFlipAll(true);
     });
 
     this.container.querySelector('#btn-a4-flip-all')?.addEventListener('click', () => {
       this.isAllFlipped = !this.isAllFlipped;
-      this.updateAllCardFaces();
+      this.render();
+      this.onFlipAll(this.isAllFlipped);
     });
 
-    // Pagination
     this.container.querySelector('#btn-prev-page')?.addEventListener('click', () => {
       if (this.currentPageIndex > 0) {
         this.currentPageIndex--;
@@ -307,28 +245,11 @@ export class A4Editor {
       this.render();
     });
 
-    // Card selection to switch back to editor
-    this.container.querySelectorAll('.a4-card-cell-inner').forEach((cell) => {
-      cell.addEventListener('click', () => {
-        const id = cell.dataset.id;
+    this.container.querySelectorAll('.a4-card-slot').forEach((slot) => {
+      slot.addEventListener('click', () => {
+        const id = slot.dataset.id;
         this.onCardSelect(id);
       });
     });
-  }
-
-  updateAllCardFaces() {
-    const inners = this.container.querySelectorAll('.a4-card-cell-inner');
-    inners.forEach((inner) => {
-      inner.classList.toggle('flipped', this.isAllFlipped);
-    });
-
-    const btnFront = this.container.querySelector('#btn-a4-show-front');
-    const btnBack = this.container.querySelector('#btn-a4-show-back');
-    if (btnFront && btnBack) {
-      btnFront.classList.toggle('active', !this.isAllFlipped);
-      btnBack.classList.toggle('active', this.isAllFlipped);
-    }
-
-    this.onFlipAll(this.isAllFlipped);
   }
 }

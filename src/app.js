@@ -14,10 +14,9 @@ import { AutoSaveManager } from './storage/autosave.js';
 import { loadProject, openDB } from './storage/indexedDB.js';
 import { RecoveryManager } from './storage/recovery.js';
 import { initIcons } from './utils/icons.js';
-import { CanvasTransformations } from './editor/transformations.js';
-import { ElementFactory } from './editor/elements.js';
 import { SheetLayoutEngine } from './printing/layout.js';
 import { AlignmentEngine } from './printing/alignment.js';
+import { renderBadgeFrontHtml, renderBadgeBackHtml } from './components/BadgeCard/renderBadgeHtml.js';
 
 export class App {
   constructor(rootEl) {
@@ -230,22 +229,17 @@ export class App {
     // Property Inspector (Right Sidebar)
     this.propertyInspector = new PropertyInspector({
       container: this.rootEl.querySelector('#properties-mount'),
-      onAddElement: (elemData) => this.handleAddElement(elemData),
-      onUpdateElement: (obj, props) => this.handleUpdateElement(obj, props),
-      onDeleteElement: (obj) => this.handleDeleteElement(obj),
-      onReorderElement: (obj, dir) => this.handleReorderElement(obj, dir),
-      onAlignElement: (obj, alignType) => this.handleAlignElement(obj, alignType),
-      onDuplicateElement: (obj) => this.handleDuplicateElement(obj),
-      onUploadImage: (dataUrl, targetObj) => {
-        this.photoEditorModal.open(dataUrl, targetObj);
+      onEditPhoto: (src) => {
+        this.photoEditorModal.open(src || this.badgeEditor.currentData.photoSrc, null);
       },
-      onEditPhoto: (targetObj) => {
-        const src = targetObj.getSrc ? targetObj.getSrc() : targetObj._element?.src;
-        if (src) {
-          this.photoEditorModal.open(src, targetObj);
-        }
+      onUploadImage: (dataUrl) => {
+        this.photoEditorModal.open(dataUrl, null);
       },
-      onUpdateBadgeSettings: (settings) => this.handleUpdateBadgeSettings(settings),
+      onUpdateField: (field, value) => {
+        this.badgeEditor.currentData[field] = value;
+        this.badgeEditor.updateCardDOM();
+        this.handleCanvasModified();
+      },
     });
 
     // Photo Editor Modal
@@ -365,6 +359,7 @@ export class App {
     const card = this.cards.find((c) => c.id === id);
     if (!card) return;
     this.badgeEditor.loadCardData(card);
+    this.propertyInspector.setCardData(this.badgeEditor.currentData, this.badgeEditor.canvasManager.activeSide);
   }
 
   syncCurrentCardToMemory() {
@@ -621,105 +616,27 @@ export class App {
   }
 
   renderPrintBadges(slots, side) {
+    const scaleFactor = 85.6 / (440 * 0.2645833);
+
     return slots
       .map((slot) => {
         const card = this.cards[slot.cardIndex];
         if (!card) return '';
 
         const isFront = side === 'front';
-        const studentName = card.name || `Студент #${slot.cardIndex + 1}`;
-        const studentGroup = card.group || 'П-302';
-        const studentId = card.studentId || `ID-2026-${String(slot.cardIndex + 1).padStart(4, '0')}`;
-        const login = `${studentName.toLowerCase().replace(/[^a-zа-яё0-9]/gi, '.')}.stud@kt.tj`;
+        const cardData = card.data || card;
 
-        if (isFront) {
-          return `
-            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; border-radius: 2mm; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
-              <!-- Header with Emblems -->
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.5mm 2.5mm 1mm 2.5mm; border-bottom: 0.2mm solid #E2E8F0;">
-                <img src="/assets/gerb-tajikistan-clean.png" style="width: 7.5mm; height: 7.5mm; object-fit: contain;" />
-                <div style="text-align: center; flex: 1; padding: 0 1.5mm; line-height: 1.15;">
-                  <div style="font-size: 4.8pt; font-weight: bold; color: #475569;">КОЛЛЕҶИ ТИББИИ</div>
-                  <div style="font-size: 5.4pt; font-weight: 800; color: #0F172A;">ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН</div>
-                  <div style="font-size: 4.8pt; font-weight: bold; color: #082F49;">ДАР НОҲИЯИ ТЕМУРМАЛИК</div>
-                </div>
-                <img src="/assets/medical-emblem-clean.png" style="width: 7.2mm; height: 7.2mm; object-fit: contain;" />
-              </div>
+        const renderedHtml = isFront
+          ? renderBadgeFrontHtml(cardData, { isEditable: false })
+          : renderBadgeBackHtml(cardData, { isEditable: false });
 
-              <!-- Main badge body -->
-              <div style="display: flex; gap: 2.5mm; padding: 2mm 2.5mm 1mm 2.5mm; box-sizing: border-box;">
-                <!-- Student Photo Box -->
-                <div style="width: 21mm; height: 27mm; border: 0.2mm solid #CBD5E1; border-radius: 1mm; overflow: hidden; flex-shrink: 0; background: #F8FAFC;">
-                  <img src="/assets/student-nigina.jpg" style="width: 100%; height: 100%; object-fit: cover;" />
-                </div>
-
-                <!-- Student Information -->
-                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between;">
-                  <!-- Dark Navy ID Pill -->
-                  <div style="display: inline-block; background-color: #082F49; border-radius: 0.8mm; padding: 0.4mm 2.5mm; width: fit-content;">
-                    <span style="font-size: 6.2pt; font-weight: bold; color: #FFFFFF; font-family: monospace;">2-790106</span>
-                  </div>
-
-                  <div style="margin: 0.5mm 0;">
-                    <div style="font-size: 8.5pt; font-weight: 900; color: #0F172A; line-height: 1.05;">РАҲИМОВА</div>
-                    <div style="font-size: 7.2pt; font-weight: 900; color: #0F172A; line-height: 1.05;">НИГИНА РУСТАМОВНА</div>
-                  </div>
-
-                  <div style="font-size: 5.2pt; color: #334155; line-height: 1.25;">
-                    <div><span style="color: #64748B;">Ихтисос:</span> <strong style="color: #082F49;">кори ҳамширагӣ</strong></div>
-                    <div style="color: #475569;"><span style="color: #059669; font-weight: bold;">•</span> Соли таҳсил: 2024–2028</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Footer with Director -->
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 6.5mm; background: #F8FAFC; border-top: 0.2mm solid #E2E8F0; display: flex; align-items: center; justify-content: center; gap: 3mm; font-size: 5.2pt; color: #334155;">
-                <span><strong>Директор:</strong></span>
-                <span style="font-family: 'Times New Roman', serif; font-style: italic; font-weight: bold; font-size: 6.8pt; color: #1E40AF;">Сафарзода</span>
-                <span><strong>Сафарзода З.И.</strong></span>
-              </div>
+        return `
+          <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; overflow: hidden; box-sizing: border-box; border-radius: 2mm;">
+            <div style="width: 440px; height: 278px; transform: scale(${scaleFactor}); transform-origin: top left;">
+              ${renderedHtml}
             </div>
-          `;
-        } else {
-          return `
-            <div class="print-badge-item" style="position: absolute; left: ${slot.leftMm}mm; top: ${slot.topMm}mm; width: ${slot.widthMm}mm; height: ${slot.heightMm}mm; border: 0.2mm solid #CBD5E1; background: #FFFFFF; box-sizing: border-box; overflow: hidden; font-family: 'Inter', sans-serif;">
-              <!-- Header with Validity -->
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.2mm 2.5mm; border-bottom: 0.2mm solid #E2E8F0;">
-                <span style="font-size: 5.5pt; font-weight: bold; color: #0F172A;">ҚОИДАҲОИ ИСТИФОДАИ ШАҲОДАТНОМА</span>
-                <span style="font-size: 4.8pt; font-weight: bold; color: #065F46; background: #ECFDF5; border: 0.2mm solid #A7F3D0; padding: 0.3mm 1mm; border-radius: 0.5mm;">ЭЪТИБОР: 2024–2028</span>
-              </div>
-
-              <!-- Regulations -->
-              <div style="padding: 1mm 2.5mm; font-size: 4.8pt; color: #334155; line-height: 1.25;">
-                <div>1. Шаҳодатнома ҳуҷҷати расмии донишҷӯ буда, ба дигарон додан манъ аст.</div>
-                <div>2. Дар ҳолати гум кардан ба маъмурияти коллеҷ хабар диҳед.</div>
-                <div>3. Ҳангоми ворид шудан ба маркази тестӣ пешниҳод карда мешавад.</div>
-              </div>
-
-              <!-- Moodle Box -->
-              <div style="margin: 0.5mm 2.5mm; background: #F8FAFC; border: 0.2mm solid #CBD5E1; border-radius: 1mm; padding: 1mm 1.5mm;">
-                <div style="font-size: 4.6pt; font-weight: bold; color: #0F172A; margin-bottom: 0.5mm;">МАЪЛУМОТИ ВОРИДШАВӢ БА СИСТЕМАИ ТЕСТӢ (MOODLE)</div>
-                <div style="display: flex; gap: 2mm; font-size: 5.2pt;">
-                  <span style="background: #FFFFFF; border: 0.2mm solid #E2E8F0; padding: 0.5mm 1.5mm; border-radius: 0.5mm;">Логин: <strong style="color: #0E7490; font-family: monospace;">gr26111</strong></span>
-                  <span style="background: #FFFFFF; border: 0.2mm solid #E2E8F0; padding: 0.5mm 1.5mm; border-radius: 0.5mm;">Парол: <strong style="color: #0F172A; font-family: monospace;">Student1#</strong></span>
-                </div>
-              </div>
-
-              <!-- Bottom Barcode & Address -->
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.2mm 2.5mm; border-top: 0.2mm solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; background: #FFFFFF;">
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                  <div style="width: 25mm; height: 5mm; background: #0F172A; border-radius: 0.5mm;"></div>
-                  <span style="font-size: 4.5pt; font-family: monospace; font-weight: bold; margin-top: 0.3mm;">2-790106</span>
-                </div>
-
-                <div style="font-size: 4.6pt; color: #475569; text-align: right; line-height: 1.2;">
-                  <span style="font-weight: bold; color: #0F172A;">Суроға:</span> вилояти Хатлон, ноҳияи Темурмалик,<br/>
-                  ҷамоати деҳоти <strong>Кангурт</strong>
-                </div>
-              </div>
-            </div>
-          `;
-        }
+          </div>
+        `;
       })
       .join('');
   }
