@@ -46,13 +46,115 @@ const DEMO_STUDENT: Student = {
   specialty: "кори ҳамширагӣ",
   studyYears: "2024–2028",
   expires: "01/07/2028",
-  login: "gr26111",
+  login: "gr790106",
   password: "Student1#",
   photo: "/images/demo-student.jpg",
   photoX: 50,
   photoY: 43,
   photoZoom: 1.08,
 };
+
+const TAJIK_DEMO_STUDENTS: Array<Student> = [
+  DEMO_STUDENT,
+  {
+    id: "demo-firuz",
+    fullName: "САИДОВ ФИРӮЗ КАРИМОВИЧ",
+    studentId: "2-790107",
+    specialty: "кори табобатӣ",
+    studyYears: "2023–2027",
+    expires: "01/07/2027",
+    login: "gr790107",
+    password: "Student1#",
+    photo: "/images/student-male-1.jpg",
+    photoX: 50,
+    photoY: 35,
+    photoZoom: 1.15,
+  },
+  {
+    id: "demo-madina",
+    fullName: "НАЗАРОВА МАДИНА ҲАКИМОВНА",
+    studentId: "2-790108",
+    specialty: "кори момодоягӣ",
+    studyYears: "2024–2027",
+    expires: "01/07/2027",
+    login: "gr790108",
+    password: "Student1#",
+    photo: "/images/student-female-2.jpg",
+    photoX: 50,
+    photoY: 36,
+    photoZoom: 1.1,
+  },
+  {
+    id: "demo-jamshed",
+    fullName: "КАРИМОВ ҶАМШЕД АЗИЗОВИЧ",
+    studentId: "2-790109",
+    specialty: "кори дандонсозӣ",
+    studyYears: "2024–2028",
+    expires: "01/07/2028",
+    login: "gr790109",
+    password: "Student1#",
+    photo: "/images/student-male-2.jpg",
+    photoX: 50,
+    photoY: 36,
+    photoZoom: 1.15,
+  },
+  {
+    id: "demo-gulnora",
+    fullName: "ХОЛОВА ГУЛНОРА САИДОВНА",
+    studentId: "2-790110",
+    specialty: "кори фарматсевтӣ",
+    studyYears: "2023–2026",
+    expires: "01/07/2026",
+    login: "gr790110",
+    password: "Student1#",
+    photo: "/images/student-female-3.jpg",
+    photoX: 50,
+    photoY: 34,
+    photoZoom: 1.25,
+  },
+  {
+    id: "demo-muhammad",
+    fullName: "ШАРИПОВ МУҲАММАД РУСТАМОВИЧ",
+    studentId: "2-790111",
+    specialty: "кори табобатӣ",
+    studyYears: "2024–2028",
+    expires: "01/07/2028",
+    login: "gr790111",
+    password: "Student1#",
+    photo: "/images/student-male-3.jpg",
+    photoX: 50,
+    photoY: 35,
+    photoZoom: 1.15,
+  },
+  {
+    id: "demo-tahmina",
+    fullName: "БОБОЕВА ТАҲМИНА ДАВЛАТОВНА",
+    studentId: "2-790112",
+    specialty: "ташхиси лабораторӣ",
+    studyYears: "2024–2027",
+    expires: "01/07/2027",
+    login: "gr790112",
+    password: "Student1#",
+    photo: "/images/student-female-4.jpg",
+    photoX: 50,
+    photoY: 32,
+    photoZoom: 1.2,
+  },
+  {
+    id: "demo-daler",
+    fullName: "ЮСУПОВ ДАЛЕР САФАРОВИЧ",
+    studentId: "2-790113",
+    specialty: "кори ҳамширагӣ",
+    studyYears: "2023–2026",
+    expires: "01/07/2026",
+    login: "gr790113",
+    password: "Student1#",
+    photo: "/images/student-male-4.jpg",
+    photoX: 50,
+    photoY: 34,
+    photoZoom: 1.18,
+  },
+];
 
 const RULES = [
   "Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.",
@@ -653,6 +755,18 @@ export default function App() {
     window.requestAnimationFrame(() => window.setTimeout(() => window.print(), 80));
   };
 
+  const fillDemoStudents = () => {
+    const filled = TAJIK_DEMO_STUDENTS.map((item, idx) => ({
+      ...item,
+      id: `student-${Date.now()}-${idx}`,
+    }));
+    setWorkspace({
+      students: filled,
+      selectedId: filled[0].id,
+    });
+    setToast("Варақ бо 8 донишҷӯи тиббӣ (4 духтар ва 4 писар) пур карда шуд!");
+  };
+
   const confirmDialog = () => {
     if (dialog === "clear") {
       try {
@@ -693,6 +807,106 @@ export default function App() {
         </header>
 
         <main className="workspace-layout">
+          <aside className="left-sidebar" aria-label="Панели функсияҳо">
+            <div className="left-sidebar-header">
+              <div className="sidebar-brand-title">
+                <span className="sidebar-icon"><Icon name="layout" size={16} /></span>
+                <div>
+                  <span className="eyebrow">МЕНЮИ АСОСӢ</span>
+                  <h3>Асбобҳо</h3>
+                </div>
+              </div>
+            </div>
+
+            <div className="sidebar-section">
+              <div className="sidebar-section-title">
+                <span>ДЕМО-МАЪЛУМОТ</span>
+                <i />
+              </div>
+              <div className="demo-fill-card">
+                <div className="demo-fill-badge">8 донишҷӯи тиббӣ</div>
+                <strong>Пур кардани варақ</strong>
+                <p>4 духтар ва 4 писар дар либоси тиббӣ бо номҳои тоҷикӣ ва ихтисосҳои гуногун.</p>
+                <button
+                  type="button"
+                  className="fill-demo-btn"
+                  onClick={fillDemoStudents}
+                >
+                  <Icon name="plus" size={14} />
+                  <span>Пур кардани 8 донишҷӯ</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="sidebar-section">
+              <div className="sidebar-section-title">
+                <span>РӮЙХАТИ БЕЙДЖҲО</span>
+                <span className="slot-badge">{students.length} / 8</span>
+              </div>
+              <div className="slot-nav-list">
+                {Array.from({ length: MAX_BADGES }, (_, idx) => {
+                  const item = slots[idx];
+                  const isCurSelected = selected?.id === item?.id;
+                  return (
+                    <button
+                      key={`nav-slot-${idx}`}
+                      type="button"
+                      className={`slot-nav-item ${isCurSelected ? "selected" : ""} ${item ? "filled" : "empty"}`}
+                      onClick={() => {
+                        if (item) {
+                          setWorkspace((curr) => ({ ...curr, selectedId: item.id }));
+                        } else {
+                          addStudent(idx);
+                        }
+                      }}
+                    >
+                      <span className="slot-nav-num">{String(idx + 1).padStart(2, "0")}</span>
+                      {item ? (
+                        <div className="slot-nav-preview">
+                          <div className="slot-nav-avatar">
+                            {item.photo ? (
+                              <img src={item.photo} alt={item.fullName} />
+                            ) : (
+                              <span>{item.fullName.charAt(0) || "Д"}</span>
+                            )}
+                          </div>
+                          <div className="slot-nav-text">
+                            <span className="slot-nav-name">{item.fullName}</span>
+                            <span className="slot-nav-sub">{item.specialty}</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="slot-nav-empty">+ Ҷойи холӣ</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="sidebar-section future-section">
+              <div className="sidebar-section-title">
+                <span>ИМКОНИЯТҲОИ ОЯНДА</span>
+                <span className="soon-pill">Ба қарибӣ</span>
+              </div>
+              <div className="future-card-list">
+                <div className="future-card-item">
+                  <span className="future-card-icon">📊</span>
+                  <div>
+                    <strong>Воридот аз Excel / CSV</strong>
+                    <span>Боркунии яклухти рӯйхат</span>
+                  </div>
+                </div>
+                <div className="future-card-item">
+                  <span className="future-card-icon">📑</span>
+                  <div>
+                    <strong>Экспорти PDF босифат</strong>
+                    <span>Барои чопхонаҳои касбӣ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
           <section className="canvas-panel" aria-label="Рабочий лист">
             <div className="canvas-toolbar">
               <div className="canvas-heading">
