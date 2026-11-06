@@ -1,24 +1,26 @@
-// Reusable pixel-perfect Stitch badge HTML renderer
-// Exactly matching updated Google Stitch screen: "Бейджик донишҷӯ (Front & Back) — Танҳо карточка"
-// Standard 96 x 67 mm (480px x 335px)
+// Unified Pixel-Perfect Badge HTML Renderer
+// Strict 96 x 67 mm (480px x 335px) pure HTML/CSS component
+// Used identically on: A4 sheet, Single preview, and Print Media
 
 export function renderBadgeFrontHtml(data = {}, options = {}) {
   const { isEditable = false, style = '' } = options;
 
-  const t1 = data.title1 || 'КОЛЛЕҶИ ТИББИИ';
-  const t2 = data.title2 || 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН';
+  const isDanghara = data.templateId === 'danghara';
+
+  const t1 = data.title1 || (isDanghara ? 'КОЛЛЕҶИ ТИББИИ ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН' : 'КОЛЛЕҶИ ТИББИИ');
+  const t2 = data.title2 || (isDanghara ? 'ДАР НОҲИЯИ ДАНҒАРА' : 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН');
   const t3 = data.title3 || 'ДАР НОҲИЯИ ТЕМУРМАЛИК';
   const idNum = data.idNumber || data.studentId || '2-790106';
   const name1 = data.nameLine1 || (data.name ? data.name.split(' ')[0] : 'РАҲИМОВА');
   const name2 = data.nameLine2 || (data.name ? data.name.split(' ').slice(1).join(' ') : 'НИГИНА РУСТАМОВНА');
   const spec = data.specialty || 'кори ҳамширагӣ';
   const cohort = data.cohort || '2024–2028';
-  const director = data.directorName || 'Сафарзода З.И.';
+  const director = data.directorName || (isDanghara ? 'Баротзода А.Ҳ.' : 'Сафарзода З.И.');
   const photo = data.photoSrc || '/assets/student-nigina.jpg';
   const emblemTajik = data.emblemTajikistan || '/assets/gerb-tajikistan-clean.png';
   const emblemMed = data.emblemMedical || '/assets/medical-emblem-clean.png';
 
-  const editableAttr = (field) => isEditable ? `contenteditable="true" data-field="${field}"` : '';
+  const editableAttr = (field) => (isEditable ? `contenteditable="true" data-field="${field}"` : '');
 
   return `
     <div class="card-face card-face-front" style="width: 480px; height: 335px; border-radius: 15px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(0,0,0,0.04); border: 1px solid rgba(203, 213, 225, 0.8); ${style}">
@@ -26,35 +28,57 @@ export function renderBadgeFrontHtml(data = {}, options = {}) {
       <!-- Guilloche background layer -->
       <div class="absolute inset-0 bg-guilloche-front pointer-events-none z-0" style="position: absolute; inset: 0; pointer-events: none; z-index: 0;"></div>
 
-      <!-- Top Header: Emblems and 3-line Title -->
-      <div style="position: relative; z-index: 10; padding: 12px 20px 4px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <!-- Left Logo: State Emblem (56x56 px, transparent) -->
-        <div style="width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-          <img src="${emblemTajik}" alt="Герби Ҷумҳурии Тоҷикистон" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" />
-        </div>
-        
-        <!-- Center Title (3 lines from Stitch) -->
-        <div style="flex: 1; text-align: center; padding: 0 4px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-          <div ${editableAttr('title1')} style="font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; line-height: 1.25;">
-            ${t1}
-          </div>
-          <div ${editableAttr('title2')} style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.025em; color: #0F172A; line-height: 1.25; margin-top: 2px;">
-            ${t2}
-          </div>
-          <div ${editableAttr('title3')} style="font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; line-height: 1.25; margin-top: 2px;">
-            ${t3}
+      ${
+        isDanghara
+          ? `
+        <!-- Top Tajik Flag Ribbon Accent for Danghara -->
+        <div style="position: relative; z-index: 10; width: 100%;">
+          <div class="tajik-ribbon-bar" style="height: 4px; width: 100%; background: linear-gradient(to bottom, #CC161F 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #007A3D 66.6%);"></div>
+          <div style="width: 100%; padding: 6px 20px 0 20px; display: flex; justify-content: center;">
+            <div style="width: 190px; height: 6px; border-radius: 9999px; background: linear-gradient(90deg, rgba(204, 22, 31, 0.9) 0%, rgba(204, 22, 31, 0.9) 28%, #ffffff 28%, #ffffff 72%, rgba(0, 122, 61, 0.9) 72%, rgba(0, 122, 61, 0.9) 100%); opacity: 0.9;"></div>
           </div>
         </div>
+        <!-- College Header -->
+        <div style="position: relative; z-index: 10; padding: 4px 16px 0 16px; text-align: center;">
+          <h1 style="font-size: 9px; font-weight: 800; text-transform: uppercase; line-height: 1.25; letter-spacing: -0.01em; color: #0F172A; font-family: 'PT Serif', Georgia, serif; margin: 0;">
+            <span ${editableAttr('title1')}>${t1}</span><br/>
+            <span ${editableAttr('title2')} style="color: #082F49; font-family: 'Inter', sans-serif; font-weight: 700;">${t2}</span>
+          </h1>
+          <div style="width: 96px; height: 1px; background-color: #CBD5E1; margin: 4px auto 0 auto;"></div>
+        </div>
+      `
+          : `
+        <!-- Top Header: Emblems and 3-line Title (Temurmalik) -->
+        <div style="position: relative; z-index: 10; padding: 12px 20px 4px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <!-- Left Logo: State Emblem (56x56 px, transparent) -->
+          <div style="width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+            <img src="${emblemTajik}" alt="Герби Тоҷикистон" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" />
+          </div>
+          
+          <!-- Center Title (3 lines from Stitch) -->
+          <div style="flex: 1; text-align: center; padding: 0 4px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div ${editableAttr('title1')} style="font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; line-height: 1.25;">
+              ${t1}
+            </div>
+            <div ${editableAttr('title2')} style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.025em; color: #0F172A; line-height: 1.25; margin-top: 2px;">
+              ${t2}
+            </div>
+            <div ${editableAttr('title3')} style="font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #334155; line-height: 1.25; margin-top: 2px;">
+              ${t3}
+            </div>
+          </div>
 
-        <!-- Right Logo: Medical Snake (56x56 px, transparent) -->
-        <div style="width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-          <img src="${emblemMed}" alt="Эмблемаи тиббӣ" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" />
+          <!-- Right Logo: Medical Snake (56x56 px, transparent) -->
+          <div style="width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+            <img src="${emblemMed}" alt="Эмблемаи тиббӣ" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" />
+          </div>
         </div>
-      </div>
+      `
+      }
 
       <!-- Main Body: Student Photo + Info -->
       <div style="position: relative; z-index: 10; padding: 6px 20px; display: flex; align-items: center; gap: 16px; flex: 1;">
-        <!-- Student Photo with rounded corners and border (124px x 162px from Stitch) -->
+        <!-- Student Photo with rounded corners and border -->
         <div class="student-photo-container" style="width: 124px; height: 162px; flex-shrink: 0; border-radius: 6px; overflow: hidden; border: 1px solid #CBD5E1; box-shadow: 0 1px 3px rgba(0,0,0,0.1); background-color: #F1F5F9; position: relative; cursor: ${isEditable ? 'pointer' : 'default'};">
           <img src="${photo}" alt="Акси донишҷӯ" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           ${
@@ -126,19 +150,23 @@ export function renderBadgeFrontHtml(data = {}, options = {}) {
 export function renderBadgeBackHtml(data = {}, options = {}) {
   const { isEditable = false, style = '' } = options;
 
-  const backTitle = data.backTitle || 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)';
-  const validity = data.validity || 'EXP: 01/07/2028';
+  const isDanghara = data.templateId === 'danghara';
+
+  const backTitle = data.backTitle || (isDanghara ? 'Қоидаҳои истифодаи шаҳодатнома' : 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)');
+  const validity = data.validity || (isDanghara ? 'VALID UNTIL: 01/07/2028' : 'EXP: 01/07/2028');
   const r1 = data.rule1 || '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.';
   const r2 = data.rule2 || '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.';
   const r3 = data.rule3 || '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.';
   const login = data.moodleLogin || 'gr26111';
   const pass = data.moodlePass || 'Student1#';
+  const blood = data.bloodGroup || 'A(II) Rh+ (Positive)';
+  const phone = data.contactPhone || '+992 (3312) 2-24-45';
   const barcode = data.barcodeNumber || data.idNumber || data.studentId || '2-790106';
   const addrCity = data.addressCity || 'ҶТ, вилояти Хатлон,';
-  const addrDistrict = data.addressDistrict || 'ноҳияи Темурмалик,';
-  const addrVillage = data.addressVillage || 'ҷ.д Кангурт';
+  const addrDistrict = data.addressDistrict || (isDanghara ? 'н. Данғара,' : 'ноҳияи Темурмалик,');
+  const addrVillage = data.addressVillage || (isDanghara ? 'кӯч. Марказӣ' : 'ҷ.д Кангурт');
 
-  const editableAttr = (field) => isEditable ? `contenteditable="true" data-field="${field}"` : '';
+  const editableAttr = (field) => (isEditable ? `contenteditable="true" data-field="${field}"` : '');
 
   return `
     <div class="card-face card-face-back" style="width: 480px; height: 335px; border-radius: 15px; overflow: hidden; background-color: #FFFFFF; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(0,0,0,0.04); border: 1px solid rgba(203, 213, 225, 0.8); ${style}">
@@ -172,25 +200,47 @@ export function renderBadgeBackHtml(data = {}, options = {}) {
         </div>
       </div>
 
-      <!-- Testing System Container (Moodle) -->
-      <div style="position: relative; z-index: 10; margin: 0 20px; padding: 10px 12px; background-color: rgba(248, 250, 252, 0.95); border-radius: 6px; border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <div style="flex: 1;">
-          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #059669; display: inline-block;"></span>
-            <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #082F49; display: block;">СИСТЕМАИ ТЕСТӢ</span>
+      ${
+        isDanghara
+          ? `
+        <!-- Blood Group Chip for Danghara -->
+        <div style="position: relative; z-index: 10; margin: 0 20px; padding: 6px 12px; background-color: #F1F5F9; border-radius: 6px; border: 1px solid rgba(226, 232, 240, 0.8); display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <span style="font-size: 6.5px; text-transform: uppercase; font-weight: 700; color: #64748B; display: block;">Гурӯҳи хун / Резус-омил:</span>
+            <span ${editableAttr('bloodGroup')} style="font-size: 10px; font-weight: 900; color: #BE123C; font-family: 'JetBrains Mono', monospace;">
+              ${blood}
+            </span>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="background: #FFFFFF; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 6px;">
-              <span style="color: #64748B; font-size: 9.5px; text-transform: uppercase; font-weight: 500;">Логин:</span>
-              <strong ${editableAttr('moodleLogin')} style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #0F172A; font-size: 12px; letter-spacing: -0.02em;">${login}</strong>
+          <div style="text-align: right;">
+            <span style="font-size: 6.5px; text-transform: uppercase; font-weight: 700; color: #64748B; display: block;">Телефон барои тамос:</span>
+            <span ${editableAttr('contactPhone')} style="font-size: 8.5px; font-weight: 600; color: #1E293B;">
+              ${phone}
+            </span>
+          </div>
+        </div>
+      `
+          : `
+        <!-- Testing System Container (Moodle) -->
+        <div style="position: relative; z-index: 10; margin: 0 20px; padding: 10px 12px; background-color: rgba(248, 250, 252, 0.95); border-radius: 6px; border: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #059669; display: inline-block;"></span>
+              <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #082F49; display: block;">СИСТЕМАИ ТЕСТӢ</span>
             </div>
-            <div style="background: #FFFFFF; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 6px;">
-              <span style="color: #64748B; font-size: 9.5px; text-transform: uppercase; font-weight: 500;">Парол:</span>
-              <strong ${editableAttr('moodlePass')} style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #082F49; font-size: 12px; letter-spacing: -0.02em;">${pass}</strong>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: #FFFFFF; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 6px;">
+                <span style="color: #64748B; font-size: 9.5px; text-transform: uppercase; font-weight: 500;">Логин:</span>
+                <strong ${editableAttr('moodleLogin')} style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #0F172A; font-size: 12px; letter-spacing: -0.02em;">${login}</strong>
+              </div>
+              <div style="background: #FFFFFF; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; gap: 6px;">
+                <span style="color: #64748B; font-size: 9.5px; text-transform: uppercase; font-weight: 500;">Парол:</span>
+                <strong ${editableAttr('moodlePass')} style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #082F49; font-size: 12px; letter-spacing: -0.02em;">${pass}</strong>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      `
+      }
 
       <!-- Barcode, QR Code & College Address -->
       <div style="position: relative; z-index: 10; padding: 10px 20px; border-top: 1px solid rgba(226, 232, 240, 0.9); display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #FFFFFF;">
