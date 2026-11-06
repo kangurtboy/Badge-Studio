@@ -1,7 +1,7 @@
 // Header Component for Badge Studio
 
 export class Header {
-  constructor({ container, onModeChange, onNewBadge, onUndo, onRedo, onOpenSettings, onPrint, onTitleChange }) {
+  constructor({ container, onModeChange, onNewBadge, onUndo, onRedo, onOpenSettings, onPrint, onTitleChange, onResetStitch }) {
     this.container = container;
     this.onModeChange = onModeChange;
     this.onNewBadge = onNewBadge;
@@ -10,6 +10,7 @@ export class Header {
     this.onOpenSettings = onOpenSettings;
     this.onPrint = onPrint;
     this.onTitleChange = onTitleChange;
+    this.onResetStitch = onResetStitch || (() => {});
     this.currentMode = 'editor';
 
     this.render();
@@ -60,6 +61,9 @@ export class Header {
           <button class="btn-icon" id="btn-redo" title="Повторить (Ctrl+Shift+Z)" disabled>
             <i data-lucide="redo-2"></i>
           </button>
+          <button class="btn-secondary" id="btn-reset-stitch" title="Принудительно загрузить чистый макет из Google Stitch" style="color: #38bdf8; font-weight: 600; border: 1px solid rgba(56, 189, 248, 0.35); background: rgba(56, 189, 248, 0.08);">
+            <i data-lucide="rotate-cw"></i> Макет Stitch
+          </button>
           <button class="btn-secondary" id="btn-new-badge" title="Создать новый бейджик">
             <i data-lucide="plus"></i> Новый бейджик
           </button>
@@ -89,6 +93,7 @@ export class Header {
 
     this.container.querySelector('#btn-undo').addEventListener('click', () => this.onUndo());
     this.container.querySelector('#btn-redo').addEventListener('click', () => this.onRedo());
+    this.container.querySelector('#btn-reset-stitch')?.addEventListener('click', () => this.onResetStitch());
     this.container.querySelector('#btn-new-badge').addEventListener('click', () => this.onNewBadge());
     this.container.querySelector('#btn-settings').addEventListener('click', () => this.onOpenSettings());
     this.container.querySelector('#btn-print').addEventListener('click', () => this.onPrint());

@@ -185,6 +185,18 @@ export class App {
       onRedo: () => this.handleRedo(),
       onOpenSettings: () => this.settingsModal.open(),
       onPrint: () => this.switchMode('print'),
+      onResetStitch: async () => {
+        this.loadSampleData();
+        this.sidebar.setCards(this.cards, this.currentCardId);
+        this.loadCardIntoEditor(this.currentCardId);
+        await this.autoSaveManager.saveNow({
+          id: 'current-project',
+          version: '5.0-stitch-exact',
+          cards: this.cards,
+          currentCardId: this.currentCardId,
+          settings: this.settings,
+        });
+      },
     });
 
     // Sidebar
