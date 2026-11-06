@@ -37,7 +37,7 @@ type Workspace = {
 type IconName = "plus" | "minus" | "trash" | "rotate" | "print" | "image" | "check" | "close" | "warning" | "maximize" | "layout";
 
 const STORAGE_KEY = "badge-studio.workspace.v2";
-const MAX_BADGES = 6;
+const MAX_BADGES = 8;
 
 const DEMO_STUDENT: Student = {
   id: "demo-nigina",
@@ -104,15 +104,12 @@ function normalizeStudent(value: unknown): Student | null {
   };
 }
 
-function slotForPrint(slots: Array<Student | null>, side: Side, layout: "portrait" | "landscape", visualIndex: number) {
-  if (side === "front") {
-    return { physicalIndex: visualIndex, student: slots[visualIndex] ?? null };
-  }
-  const cols = layout === "portrait" ? 2 : 3;
-  const row = Math.floor(visualIndex / cols);
-  const col = visualIndex % cols;
-  const mirroredCol = cols - 1 - col;
-  const physicalIndex = row * cols + mirroredCol;
+function slotForPrint(slots: Array<Student | null>, side: Side, visualIndex: number) {
+  const physicalIndex = side === "front"
+    ? visualIndex
+    : visualIndex % 2 === 0
+      ? visualIndex + 1
+      : visualIndex - 1;
   return { physicalIndex, student: slots[physicalIndex] ?? null };
 }
 
@@ -337,9 +334,21 @@ function BadgeArtwork({
     );
   }
 
+  // Convert 0..100% position to offset translation.
+  // Center is 50%, so offset is (photoX - 50)%.
+  // Multiplication factor 1.25 gives ample room to move the face left, right, up, down!
+  const offsetX = (student.photoX - 50) * 1.25;
+  const offsetY = (student.photoY - 50) * 1.25;
+
   const photoStyle: CSSProperties = {
-    objectPosition: `${student.photoX}% ${student.photoY}%`,
-    transform: `scale(${student.photoZoom})`,
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    transform: `translate(calc(-50% + ${offsetX}%), calc(-50% + ${offsetY}%)) scale(${student.photoZoom})`,
+    transformOrigin: "center center",
     userSelect: "none",
     pointerEvents: "none",
   };
@@ -357,8 +366,8 @@ function BadgeArtwork({
     const frameHeight = frameRect.height || 160;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      const deltaX = ((moveEvent.clientX - startClientX) / frameWidth) * 100;
-      const deltaY = ((moveEvent.clientY - startClientY) / frameHeight) * 100;
+      const deltaX = ((moveEvent.clientX - startClientX) / frameWidth) * 80;
+      const deltaY = ((moveEvent.clientY - startClientY) / frameHeight) * 80;
       const nextX = Math.round(Math.max(0, Math.min(100, startX + deltaX)));
       const nextY = Math.round(Math.max(0, Math.min(100, startY + deltaY)));
       update("photoX", nextX);
@@ -520,7 +529,6 @@ export default function App() {
   const [workspace, setWorkspace] = useState<Workspace>(createInitialWorkspace);
   const [side, setSide] = useState<Side>("front");
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
-  const [sheetLayout, setSheetLayout] = useState<"portrait" | "landscape">("portrait");
   const [zoom, setZoom] = useState<number>(1);
   const [printSide, setPrintSide] = useState<Side | null>(null);
   const [dialog, setDialog] = useState<"clear" | "remove" | null>(null);
@@ -656,29 +664,10 @@ export default function App() {
               <div className="canvas-heading">
                 <div className="canvas-heading-title"><span className="eyebrow">РАБОЧАЯ ОБЛАСТЬ</span><h1>Лист бейджей</h1></div>
                 <div className="sheet-spec">
-                  <span>A4</span><i />{sheetLayout === "portrait" ? "210 × 297 мм (2×3)" : "297 × 210 мм (3×2)"}<i />96 × 67 мм
+                  <span>A4</span><i />210 × 297 мм (2×4)<i />96 × 67 мм
                 </div>
               </div>
               <div className="canvas-tools">
-                <div className="layout-switch" role="group" aria-label="Сетка листа">
-                  <button
-                    type="button"
-                    className={`layout-btn ${sheetLayout === "portrait" ? "active" : ""}`}
-                    title="Книжная ориентация: 2 колонки × 3 ряда"
-                    onClick={() => setSheetLayout("portrait")}
-                  >
-                    2×3 Книжная
-                  </button>
-                  <button
-                    type="button"
-                    className={`layout-btn ${sheetLayout === "landscape" ? "active" : ""}`}
-                    title="Альбомная ориентация: 3 колонки × 2 ряда"
-                    onClick={() => setSheetLayout("landscape")}
-                  >
-                    3×2 Альбомная
-                  </button>
-                </div>
-
                 <div className="side-switch" role="tablist" aria-label="Сторона бейджей">
                   <button
                     type="button"
@@ -705,19 +694,6 @@ export default function App() {
                     Оборот
                   </button>
                 </div>
-
-                <button
-                  type="button"
-                  className="rotate-all-btn"
-                  title="Перевернуть все бейджи на листе"
-                  onClick={() => {
-                    setSide((prev) => (prev === "front" ? "back" : "front"));
-                    setFlippedCards({});
-                  }}
-                >
-                  <Icon name="rotate" size={13} />
-                  <span>Перевернуть все</span>
-                </button>
 
                 <div className="zoom-bar">
                   <button
@@ -748,7 +724,7 @@ export default function App() {
                     type="button"
                     className="zoom-btn"
                     title="По размеру экрана"
-                    onClick={() => setZoom(sheetLayout === "portrait" ? 0.88 : 0.82)}
+                    onClick={() => setZoom(0.85)}
                   >
                     <Icon name="maximize" size={12} />
                   </button>
@@ -771,87 +747,88 @@ export default function App() {
               }}
             >
               <div
-                className={`sheet-page ${sheetLayout === "landscape" ? "is-landscape" : ""}`}
+                className="sheet-zoom-wrapper"
                 style={{
                   transform: `scale(${zoom})`,
                   transformOrigin: "center top",
                 }}
-                aria-label={`Лист A4, ${MAX_BADGES} мест для бейджей`}
               >
-                <div className="sheet-grid">
-                  {Array.from({ length: MAX_BADGES }, (_, slotIndex) => {
-                    const student = slots[slotIndex];
-                    const isSelected = selected?.id === student?.id;
-                    const isCardFlipped = (side === "back") !== Boolean(student && flippedCards[student.id]);
+                <div className="sheet-page" aria-label={`Лист A4, ${MAX_BADGES} мест для бейджей`}>
+                  <div className="sheet-grid">
+                    {Array.from({ length: MAX_BADGES }, (_, slotIndex) => {
+                      const student = slots[slotIndex];
+                      const isSelected = selected?.id === student?.id;
+                      const isCardFlipped = (side === "back") !== Boolean(student && flippedCards[student.id]);
 
-                    return student ? (
-                      <div
-                        key={`slot-${slotIndex}`}
-                        className={`badge-slot ${isSelected ? "is-selected" : ""}`}
-                        onClick={() => setWorkspace((current) => ({ ...current, selectedId: student.id }))}
-                        onKeyDown={(event) => {
-                          if ((event.key === "Enter" || event.key === " ") && event.target === event.currentTarget) {
-                            event.preventDefault();
-                            setWorkspace((current) => ({ ...current, selectedId: student.id }));
-                          }
-                        }}
-                        tabIndex={0}
-                        aria-label={`Бейдж ${slotIndex + 1}: ${student.fullName || "без имени"}`}
-                      >
-                        <div className={`badge-flipper ${isCardFlipped ? "show-back" : ""}`}>
-                          <div className="badge-face front-face">
-                            <BadgeArtwork
-                              student={student}
-                              side="front"
-                              update={(field, value) => updateStudent(student.id, field, value)}
-                              onUploadPhoto={() => {
-                                setWorkspace((current) => ({ ...current, selectedId: student.id }));
-                                photoInput.current?.click();
-                              }}
-                            />
-                          </div>
-                          <div className="badge-face back-face">
-                            <BadgeArtwork
-                              student={student}
-                              side="back"
-                              update={(field, value) => updateStudent(student.id, field, value)}
-                              onUploadPhoto={() => {
-                                setWorkspace((current) => ({ ...current, selectedId: student.id }));
-                                photoInput.current?.click();
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <button
-                          className="flip-control"
-                          type="button"
-                          aria-label="Перевернуть этот бейдж"
-                          title="Перевернуть только этот бейдж"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setFlippedCards((prev) => ({
-                              ...prev,
-                              [student.id]: !prev[student.id],
-                            }));
+                      return student ? (
+                        <div
+                          key={`slot-${slotIndex}`}
+                          className={`badge-slot ${isSelected ? "is-selected" : ""}`}
+                          onClick={() => setWorkspace((current) => ({ ...current, selectedId: student.id }))}
+                          onKeyDown={(event) => {
+                            if ((event.key === "Enter" || event.key === " ") && event.target === event.currentTarget) {
+                              event.preventDefault();
+                              setWorkspace((current) => ({ ...current, selectedId: student.id }));
+                            }
                           }}
+                          tabIndex={0}
+                          aria-label={`Бейдж ${slotIndex + 1}: ${student.fullName || "без имени"}`}
                         >
-                          <Icon name="rotate" size={14} />
+                          <div className={`badge-flipper ${isCardFlipped ? "show-back" : ""}`}>
+                            <div className="badge-face front-face">
+                              <BadgeArtwork
+                                student={student}
+                                side="front"
+                                update={(field, value) => updateStudent(student.id, field, value)}
+                                onUploadPhoto={() => {
+                                  setWorkspace((current) => ({ ...current, selectedId: student.id }));
+                                  photoInput.current?.click();
+                                }}
+                              />
+                            </div>
+                            <div className="badge-face back-face">
+                              <BadgeArtwork
+                                student={student}
+                                side="back"
+                                update={(field, value) => updateStudent(student.id, field, value)}
+                                onUploadPhoto={() => {
+                                  setWorkspace((current) => ({ ...current, selectedId: student.id }));
+                                  photoInput.current?.click();
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <button
+                            className="flip-control"
+                            type="button"
+                            aria-label="Перевернуть этот бейдж"
+                            title="Перевернуть только этот бейдж"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setFlippedCards((prev) => ({
+                                ...prev,
+                                [student.id]: !prev[student.id],
+                              }));
+                            }}
+                          >
+                            <Icon name="rotate" size={14} />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          className="empty-slot"
+                          type="button"
+                          key={`empty-${slotIndex}`}
+                          onClick={() => addStudent(slotIndex)}
+                          aria-label={`Добавить студента в место ${slotIndex + 1}`}
+                        >
+                          <span className="empty-slot-count">{String(slotIndex + 1).padStart(2, "0")}</span>
+                          <span className="empty-slot-plus"><Icon name="plus" size={17} /></span>
+                          <span className="empty-slot-label">Добавить</span>
                         </button>
-                      </div>
-                    ) : (
-                      <button
-                        className="empty-slot"
-                        type="button"
-                        key={`empty-${slotIndex}`}
-                        onClick={() => addStudent(slotIndex)}
-                        aria-label={`Добавить студента в место ${slotIndex + 1}`}
-                      >
-                        <span className="empty-slot-count">{String(slotIndex + 1).padStart(2, "0")}</span>
-                        <span className="empty-slot-plus"><Icon name="plus" size={17} /></span>
-                        <span className="empty-slot-label">Добавить</span>
-                      </button>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
@@ -866,7 +843,7 @@ export default function App() {
             {selected ? (
               <>
                 <div className="inspector-heading">
-                  <div><span className="eyebrow">БЕЙДЖ {String(selectedIndex + 1).padStart(2, "0")} / 06</span><h2>Данные студента</h2></div>
+                  <div><span className="eyebrow">БЕЙДЖ {String(selectedIndex + 1).padStart(2, "0")} / 08</span><h2>Данные студента</h2></div>
                   <span className="selected-mark"><Icon name="check" size={13} /></span>
                 </div>
                 <div className="inline-edit-hint"><span className="hint-cursor">T</span>Текст на макете тоже можно редактировать кликом</div>
@@ -926,11 +903,11 @@ export default function App() {
       </div>
 
       {printSide && (
-        <div id="print-root" data-side={printSide} className={sheetLayout === "landscape" ? "is-landscape" : ""}>
-          <div className={`print-page ${sheetLayout === "landscape" ? "is-landscape" : ""}`}>
+        <div id="print-root" data-side={printSide}>
+          <div className="print-page">
             <div className="print-grid">
               {Array.from({ length: MAX_BADGES }, (_, visualIndex) => {
-                const { student } = slotForPrint(slots, printSide, sheetLayout, visualIndex);
+                const { student } = slotForPrint(slots, printSide, visualIndex);
                 return (
                   <div className={`print-slot ${student ? "filled" : "empty"}`} key={`print-${visualIndex}`}>
                     {student && <BadgeArtwork student={student} side={printSide} update={(field, value) => updateStudent(student.id, field, value)} />}
