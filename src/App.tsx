@@ -735,7 +735,7 @@ export default function App() {
                     type="range"
                     className="zoom-range-input"
                     min="0.5"
-                    max="1.7"
+                    max="2.0"
                     step="0.05"
                     value={zoom}
                     onChange={(e) => setZoom(Number(e.target.value))}
