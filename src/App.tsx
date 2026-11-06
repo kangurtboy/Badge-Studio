@@ -48,7 +48,7 @@ const DEMO_STUDENT: Student = {
   expires: "01/07/2028",
   login: "gr790106",
   password: "Student1#",
-  photo: "/images/demo-student.jpg",
+  photo: "./images/demo-student.jpg",
   photoX: 50,
   photoY: 43,
   photoZoom: 1.08,
@@ -65,7 +65,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2027",
     login: "gr790107",
     password: "Student1#",
-    photo: "/images/student-male-1.jpg",
+    photo: "./images/student-male-1.jpg",
     photoX: 50,
     photoY: 35,
     photoZoom: 1.15,
@@ -79,7 +79,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2027",
     login: "gr790108",
     password: "Student1#",
-    photo: "/images/student-female-2.jpg",
+    photo: "./images/student-female-2.jpg",
     photoX: 50,
     photoY: 36,
     photoZoom: 1.1,
@@ -93,7 +93,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2028",
     login: "gr790109",
     password: "Student1#",
-    photo: "/images/student-male-2.jpg",
+    photo: "./images/student-male-2.jpg",
     photoX: 50,
     photoY: 36,
     photoZoom: 1.15,
@@ -107,7 +107,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2026",
     login: "gr790110",
     password: "Student1#",
-    photo: "/images/student-female-3.jpg",
+    photo: "./images/student-female-3.jpg",
     photoX: 50,
     photoY: 34,
     photoZoom: 1.25,
@@ -121,7 +121,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2028",
     login: "gr790111",
     password: "Student1#",
-    photo: "/images/student-male-3.jpg",
+    photo: "./images/student-male-3.jpg",
     photoX: 50,
     photoY: 35,
     photoZoom: 1.15,
@@ -135,7 +135,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2027",
     login: "gr790112",
     password: "Student1#",
-    photo: "/images/student-female-4.jpg",
+    photo: "./images/student-female-4.jpg",
     photoX: 50,
     photoY: 32,
     photoZoom: 1.2,
@@ -149,7 +149,7 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
     expires: "01/07/2026",
     login: "gr790113",
     password: "Student1#",
-    photo: "/images/student-male-4.jpg",
+    photo: "./images/student-male-4.jpg",
     photoX: 50,
     photoY: 34,
     photoZoom: 1.18,
@@ -518,7 +518,7 @@ function BadgeArtwork({
     <div className="badge-artwork badge-front">
       <div className="front-heading">
         <div className="crest-seal">
-          <img src="/assets/emblem-tajikistan.svg" alt="Герби Тоҷикистон" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+          <img src="./assets/emblem-tajikistan.svg" alt="Герби Тоҷикистон" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </div>
         <div className="institution-name">
           <span>КОЛЛЕҶИ ТИББИИ</span>
@@ -526,7 +526,7 @@ function BadgeArtwork({
           <span>ДАР НОҲИЯИ ТЕМУРМАЛИК</span>
         </div>
         <div className="medical-seal">
-          <img src="/assets/medical-emblem-clean.png" alt="Эмблемаи тиббӣ" style={{ width: "100%", height: "100%", objectFit: "contain", transform: "scale(1.18)", mixBlendMode: "multiply" }} />
+          <img src="./assets/medical-emblem-clean.png" alt="Эмблемаи тиббӣ" style={{ width: "100%", height: "100%", objectFit: "contain", transform: "scale(1.18)", mixBlendMode: "multiply" }} />
         </div>
       </div>
       <div className="front-body">
