@@ -378,16 +378,41 @@ export class App {
   addNewCard() {
     this.syncCurrentCardToMemory();
     const count = this.cards.length + 1;
-    const defaultFront = createDefaultFront();
-    const defaultBack = createDefaultBack();
+
+    const defaultData = {
+      title1: 'КОЛЛЕҶИ ТИББИИ',
+      title2: 'ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН',
+      title3: 'ДАР НОҲИЯИ ТЕМУРМАЛИК',
+      idNumber: `2-79010${count}`,
+      nameLine1: `СТУДЕНТ #${count}`,
+      nameLine2: 'ФАМИЛИЯ ИМЯ',
+      specialty: 'кори ҳамширагӣ',
+      cohort: '2024–2028',
+      directorName: 'Сафарзода З.И.',
+      photoSrc: '/assets/student-nigina.jpg',
+      emblemTajikistan: '/assets/gerb-tajikistan-clean.png',
+      emblemMedical: '/assets/medical-emblem-clean.png',
+      backTitle: 'ШАҲОДАТНОМАИ ДОНИШҶӮӢ (STUDENT ID CARD)',
+      validity: 'EXP: 01/07/2028',
+      rule1: '1. Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.',
+      rule2: '2. Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.',
+      rule3: '3. Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.',
+      moodleLogin: `gr2611${count}`,
+      moodlePass: 'Student1#',
+      barcodeNumber: `2-79010${count}`,
+      addressCity: 'ҶТ, вилояти Хатлон,',
+      addressDistrict: 'ноҳияи Темурмалик,',
+      addressVillage: 'ҷ.д Кангурт',
+    };
 
     const newCard = {
       id: `card-${Date.now()}`,
       name: `Студент #${count}`,
-      group: 'П-302',
-      studentId: `ID-2026-${String(count).padStart(4, '0')}`,
-      front: defaultFront,
-      back: defaultBack,
+      group: '2-790106',
+      studentId: `2-79010${count}`,
+      specialty: 'кори ҳамширагӣ',
+      photoSrc: '/assets/student-nigina.jpg',
+      data: defaultData,
     };
 
     this.cards.push(newCard);
