@@ -64,7 +64,7 @@ export function BadgeFront({
       <div className="front-heading">
         <div className="crest-seal">
           <img
-            src="./assets/emblem-tajikistan.svg"
+            src="./assets/figma-emblem-tajikistan.png"
             alt="Герби Тоҷикистон"
             style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />
@@ -76,9 +76,9 @@ export function BadgeFront({
         </div>
         <div className="medical-seal">
           <img
-            src="./assets/medical-emblem-clean.png"
+            src="./assets/figma-medical-emblem.png"
             alt="Эмблемаи тиббӣ"
-            style={{ width: "100%", height: "100%", objectFit: "contain", transform: "scale(1.18)", mixBlendMode: "multiply" }}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />
         </div>
       </div>

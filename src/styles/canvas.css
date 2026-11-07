@@ -241,7 +241,7 @@
   position: relative;
   min-width: 0;
   min-height: 0;
-  border-radius: 6px;
+  border-radius: 14px;
 }
 
 .badge-slot {
@@ -272,7 +272,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 14px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
