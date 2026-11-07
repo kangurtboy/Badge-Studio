@@ -157,9 +157,9 @@ const TAJIK_DEMO_STUDENTS: Array<Student> = [
 ];
 
 const RULES = [
-  "Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи Коллеҷи тиббии ДДТХ дар н. Темурмалик мебошад.",
-  "Ҳангоми ворид шудан ба бинои коллеҷ, беморхонаҳои клиникӣ ва китобхона пешниҳоди он ҳатмист.",
-  "Ба дигар шахсон додани шаҳодатнома қатъиян манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.",
+  "Ин шаҳодатнома ҳуҷҷати расмии донишҷӯи коллеҷ мебошад.",
+  "Ҳангоми ворид шудан ба бино ва дарсҳо бо худ доштани он ҳатмист.",
+  "Ба дигарон додан манъ аст. Ҳангоми гум шудан ба деканат муроҷиат намоед.",
 ];
 
 function createInitialWorkspace(): Workspace {
@@ -432,7 +432,10 @@ function BadgeArtwork({
     return (
       <div className="badge-artwork badge-back">
         <div className="back-heading">
-          <strong>ШАҲОДАТНОМАИ ДОНИШҶӮӢ <span>(STUDENT ID CARD)</span></strong>
+          <div className="back-title-group">
+            <strong>ШАҲОДАТНОМАИ ДОНИШҶӮӢ</strong>
+            <span className="back-subtitle">STUDENT IDENTIFICATION CARD</span>
+          </div>
           <div className="expiry-tag"><span>EXP:</span><EditableText value={student.expires} label="Срок действия" placeholder="ДД/ММ/ГГГГ" onChange={(value) => update("expires", value)} /></div>
         </div>
         <div className="badge-rules">
@@ -445,8 +448,8 @@ function BadgeArtwork({
         <div className="credentials-panel">
           <div className="credentials-heading"><span className="green-dot" />СИСТЕМАИ ТЕСТӢ</div>
           <div className="credential-row">
-            <div className="credential-chip"><span>Логин:</span><EditableText value={student.login} label="Логин" placeholder="Логин" className="mono-edit" onChange={(value) => update("login", value)} /></div>
-            <div className="credential-chip"><span>Парол:</span><EditableText value={student.password} label="Пароль" placeholder="Пароль" className="mono-edit" onChange={(value) => update("password", value)} /></div>
+            <div className="credential-chip"><span>ЛОГИН:</span><EditableText value={student.login} label="Логин" placeholder="Логин" className="mono-edit" onChange={(value) => update("login", value)} /></div>
+            <div className="credential-chip"><span>ПАРОЛ:</span><EditableText value={student.password} label="Пароль" placeholder="Пароль" className="mono-edit" onChange={(value) => update("password", value)} /></div>
           </div>
         </div>
         <div className="back-footer">
@@ -456,7 +459,7 @@ function BadgeArtwork({
           </div>
           <div className="address-block">
             <div className="qr-box"><QrMark value={student.studentId} /></div>
-            <div><b>Суроға:</b><span>ҶТ, вилояти Хатлон,<br />ноҳияи Темурмалик,<br />ҷ.д Кангурт</span></div>
+            <div><b>Суроға:</b><span>ҶТ, н. Темурмалик,<br />ҷамоати Кангурт</span></div>
           </div>
         </div>
         <div className="tajik-ribbon" />
@@ -523,7 +526,7 @@ function BadgeArtwork({
         <div className="institution-name">
           <span>КОЛЛЕҶИ ТИББИИ</span>
           <strong>ДОНИШГОҲИ ДАВЛАТИИ ТИББИИ ХАТЛОН</strong>
-          <span>ДАР НОҲИЯИ ТЕМУРМАЛИК</span>
+          <span>ДАР ДЕҲОТИ КАНГУРТИ НОҲИЯИ ТЕМУРМАЛИК</span>
         </div>
         <div className="medical-seal">
           <img src="./assets/medical-emblem-clean.png" alt="Эмблемаи тиббӣ" style={{ width: "100%", height: "100%", objectFit: "contain", transform: "scale(1.18)", mixBlendMode: "multiply" }} />
@@ -560,7 +563,7 @@ function BadgeArtwork({
         </div>
       </div>
       <div className="front-signature">
-        <span>Директор:</span><SignatureMark /><strong>Сафарзода З.И.</strong>
+        <span>Директор:</span><SignatureMark /><strong>Содиқзода З.И.</strong>
       </div>
       <BadgeCorners />
     </div>

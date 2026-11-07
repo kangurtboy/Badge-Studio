@@ -942,18 +942,18 @@ input:focus-visible,
 
 .student-number {
   max-width: 100%;
-  padding: .8cqw 1.7cqw;
+  padding: .6cqw 1.8cqw;
   display: inline-flex;
   align-items: baseline;
-  gap: .8cqw;
   overflow: hidden;
   border-radius: .9cqw;
   color: #fff;
-  background: #0c334c;
-  box-shadow: 0 .5mm 1mm rgba(8, 47, 73, .16);
-  font-size: 2.5cqw;
-  font-weight: 680;
-  letter-spacing: .04em;
+  background: #082f49;
+  box-shadow: 0 .4mm .9mm rgba(8, 47, 73, .16);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 2.65cqw;
+  font-weight: 700;
+  letter-spacing: .05em;
   line-height: 1.3;
 }
 
@@ -964,11 +964,12 @@ input:focus-visible,
 
 .student-name {
   max-width: 100%;
-  color: #111d25;
-  font-size: 3.45cqw;
-  font-weight: 820;
-  letter-spacing: -.045cqw;
-  line-height: 1.12;
+  color: #0f172a;
+  font-family: Geist, Inter, sans-serif;
+  font-size: 3.65cqw;
+  font-weight: 900;
+  letter-spacing: -.025em;
+  line-height: 1.15;
   text-transform: uppercase;
 }
 
@@ -1052,7 +1053,7 @@ input:focus-visible,
 .back-heading {
   min-height: 15%;
   flex: 0 0 15%;
-  padding: 2.6cqw 4cqw 2.2cqw;
+  padding: 2.2cqw 4cqw 2cqw;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1060,64 +1061,75 @@ input:focus-visible,
   border-bottom: .24mm solid rgba(203, 213, 225, .8);
 }
 
-.back-heading > strong {
-  color: #1d2b31;
-  font-size: 2.45cqw;
-  font-weight: 790;
-  letter-spacing: .065cqw;
+.back-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: .25cqw;
+}
+
+.back-heading strong {
+  color: #0f172a;
+  font-family: 'Hanken Grotesk', Inter, sans-serif;
+  font-size: 2.55cqw;
+  font-weight: 900;
+  letter-spacing: .025em;
+  line-height: 1.15;
+}
+
+.back-subtitle {
+  color: #082f49;
+  font-family: Geist, Inter, sans-serif;
+  font-size: 2.05cqw;
+  font-weight: 700;
+  letter-spacing: -.02em;
   line-height: 1.2;
 }
 
-.back-heading > strong span {
-  font-size: .86em;
-  font-weight: 650;
-}
-
 .expiry-tag {
-  padding: .8cqw 1.7cqw;
+  padding: .7cqw 1.8cqw;
   display: inline-flex;
   align-items: center;
   gap: .8cqw;
-  border: .22mm solid #c8dfd4;
-  border-radius: .8cqw;
-  color: #235944;
-  background: #f0f8f3;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 2.05cqw;
+  border: .24mm solid #a7f3d0;
+  border-radius: .9cqw;
+  color: #065f46;
+  background: #ecfdf5;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 2.1cqw;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .expiry-tag > span:first-child {
-  color: #64816f;
-  font-size: .83em;
+  color: #065f46;
+  font-size: .88em;
 }
 
 .badge-rules {
   min-height: 0;
   flex: 1;
-  padding: 1.5cqw 4cqw 1.2cqw;
+  padding: 1.4cqw 4cqw 1.1cqw;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1.35cqw;
+  gap: 1.25cqw;
 }
 
 .badge-rule {
   display: flex;
   align-items: flex-start;
   gap: 1.6cqw;
-  color: #3a484d;
-  font-size: 2.22cqw;
-  font-weight: 440;
+  color: #1e293b;
+  font-size: 2.15cqw;
+  font-weight: 500;
   line-height: 1.32;
 }
 
 .badge-rule b {
   flex: 0 0 auto;
-  color: #12506d;
-  font-size: 1.08em;
-  font-weight: 800;
+  color: #082f49;
+  font-size: 1.1em;
+  font-weight: 900;
 }
 
 .credentials-panel {
