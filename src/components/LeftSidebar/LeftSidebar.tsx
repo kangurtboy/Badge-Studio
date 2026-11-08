@@ -10,6 +10,7 @@ export function LeftSidebar({
   onAddStudent,
   onFillDemo,
   onDuplicateStudent,
+  onDeleteStudent,
 }: {
   slots: Array<Student | null>;
   selected: Student | null;
@@ -18,6 +19,7 @@ export function LeftSidebar({
   onAddStudent: (index: number) => void;
   onFillDemo: () => void;
   onDuplicateStudent: (id: string) => void;
+  onDeleteStudent: (id: string) => void;
 }) {
   return (
     <aside className="left-sidebar" aria-label="Панели функсияҳо">
@@ -102,20 +104,34 @@ export function LeftSidebar({
                         <span className="slot-nav-sub">{item.specialty}</span>
                       </div>
                     </div>
-                    {studentsCount < MAX_BADGES && (
+                    <div className="slot-actions">
+                      {studentsCount < MAX_BADGES && (
+                        <button
+                          type="button"
+                          className="slot-copy-btn"
+                          title="Нусхабардорӣ (Дублировать этот бейдж)"
+                          aria-label={`Нусхабардории бейҷи ${item.fullName}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDuplicateStudent(item.id);
+                          }}
+                        >
+                          <Icon name="copy" size={13} />
+                        </button>
+                      )}
                       <button
                         type="button"
-                        className="slot-copy-btn"
-                        title="Нусхабардорӣ (Дублировать этот бейдж)"
-                        aria-label={`Нусхабардории бейҷи ${item.fullName}`}
+                        className="slot-delete-btn"
+                        title="Нобуд кардан (Удалить этот бейдж)"
+                        aria-label={`Нобуд кардани бейҷи ${item.fullName}`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          onDuplicateStudent(item.id);
+                          onDeleteStudent(item.id);
                         }}
                       >
-                        <Icon name="copy" size={13} />
+                        <Icon name="trash" size={13} />
                       </button>
-                    )}
+                    </div>
                   </>
                 ) : (
                   <span className="slot-nav-empty">+ Ҷойи холӣ</span>

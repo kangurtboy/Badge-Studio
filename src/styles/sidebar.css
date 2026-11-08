@@ -240,13 +240,21 @@
   font-weight: 500;
 }
 
-.slot-copy-btn {
+.slot-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.slot-copy-btn,
+.slot-delete-btn {
   width: 24px;
   height: 24px;
   display: grid;
   place-items: center;
   flex: 0 0 24px;
-  margin-left: auto;
   padding: 0;
   border: 1px solid #d8e2dc;
   border-radius: 6px;
@@ -262,6 +270,18 @@
   color: #14382e;
   border-color: #1e4439;
   background: #eef5f0;
+  transform: scale(1.08);
+}
+
+.slot-delete-btn {
+  color: #8b4a40;
+}
+
+.slot-delete-btn:hover {
+  opacity: 1;
+  color: #b91c1c;
+  border-color: #fca5a5;
+  background: #fef2f2;
   transform: scale(1.08);
 }
 

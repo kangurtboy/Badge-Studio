@@ -13,6 +13,7 @@ import {
   compressPhoto,
   createInitialWorkspace,
   makeNewStudent,
+  makeStudentId,
 } from "./utils/studentHelpers";
 
 export default function App() {
@@ -166,6 +167,27 @@ export default function App() {
     setToast(`Бейҷи «${sourceStudent.fullName}» нусхабардорӣ шуд.`);
   };
 
+  const deleteStudent = (id: string) => {
+    const studentToDelete = students.find((s) => s.id === id);
+    const targetIndex = slots.findIndex((s) => s?.id === id);
+    if (targetIndex < 0) return;
+
+    const nextSlots = [...slots];
+    nextSlots[targetIndex] = null;
+    const remainingStudents = nextSlots.filter((s): s is Student => s !== null);
+    const nextSelectedId =
+      selected?.id === id
+        ? remainingStudents[0]?.id ?? null
+        : selected?.id ?? null;
+
+    setWorkspace({
+      students: nextSlots,
+      selectedId: nextSelectedId,
+    });
+
+    setToast(`Бейҷи «${studentToDelete?.fullName || ""}» нест карда шуд.`);
+  };
+
   const confirmDialog = () => {
     if (dialog === "clear") {
       try {
@@ -204,6 +226,7 @@ export default function App() {
             onAddStudent={addStudent}
             onFillDemo={fillDemoStudents}
             onDuplicateStudent={duplicateStudent}
+            onDeleteStudent={deleteStudent}
           />
 
           <section className="canvas-panel" aria-label="Рабочий лист">
