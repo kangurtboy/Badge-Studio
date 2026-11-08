@@ -136,6 +136,36 @@ export default function App() {
     setToast("Варақ бо 8 донишҷӯи тиббӣ (4 духтар ва 4 писар) пур карда шуд!");
   };
 
+  const duplicateStudent = (id: string) => {
+    if (students.length >= MAX_BADGES) {
+      setToast(`На одном листе помещается не больше ${MAX_BADGES} бейджей.`);
+      return;
+    }
+    const sourceStudent = students.find((s) => s.id === id);
+    if (!sourceStudent) return;
+
+    const availableIndex = slots.findIndex((s) => s === null);
+    if (availableIndex < 0) return;
+
+    const newStudentId = makeStudentId(slots);
+    const suffix = newStudentId.split("-").pop() ?? "00000";
+
+    const duplicatedStudent: Student = {
+      ...sourceStudent,
+      id: `student-${Date.now()}-${availableIndex}`,
+      studentId: newStudentId,
+      login: `gr${suffix}`,
+    };
+
+    setWorkspace((current) => {
+      const next = Array.from({ length: MAX_BADGES }, (_, index) => current.students[index] ?? null);
+      next[availableIndex] = duplicatedStudent;
+      return { students: next, selectedId: duplicatedStudent.id };
+    });
+
+    setToast(`Бейҷи «${sourceStudent.fullName}» нусхабардорӣ шуд.`);
+  };
+
   const confirmDialog = () => {
     if (dialog === "clear") {
       try {
@@ -173,6 +203,7 @@ export default function App() {
             onSelectStudent={(id) => setWorkspace((curr) => ({ ...curr, selectedId: id }))}
             onAddStudent={addStudent}
             onFillDemo={fillDemoStudents}
+            onDuplicateStudent={duplicateStudent}
           />
 
           <section className="canvas-panel" aria-label="Рабочий лист">

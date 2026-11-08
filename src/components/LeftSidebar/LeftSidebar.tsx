@@ -9,6 +9,7 @@ export function LeftSidebar({
   onSelectStudent,
   onAddStudent,
   onFillDemo,
+  onDuplicateStudent,
 }: {
   slots: Array<Student | null>;
   selected: Student | null;
@@ -16,6 +17,7 @@ export function LeftSidebar({
   onSelectStudent: (id: string) => void;
   onAddStudent: (index: number) => void;
   onFillDemo: () => void;
+  onDuplicateStudent: (id: string) => void;
 }) {
   return (
     <aside className="left-sidebar" aria-label="Панели функсияҳо">
@@ -61,9 +63,10 @@ export function LeftSidebar({
             const item = slots[idx];
             const isCurSelected = selected?.id === item?.id;
             return (
-              <button
+              <div
                 key={`nav-slot-${idx}`}
-                type="button"
+                role="button"
+                tabIndex={0}
                 className={`slot-nav-item ${isCurSelected ? "selected" : ""} ${item ? "filled" : "empty"}`}
                 onClick={() => {
                   if (item) {
@@ -72,26 +75,52 @@ export function LeftSidebar({
                     onAddStudent(idx);
                   }
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (item) {
+                      onSelectStudent(item.id);
+                    } else {
+                      onAddStudent(idx);
+                    }
+                  }
+                }}
               >
                 <span className="slot-nav-num">{String(idx + 1).padStart(2, "0")}</span>
                 {item ? (
-                  <div className="slot-nav-preview">
-                    <div className="slot-nav-avatar">
-                      {item.photo ? (
-                        <img src={item.photo} alt={item.fullName} />
-                      ) : (
-                        <span>{item.fullName.charAt(0) || "Д"}</span>
-                      )}
+                  <>
+                    <div className="slot-nav-preview">
+                      <div className="slot-nav-avatar">
+                        {item.photo ? (
+                          <img src={item.photo} alt={item.fullName} />
+                        ) : (
+                          <span>{item.fullName.charAt(0) || "Д"}</span>
+                        )}
+                      </div>
+                      <div className="slot-nav-text">
+                        <span className="slot-nav-name">{item.fullName}</span>
+                        <span className="slot-nav-sub">{item.specialty}</span>
+                      </div>
                     </div>
-                    <div className="slot-nav-text">
-                      <span className="slot-nav-name">{item.fullName}</span>
-                      <span className="slot-nav-sub">{item.specialty}</span>
-                    </div>
-                  </div>
+                    {studentsCount < MAX_BADGES && (
+                      <button
+                        type="button"
+                        className="slot-copy-btn"
+                        title="Нусхабардорӣ (Дублировать этот бейдж)"
+                        aria-label={`Нусхабардории бейҷи ${item.fullName}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDuplicateStudent(item.id);
+                        }}
+                      >
+                        <Icon name="copy" size={13} />
+                      </button>
+                    )}
+                  </>
                 ) : (
                   <span className="slot-nav-empty">+ Ҷойи холӣ</span>
                 )}
-              </button>
+              </div>
             );
           })}
         </div>

@@ -44,4 +44,5 @@ export type IconName =
   | "close"
   | "warning"
   | "maximize"
-  | "layout";
+  | "layout"
+  | "copy";
