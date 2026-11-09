@@ -23,6 +23,10 @@ export function normalizeStudent(value: unknown): Student | null {
     photoX: typeof source.photoX === "number" ? source.photoX : 50,
     photoY: typeof source.photoY === "number" ? source.photoY : 50,
     photoZoom: typeof source.photoZoom === "number" ? source.photoZoom : 1,
+    photoBrightness: typeof source.photoBrightness === "number" ? source.photoBrightness : 100,
+    photoContrast: typeof source.photoContrast === "number" ? source.photoContrast : 100,
+    photoSaturation: typeof source.photoSaturation === "number" ? source.photoSaturation : 100,
+    photoWarmth: typeof source.photoWarmth === "number" ? source.photoWarmth : 0,
   };
 }
 
@@ -82,6 +86,10 @@ export function makeNewStudent(students: Array<Student | null>, index: number): 
     photoX: 50,
     photoY: 50,
     photoZoom: 1,
+    photoBrightness: 100,
+    photoContrast: 100,
+    photoSaturation: 100,
+    photoWarmth: 0,
   };
 }
 

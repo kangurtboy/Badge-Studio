@@ -271,6 +271,47 @@
   cursor: pointer;
 }
 
+/* Photo Color Correction Subsection */
+.photo-color-section {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed #e1e7e2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.photo-color-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.photo-color-title {
+  color: #687770;
+  font-size: 8.5px;
+  font-weight: 750;
+  letter-spacing: .08em;
+}
+
+.reset-filters-btn {
+  padding: 1px 8px;
+  border: 1px solid #dce4df;
+  border-radius: 5px;
+  color: #4b6357;
+  background: #f7faf8;
+  font-size: 9px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 130ms ease;
+}
+
+.reset-filters-btn:hover {
+  border-color: #a8beb2;
+  color: #1e4439;
+  background: #eef5f0;
+}
+
 .reverse-section {
   padding-bottom: 15px;
 }

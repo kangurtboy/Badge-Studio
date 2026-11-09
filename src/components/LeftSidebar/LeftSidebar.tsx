@@ -94,7 +94,18 @@ export function LeftSidebar({
                     <div className="slot-nav-preview">
                       <div className="slot-nav-avatar">
                         {item.photo ? (
-                          <img src={item.photo} alt={item.fullName} />
+                          <img
+                            src={item.photo}
+                            alt={item.fullName}
+                            style={{
+                              filter: [
+                                (item.photoBrightness ?? 100) !== 100 ? `brightness(${item.photoBrightness}%)` : "",
+                                (item.photoContrast ?? 100) !== 100 ? `contrast(${item.photoContrast}%)` : "",
+                                (item.photoSaturation ?? 100) !== 100 ? `saturate(${item.photoSaturation}%)` : "",
+                                (item.photoWarmth ?? 0) > 0 ? `sepia(${item.photoWarmth}%)` : "",
+                              ].filter(Boolean).join(" ") || undefined,
+                            }}
+                          />
                         ) : (
                           <span>{item.fullName.charAt(0) || "Д"}</span>
                         )}

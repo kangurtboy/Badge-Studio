@@ -44,7 +44,9 @@
 
 @media print {
   .dialog-scrim,
-  .toast-message {
+  .toast-message,
+  .photo-delete-btn,
+  .flip-control {
     display: none !important;
   }
 

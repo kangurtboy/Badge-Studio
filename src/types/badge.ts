@@ -11,7 +11,11 @@ export type StudentField =
   | "photo"
   | "photoX"
   | "photoY"
-  | "photoZoom";
+  | "photoZoom"
+  | "photoBrightness"
+  | "photoContrast"
+  | "photoSaturation"
+  | "photoWarmth";
 
 export type Student = {
   id: string;
@@ -26,6 +30,10 @@ export type Student = {
   photoX: number;
   photoY: number;
   photoZoom: number;
+  photoBrightness?: number;
+  photoContrast?: number;
+  photoSaturation?: number;
+  photoWarmth?: number;
 };
 
 export type Workspace = {

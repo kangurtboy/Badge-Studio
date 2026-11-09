@@ -122,8 +122,53 @@
   -webkit-user-select: none;
 }
 
-.photo-frame:active {
+.photo-frame:active,
+.photo-frame.is-dragging {
   cursor: grabbing;
+}
+
+.photo-delete-btn {
+  position: absolute;
+  top: 1.2cqw;
+  right: 1.2cqw;
+  width: 3.8cqw;
+  height: 3.8cqw;
+  min-width: 18px;
+  min-height: 18px;
+  max-width: 24px;
+  max-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 140ms ease, transform 140ms ease, background-color 140ms ease, border-color 140ms ease;
+  padding: 0;
+}
+
+.photo-frame:hover .photo-delete-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.photo-delete-btn:hover {
+  background: rgba(220, 38, 38, 0.95);
+  border-color: rgba(255, 255, 255, 0.75);
+  color: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+}
+
+.photo-frame.is-dragging .photo-delete-btn {
+  display: none !important;
 }
 
 .photo-frame img {

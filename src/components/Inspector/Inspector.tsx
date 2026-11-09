@@ -82,7 +82,18 @@ export function Inspector({
             <div className="photo-upload-row">
               <div className="photo-thumb">
                 {selected.photo ? (
-                  <img src={selected.photo} alt="Фото студента" />
+                  <img
+                    src={selected.photo}
+                    alt="Фото студента"
+                    style={{
+                      filter: [
+                        (selected.photoBrightness ?? 100) !== 100 ? `brightness(${selected.photoBrightness}%)` : "",
+                        (selected.photoContrast ?? 100) !== 100 ? `contrast(${selected.photoContrast}%)` : "",
+                        (selected.photoSaturation ?? 100) !== 100 ? `saturate(${selected.photoSaturation}%)` : "",
+                        (selected.photoWarmth ?? 0) > 0 ? `sepia(${selected.photoWarmth}%)` : "",
+                      ].filter(Boolean).join(" ") || undefined,
+                    }}
+                  />
                 ) : (
                   <Icon name="image" size={18} />
                 )}
@@ -124,7 +135,7 @@ export function Inspector({
                 label="Масштаб (Zoom)"
                 value={selected.photoZoom}
                 min={1}
-                max={2.5}
+                max={3}
                 step={0.01}
                 display={`${selected.photoZoom.toFixed(2)}×`}
                 onChange={(value) => onUpdateSelected("photoZoom", value)}
@@ -148,6 +159,70 @@ export function Inspector({
                 onChange={(value) => onUpdateSelected("photoY", value)}
               />
             </div>
+
+            {selected.photo && (
+              <div className="photo-color-section">
+                <div className="photo-color-header">
+                  <span className="photo-color-title">ЦВЕТОКОРРЕКЦИЯ (CSS)</span>
+                  {((selected.photoBrightness ?? 100) !== 100 ||
+                    (selected.photoContrast ?? 100) !== 100 ||
+                    (selected.photoSaturation ?? 100) !== 100 ||
+                    (selected.photoWarmth ?? 0) !== 0) && (
+                    <button
+                      type="button"
+                      className="reset-filters-btn"
+                      title="Сбросить цветовые настройки фото"
+                      onClick={() => {
+                        onUpdateSelected("photoBrightness", 100);
+                        onUpdateSelected("photoContrast", 100);
+                        onUpdateSelected("photoSaturation", 100);
+                        onUpdateSelected("photoWarmth", 0);
+                      }}
+                    >
+                      Сброс
+                    </button>
+                  )}
+                </div>
+                <div className="photo-ranges">
+                  <RangeField
+                    label="Яркость (Brightness)"
+                    value={selected.photoBrightness ?? 100}
+                    min={50}
+                    max={150}
+                    step={1}
+                    display={`${selected.photoBrightness ?? 100}%`}
+                    onChange={(value) => onUpdateSelected("photoBrightness", value)}
+                  />
+                  <RangeField
+                    label="Контраст (Contrast)"
+                    value={selected.photoContrast ?? 100}
+                    min={50}
+                    max={150}
+                    step={1}
+                    display={`${selected.photoContrast ?? 100}%`}
+                    onChange={(value) => onUpdateSelected("photoContrast", value)}
+                  />
+                  <RangeField
+                    label="Насыщенность (Saturation)"
+                    value={selected.photoSaturation ?? 100}
+                    min={0}
+                    max={200}
+                    step={1}
+                    display={`${selected.photoSaturation ?? 100}%`}
+                    onChange={(value) => onUpdateSelected("photoSaturation", value)}
+                  />
+                  <RangeField
+                    label="Тёплый тон (Warmth)"
+                    value={selected.photoWarmth ?? 0}
+                    min={0}
+                    max={60}
+                    step={1}
+                    display={`${selected.photoWarmth ?? 0}%`}
+                    onChange={(value) => onUpdateSelected("photoWarmth", value)}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="form-section reverse-section">
