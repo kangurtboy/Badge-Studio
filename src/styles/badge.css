@@ -317,13 +317,13 @@
 
 .signature-mark-img {
   width: auto;
-  height: 12cqw;
+  height: 16cqw;
   max-width: none;
   object-fit: contain;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -35%);
   mix-blend-mode: multiply;
   pointer-events: none;
   user-select: none;
