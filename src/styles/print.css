@@ -35,50 +35,50 @@
 }
 
 .print-slot.filled {
-  /* Чёрная линия обрезки по периметру 96x67мм */
+  /* Чёрная линия обрезки с внешним отступом 1мм */
   outline: 0.25mm solid #000000;
-  outline-offset: 0;
+  outline-offset: 1mm;
 }
 
 .print-slot.filled .badge-artwork {
   box-shadow: none !important;
-  border: none !important;
-  border-radius: 0 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 12px !important;
 }
 
-/* Метки обрезки по углам бейджа */
+/* Метки обрезки по углам с отступом */
 .print-cut-corner {
   position: absolute;
-  width: 2.5mm;
-  height: 2.5mm;
+  width: 2mm;
+  height: 2mm;
   pointer-events: none;
   z-index: 10;
 }
 
 .print-cut-corner.tl {
-  top: -2.5mm;
-  left: -2.5mm;
+  top: -3mm;
+  left: -3mm;
   border-right: 0.25mm solid #000000;
   border-bottom: 0.25mm solid #000000;
 }
 
 .print-cut-corner.tr {
-  top: -2.5mm;
-  right: -2.5mm;
+  top: -3mm;
+  right: -3mm;
   border-left: 0.25mm solid #000000;
   border-bottom: 0.25mm solid #000000;
 }
 
 .print-cut-corner.bl {
-  bottom: -2.5mm;
-  left: -2.5mm;
+  bottom: -3mm;
+  left: -3mm;
   border-right: 0.25mm solid #000000;
   border-top: 0.25mm solid #000000;
 }
 
 .print-cut-corner.br {
-  bottom: -2.5mm;
-  right: -2.5mm;
+  bottom: -3mm;
+  right: -3mm;
   border-left: 0.25mm solid #000000;
   border-top: 0.25mm solid #000000;
 }
