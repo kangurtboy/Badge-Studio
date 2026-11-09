@@ -70,17 +70,15 @@ export function makeStudentId(students: Array<Student | null>) {
   return `2-${lastNumber + 1}`;
 }
 
-export function makeNewStudent(students: Array<Student | null>, index: number): Student {
-  const studentNumber = makeStudentId(students);
-  const suffix = studentNumber.split("-").pop() ?? "00000";
+export function makeNewStudent(_students: Array<Student | null>, index: number): Student {
   return {
     id: `student-${Date.now()}-${index}`,
     fullName: "НАВ ДОНИШҶӮ",
-    studentId: studentNumber,
+    studentId: "2-790106",
     specialty: "кори ҳамширагӣ",
-    studyYears: "2025–2029",
-    expires: "01/07/2029",
-    login: `gr${suffix}`,
+    studyYears: "2024–2028",
+    expires: "01/07/2028",
+    login: "gr790106",
     password: "Student1#",
     photo: "",
     photoX: 50,

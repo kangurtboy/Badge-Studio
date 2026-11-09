@@ -24,11 +24,17 @@ export function PrintRoot({
                 key={`print-${visualIndex}`}
               >
                 {student && (
-                  <BadgeArtwork
-                    student={student}
-                    side={side}
-                    update={(field, value) => onUpdateStudent(student.id, field, value)}
-                  />
+                  <>
+                    <span className="print-cut-corner tl" aria-hidden="true" />
+                    <span className="print-cut-corner tr" aria-hidden="true" />
+                    <span className="print-cut-corner bl" aria-hidden="true" />
+                    <span className="print-cut-corner br" aria-hidden="true" />
+                    <BadgeArtwork
+                      student={student}
+                      side={side}
+                      update={(field, value) => onUpdateStudent(student.id, field, value)}
+                    />
+                  </>
                 )}
               </div>
             );

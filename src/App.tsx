@@ -13,7 +13,6 @@ import {
   compressPhoto,
   createInitialWorkspace,
   makeNewStudent,
-  makeStudentId,
 } from "./utils/studentHelpers";
 
 export default function App() {
@@ -148,14 +147,9 @@ export default function App() {
     const availableIndex = slots.findIndex((s) => s === null);
     if (availableIndex < 0) return;
 
-    const newStudentId = makeStudentId(slots);
-    const suffix = newStudentId.split("-").pop() ?? "00000";
-
     const duplicatedStudent: Student = {
       ...sourceStudent,
       id: `student-${Date.now()}-${availableIndex}`,
-      studentId: newStudentId,
-      login: `gr${suffix}`,
     };
 
     setWorkspace((current) => {

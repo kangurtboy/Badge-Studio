@@ -135,7 +135,7 @@ export function BadgeFront({
                     e.stopPropagation();
                   }}
                 >
-                  <Icon name="close" size={11} />
+                  <Icon name="close" size={9} />
                 </button>
               )}
             </>

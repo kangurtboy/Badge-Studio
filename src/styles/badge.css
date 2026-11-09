@@ -129,28 +129,28 @@
 
 .photo-delete-btn {
   position: absolute;
-  top: 1.2cqw;
-  right: 1.2cqw;
-  width: 3.8cqw;
-  height: 3.8cqw;
-  min-width: 18px;
-  min-height: 18px;
-  max-width: 24px;
-  max-height: 24px;
+  top: 0.8cqw;
+  right: 0.8cqw;
+  width: 2.6cqw;
+  height: 2.6cqw;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 18px;
+  max-height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   background: rgba(15, 23, 42, 0.72);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   color: #ffffff;
   cursor: pointer;
   z-index: 10;
   opacity: 0;
   transform: scale(0.85);
-  transition: opacity 140ms ease, transform 140ms ease, background-color 140ms ease, border-color 140ms ease;
+  transition: opacity 130ms ease, transform 130ms ease, background-color 130ms ease, border-color 130ms ease;
   padding: 0;
 }
 
