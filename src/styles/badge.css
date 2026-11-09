@@ -259,13 +259,25 @@
   letter-spacing: 0.025em;
 }
 
-.signature-mark {
+.signature-mark-box {
   width: 18.2cqw;
   height: 5.45cqw;
-  margin: 0 -.5cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
   flex: 0 0 18.2cqw;
-  color: #123f74;
-  opacity: 0.9;
+}
+
+.signature-mark-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: translateY(-0.2cqw) scale(1.35);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
 }
 
 .front-signature strong {
