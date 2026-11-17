@@ -12,6 +12,7 @@ export type StudentField =
   | "photoX"
   | "photoY"
   | "photoZoom"
+  | "photoRotate"
   | "photoBrightness"
   | "photoContrast"
   | "photoSaturation"
@@ -30,6 +31,7 @@ export type Student = {
   photoX: number;
   photoY: number;
   photoZoom: number;
+  photoRotate?: number;
   photoBrightness?: number;
   photoContrast?: number;
   photoSaturation?: number;

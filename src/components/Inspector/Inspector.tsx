@@ -86,6 +86,7 @@ export function Inspector({
                     src={selected.photo}
                     alt="Фото студента"
                     style={{
+                      transform: (selected.photoRotate ?? 0) !== 0 ? `rotate(${selected.photoRotate}deg)` : undefined,
                       filter: [
                         (selected.photoBrightness ?? 100) !== 100 ? `brightness(${selected.photoBrightness}%)` : "",
                         (selected.photoContrast ?? 100) !== 100 ? `contrast(${selected.photoContrast}%)` : "",
@@ -135,11 +136,60 @@ export function Inspector({
                 label="Масштаб (Zoom)"
                 value={selected.photoZoom}
                 min={1}
-                max={3}
+                max={4}
                 step={0.01}
                 display={`${selected.photoZoom.toFixed(2)}×`}
                 onChange={(value) => onUpdateSelected("photoZoom", value)}
               />
+              <div className="rotate-control-group">
+                <RangeField
+                  label="Поворот (Угол)"
+                  value={selected.photoRotate ?? 0}
+                  min={-180}
+                  max={180}
+                  step={1}
+                  display={`${selected.photoRotate ?? 0}°`}
+                  onChange={(value) => onUpdateSelected("photoRotate", value)}
+                />
+                <div className="rotate-quick-row">
+                  <button
+                    type="button"
+                    className="rotate-step-btn"
+                    title="Повернуть на 90° влево"
+                    onClick={() => {
+                      let next = (selected.photoRotate ?? 0) - 90;
+                      if (next < -180) next += 360;
+                      onUpdateSelected("photoRotate", next);
+                    }}
+                  >
+                    <Icon name="rotate" size={11} />
+                    <span>-90°</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="rotate-step-btn"
+                    title="Повернуть на 90° вправо"
+                    onClick={() => {
+                      let next = (selected.photoRotate ?? 0) + 90;
+                      if (next > 180) next -= 360;
+                      onUpdateSelected("photoRotate", next);
+                    }}
+                  >
+                    <Icon name="rotate" size={11} />
+                    <span>+90°</span>
+                  </button>
+                  {(selected.photoRotate ?? 0) !== 0 && (
+                    <button
+                      type="button"
+                      className="rotate-reset-btn"
+                      title="Сбросить угол на 0°"
+                      onClick={() => onUpdateSelected("photoRotate", 0)}
+                    >
+                      Сброс 0°
+                    </button>
+                  )}
+                </div>
+              </div>
               <RangeField
                 label="Смещение X (Горизонталь)"
                 value={selected.photoX}

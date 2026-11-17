@@ -17,6 +17,7 @@ export function BadgeFront({
 
   const offsetX = (student.photoX - 50) * 1.25;
   const offsetY = (student.photoY - 50) * 1.25;
+  const rotate = student.photoRotate ?? 0;
 
   const brightness = student.photoBrightness ?? 100;
   const contrast = student.photoContrast ?? 100;
@@ -38,7 +39,7 @@ export function BadgeFront({
     width: "100%",
     height: "100%",
     objectFit: "cover",
-    transform: `translate(calc(-50% + ${offsetX}%), calc(-50% + ${offsetY}%)) scale(${student.photoZoom})`,
+    transform: `translate(calc(-50% + ${offsetX}%), calc(-50% + ${offsetY}%)) rotate(${rotate}deg) scale(${student.photoZoom})`,
     transformOrigin: "center center",
     filter: photoFilter,
     userSelect: "none",

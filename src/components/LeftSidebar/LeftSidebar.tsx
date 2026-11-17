@@ -98,6 +98,7 @@ export function LeftSidebar({
                             src={item.photo}
                             alt={item.fullName}
                             style={{
+                              transform: (item.photoRotate ?? 0) !== 0 ? `rotate(${item.photoRotate}deg)` : undefined,
                               filter: [
                                 (item.photoBrightness ?? 100) !== 100 ? `brightness(${item.photoBrightness}%)` : "",
                                 (item.photoContrast ?? 100) !== 100 ? `contrast(${item.photoContrast}%)` : "",
