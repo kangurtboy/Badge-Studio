@@ -1,6 +1,9 @@
 export type Side = "front" | "back";
 
+export type BadgeTemplateId = "student" | "security";
+
 export type StudentField =
+  | "template"
   | "fullName"
   | "studentId"
   | "specialty"
@@ -8,6 +11,9 @@ export type StudentField =
   | "expires"
   | "login"
   | "password"
+  | "role"
+  | "roleEn"
+  | "cardType"
   | "photo"
   | "photoX"
   | "photoY"
@@ -20,6 +26,7 @@ export type StudentField =
 
 export type Student = {
   id: string;
+  template?: BadgeTemplateId;
   fullName: string;
   studentId: string;
   specialty: string;
@@ -27,6 +34,9 @@ export type Student = {
   expires: string;
   login: string;
   password: string;
+  role?: string;
+  roleEn?: string;
+  cardType?: string;
   photo: string;
   photoX: number;
   photoY: number;
@@ -55,4 +65,6 @@ export type IconName =
   | "warning"
   | "maximize"
   | "layout"
-  | "copy";
+  | "copy"
+  | "shield"
+  | "user";

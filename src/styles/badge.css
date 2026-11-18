@@ -630,3 +630,439 @@
   color: #9ba8a5;
   font-weight: 450;
 }
+
+/* ========================================================= */
+/* SECURITY BADGE TEMPLATE (ҲИФОЗАТ / ОХРАНА — FIGMA 36:2)  */
+/* ========================================================= */
+.badge-security-front {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.security-front-heading {
+  height: 22.3%;
+  min-height: 22.3%;
+  max-height: 22.3%;
+  flex: 0 0 22.3%;
+  padding: 2.27cqw 3.64cqw 0.91cqw 3.64cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.2cqw;
+  background-color: #ffffff;
+}
+
+.security-front-heading .crest-seal,
+.security-front-heading .medical-seal {
+  width: 10.9cqw;
+  height: 10.9cqw;
+  flex: 0 0 10.9cqw;
+}
+
+.security-front-heading .institution-name {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.1;
+  padding: 0 0.91cqw;
+}
+
+.security-front-heading .institution-name span:first-child {
+  font-family: Roboto, sans-serif;
+  font-size: 2.5cqw;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0.043em;
+  color: #1e293b;
+}
+
+.security-front-heading .institution-name strong {
+  font-family: Roboto, sans-serif;
+  font-size: 2.5cqw;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: 0.025em;
+  color: #0f172a;
+  margin-top: 0.23cqw;
+}
+
+.security-front-heading .institution-name span:last-child {
+  font-family: Roboto, sans-serif;
+  font-size: 2.27cqw;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: 0.024em;
+  color: #082f49;
+  margin-top: 0.45cqw;
+}
+
+/* Middle body section: Deep Navy #142a39 (Figma 36:40) */
+.security-navy-body {
+  flex: 1;
+  min-height: 0;
+  background-color: #142a39;
+  padding: 4.5cqw 3.64cqw 4.5cqw 3.64cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5cqw;
+  color: #ffffff;
+}
+
+.security-info-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.security-role-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.05cqw;
+}
+
+.brass-marker {
+  width: 0.68cqw;
+  height: 5.45cqw;
+  background: #d5b778;
+  flex-shrink: 0;
+  margin-top: 0.45cqw;
+}
+
+.security-role-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.security-role-title {
+  font-family: Roboto, sans-serif;
+  font-size: 8.18cqw;
+  font-weight: 900;
+  line-height: 0.86;
+  color: #d5b778;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.security-role-sub {
+  font-family: Roboto, sans-serif;
+  font-size: 2.05cqw;
+  font-weight: 700;
+  line-height: 1.33;
+  color: #d4dee5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 1.36cqw;
+}
+
+.security-name-box {
+  margin: 2.5cqw 0 2.2cqw 0;
+}
+
+.security-name-text {
+  font-family: Roboto, sans-serif;
+  font-size: 5.45cqw;
+  font-weight: 700;
+  line-height: 1.05;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  white-space: pre-line;
+}
+
+.security-identity-line {
+  width: 100%;
+  max-width: 64.1cqw;
+  height: 1px;
+  background: #3b4d58;
+  margin-bottom: 2.27cqw;
+}
+
+.security-type-strip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.security-card-type-text {
+  font-family: Roboto, sans-serif;
+  font-size: 2.27cqw;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #d4dee5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Photo Frame on Right (Figma 36:41 — 106x140 with 1px border #d5b778) */
+.security-photo-col {
+  flex: 0 0 24.1cqw;
+  width: 24.1cqw;
+  height: 31.8cqw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.security-photo-frame {
+  width: 100%;
+  height: 100%;
+  background-color: #0f172a;
+  border: 1px solid #d5b778;
+  border-radius: 0.91cqw;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.security-photo-frame.is-dragging {
+  cursor: grabbing;
+}
+
+.security-photo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #94a3b8;
+  font-size: 2.2cqw;
+  font-weight: 700;
+  gap: 0.8cqw;
+  background: #f8fafc;
+}
+
+/* Footer: Director Authorization (Figma 36:62 — 30px / 10.8%) */
+.security-front-signature {
+  height: 10.8%;
+  min-height: 10.8%;
+  max-height: 10.8%;
+  flex: 0 0 10.8%;
+  padding: 0 3.64cqw;
+  background: rgba(248, 250, 252, 0.9);
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2cqw;
+  font-size: 2.5cqw;
+}
+
+.security-front-signature span {
+  font-family: Roboto, sans-serif;
+  font-weight: 900;
+  font-size: 2.5cqw;
+  color: #1e293b;
+}
+
+.security-front-signature strong {
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 2.5cqw;
+  color: #0f172a;
+}
+
+.security-front-signature .signature-wrapper {
+  height: 3.64cqw;
+  max-width: 18.2cqw;
+  display: flex;
+  align-items: center;
+}
+
+/* ========================================================= */
+/* SECURITY BACK SIDE (ҲИФОЗАТ — ОБРАТНАЯ СТОРОНА)           */
+/* ========================================================= */
+.badge-security-back {
+  background-color: #142a39;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.security-back-header {
+  padding: 2.5cqw 3.64cqw 1.8cqw 3.64cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.security-back-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.security-back-titles strong {
+  font-family: Roboto, sans-serif;
+  font-size: 3.41cqw;
+  font-weight: 900;
+  line-height: 1.33;
+  color: #ffffff;
+  letter-spacing: 0.022em;
+}
+
+.security-back-subtitle {
+  font-family: Roboto, sans-serif;
+  font-size: 2.27cqw;
+  font-weight: 700;
+  line-height: 1.65;
+  color: #d4dee5;
+  letter-spacing: 0.06em;
+  margin-top: 0.45cqw;
+  text-transform: uppercase;
+}
+
+.security-brass-divider {
+  height: 2px;
+  background: #d5b778;
+  margin: 0 3.64cqw 2.73cqw 3.64cqw;
+  flex-shrink: 0;
+}
+
+.security-rules-box {
+  flex: 1;
+  min-height: 0;
+  padding: 0 3.64cqw;
+  display: flex;
+  flex-direction: column;
+}
+
+.security-rules-heading {
+  font-family: Roboto, sans-serif;
+  font-size: 2.5cqw;
+  font-weight: 900;
+  line-height: 1.27;
+  color: #d5b778;
+  letter-spacing: 0.09em;
+  margin-bottom: 2.27cqw;
+  text-transform: uppercase;
+}
+
+.security-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5cqw;
+}
+
+.security-rule-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.05cqw;
+  font-family: Roboto, sans-serif;
+}
+
+.security-rule-num {
+  flex: 0 0 5cqw;
+  font-size: 2.27cqw;
+  font-weight: 700;
+  color: #d5b778;
+  line-height: 1.4;
+}
+
+.security-rule-text {
+  flex: 1;
+  font-size: 2.73cqw;
+  font-weight: 500;
+  line-height: 1.33;
+  color: #ffffff;
+}
+
+.security-band-wrapper {
+  padding: 0 3.64cqw;
+  margin: 2.05cqw 0 1.8cqw 0;
+}
+
+.security-band-line {
+  height: 1px;
+  background: #3b4d58;
+  margin-bottom: 1.36cqw;
+}
+
+.security-band-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Roboto, sans-serif;
+  font-size: 2.05cqw;
+  font-weight: 700;
+  line-height: 1.33;
+}
+
+.security-band-left {
+  color: #d5b778;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.security-band-right {
+  color: #d4dee5;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+/* White Address and QR Panel at the bottom (Figma 36:117 — 53px / 12.05cqw) */
+.security-address-panel {
+  height: 12.05cqw;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0.91cqw 3.64cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #e2e8f0;
+}
+
+.security-address-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2cqw;
+}
+
+.security-address-copy strong {
+  font-family: Roboto, sans-serif;
+  font-size: 2.5cqw;
+  font-weight: 900;
+  line-height: 1.27;
+  color: #0f172a;
+}
+
+.security-address-copy span {
+  font-family: Roboto, sans-serif;
+  font-size: 2.5cqw;
+  font-weight: 400;
+  line-height: 1.27;
+  color: #1e293b;
+}
+
+.security-qr-container {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.security-dark-qr {
+  width: 8.18cqw;
+  height: 8.18cqw;
+  background: #0f172a;
+  border-radius: 0.91cqw;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45cqw;
+}
+
+.security-qr-vector {
+  width: 6.8cqw;
+  height: 6.8cqw;
+  object-fit: contain;
+}

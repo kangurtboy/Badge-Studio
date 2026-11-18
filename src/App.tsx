@@ -8,10 +8,12 @@ import { ConfirmDialog } from "./components/Modals/ConfirmDialog";
 import { PrintRoot } from "./components/Print/PrintRoot";
 import { MAX_BADGES, STORAGE_KEY } from "./constants/rules";
 import { DEMO_STUDENT, TAJIK_DEMO_STUDENTS } from "./data/demoStudents";
-import type { Side, Student, StudentField, Workspace } from "./types/badge";
+import type { BadgeTemplateId, Side, Student, StudentField, Workspace } from "./types/badge";
 import {
   compressPhoto,
   createInitialWorkspace,
+  DEMO_SECURITY_STAFF,
+  makeNewSecurity,
   makeNewStudent,
 } from "./utils/studentHelpers";
 
@@ -75,7 +77,7 @@ export default function App() {
     if (selected) updateStudent(selected.id, field, value);
   };
 
-  const addStudent = (preferredIndex?: number) => {
+  const addStudent = (preferredIndex?: number, template: BadgeTemplateId = "student") => {
     if (students.length >= MAX_BADGES) {
       setToast(`На одном листе помещается не больше ${MAX_BADGES} бейджей.`);
       return;
@@ -86,11 +88,15 @@ export default function App() {
         : slots.findIndex((student) => student === null);
     if (availableIndex < 0) return;
 
-    // First student is always the official DEMO_STUDENT; subsequent students are clean empty cards
-    const newStudent =
-      students.length === 0 && availableIndex === 0
-        ? { ...DEMO_STUDENT, id: `student-${Date.now()}-0` }
-        : makeNewStudent(slots, availableIndex);
+    let newStudent: Student;
+    if (template === "security") {
+      newStudent = makeNewSecurity(slots, availableIndex);
+    } else {
+      newStudent =
+        students.length === 0 && availableIndex === 0
+          ? { ...DEMO_STUDENT, id: `student-${Date.now()}-0` }
+          : makeNewStudent(slots, availableIndex);
+    }
 
     setWorkspace((current) => {
       const next = Array.from({ length: MAX_BADGES }, (_, index) => current.students[index] ?? null);
@@ -134,6 +140,38 @@ export default function App() {
       selectedId: filled[0].id,
     });
     setToast("Варақ бо 8 донишҷӯи тиббӣ (4 духтар ва 4 писар) пур карда шуд!");
+  };
+
+  const fillDemoSecurity = () => {
+    const guards = [
+      "САФАРОВ ФАРҲОД КАРИМОВИЧ",
+      "ҚУРБОНОВ БАХТИЁР САИДОВИЧ",
+      "ҲАКИМОВ ДИЛШОД РУСТАМОВИЧ",
+      "НАЗАРОВ ШӮҲРАТ АЛИЕВИЧ",
+      "МАҲМУДОВ РУСТАМ ИСМОИЛОВИЧ",
+      "КАРИМОВ ҶАМШЕД АЗИЗОВИЧ",
+      "РАҶАБОВ АКМАЛ ШАРИФОВИЧ",
+      "ХОЛОВ ЗОКИР ДАВЛАТОВИЧ",
+    ];
+
+    const filled = guards.map((name, idx) => ({
+      ...DEMO_SECURITY_STAFF,
+      id: `staff-${Date.now()}-${idx}`,
+      fullName: name,
+      studentId: `SEC-0${idx + 1}`,
+      photo:
+        idx === 0
+          ? "./images/security-guard-demo.jpg"
+          : idx % 2 === 0
+          ? "./images/student-male-1.jpg"
+          : "./images/student-male-2.jpg",
+    }));
+
+    setWorkspace({
+      students: filled,
+      selectedId: filled[0].id,
+    });
+    setToast("Варақ бо 8 корманди ҳифозат (намунаи Figma) пур карда шуд!");
   };
 
   const duplicateStudent = (id: string) => {
@@ -219,6 +257,7 @@ export default function App() {
             onSelectStudent={(id) => setWorkspace((curr) => ({ ...curr, selectedId: id }))}
             onAddStudent={addStudent}
             onFillDemo={fillDemoStudents}
+            onFillSecurityDemo={fillDemoSecurity}
             onDuplicateStudent={duplicateStudent}
             onDeleteStudent={deleteStudent}
           />

@@ -136,6 +136,25 @@
   box-shadow: 0 3px 8px rgba(24, 66, 54, .18);
 }
 
+.demo-buttons-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.security-demo-btn {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #fde68a !important;
+}
+
+.security-demo-btn:hover {
+  background: #1e293b !important;
+  border-color: #d97706 !important;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, .25);
+}
+
 /* Slot Navigator List */
 .slot-nav-list {
   display: flex;

@@ -4,3 +4,9 @@ dist/
 .DS_Store
 *.local
 *.zip
+
+# Visual comparison test artifacts
+scripts/*.png
+scripts/*.json
+scripts/*.txt
+

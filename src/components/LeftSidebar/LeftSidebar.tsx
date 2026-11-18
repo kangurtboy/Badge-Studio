@@ -9,6 +9,7 @@ export function LeftSidebar({
   onSelectStudent,
   onAddStudent,
   onFillDemo,
+  onFillSecurityDemo,
   onDuplicateStudent,
   onDeleteStudent,
 }: {
@@ -18,6 +19,7 @@ export function LeftSidebar({
   onSelectStudent: (id: string) => void;
   onAddStudent: (index: number) => void;
   onFillDemo: () => void;
+  onFillSecurityDemo: () => void;
   onDuplicateStudent: (id: string) => void;
   onDeleteStudent: (id: string) => void;
 }) {
@@ -41,17 +43,27 @@ export function LeftSidebar({
           <i />
         </div>
         <div className="demo-fill-card">
-          <div className="demo-fill-badge">8 донишҷӯи тиббӣ</div>
+          <div className="demo-fill-badge">Намунаҳои тайёр</div>
           <strong>Пур кардани варақ</strong>
-          <p>4 духтар ва 4 писар дар либоси тиббӣ бо номҳои тоҷикӣ ва ихтисосҳои гуногун.</p>
-          <button
-            type="button"
-            className="fill-demo-btn"
-            onClick={onFillDemo}
-          >
-            <Icon name="plus" size={14} />
-            <span>Пур кардани 8 донишҷӯ</span>
-          </button>
+          <p>Интихоб кунед: донишҷӯёни тиббӣ ё кормандони ҳифозат (намунаи Figma).</p>
+          <div className="demo-buttons-row">
+            <button
+              type="button"
+              className="fill-demo-btn"
+              onClick={onFillDemo}
+            >
+              <Icon name="user" size={14} />
+              <span>8 донишҷӯ (Студенты)</span>
+            </button>
+            <button
+              type="button"
+              className="fill-demo-btn security-demo-btn"
+              onClick={onFillSecurityDemo}
+            >
+              <Icon name="shield" size={14} />
+              <span>8 ҳифозат (Охрана)</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -108,12 +120,17 @@ export function LeftSidebar({
                             }}
                           />
                         ) : (
-                          <span>{item.fullName.charAt(0) || "Д"}</span>
+                          <span>{item.fullName.charAt(0) || (item.template === "security" ? "М" : "Д")}</span>
                         )}
+                        <span className="slot-type-badge" title={item.template === "security" ? "Ҳифозат (Охрана)" : "Донишҷӯ (Студент)"}>
+                          {item.template === "security" ? "🛡️" : "🎓"}
+                        </span>
                       </div>
                       <div className="slot-nav-text">
                         <span className="slot-nav-name">{item.fullName}</span>
-                        <span className="slot-nav-sub">{item.specialty}</span>
+                        <span className="slot-nav-sub">
+                          {item.template === "security" ? (item.role || "МУҲОФИЗ") : (item.specialty || "Донишҷӯ")}
+                        </span>
                       </div>
                     </div>
                     <div className="slot-actions">

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Visual Comparison: Figma vs Code</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #38bdf8;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card-panel {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+    .card-preview {
+      width: 100%;
+      aspect-ratio: 440 / 278;
+      background: #020617;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <h1>Сравнение: Оригинал Figma vs Текущий рендер кода</h1>
+
+  <h2>1. Лицевая сторона (Front · Лицевая)</h2>
+  <div class="comparison-grid">
+    <div class="card-panel">
+      <div class="card-title">
+        <span>Figma (Оригинал 36:19)</span>
+        <span style="color:#d5b778;">100% Эталон</span>
+      </div>
+      <div class="card-preview">
+        <img src="figma-security-front.png" alt="Figma Front">
+      </div>
+    </div>
+    <div class="card-panel">
+      <div class="card-title">
+        <span>Наш рендер (HTML / CSS)</span>
+        <span style="color:#38bdf8;">Рендер компонента</span>
+      </div>
+      <div class="card-preview">
+        <img src="rendered-security-front.png" alt="Rendered Front">
+      </div>
+    </div>
+  </div>
+
+  <h2>2. Оборотная сторона (Back · Оборот)</h2>
+  <div class="comparison-grid">
+    <div class="card-panel">
+      <div class="card-title">
+        <span>Figma (Оригинал 36:75)</span>
+        <span style="color:#d5b778;">100% Эталон</span>
+      </div>
+      <div class="card-preview">
+        <img src="figma-security-back.png" alt="Figma Back">
+      </div>
+    </div>
+    <div class="card-panel">
+      <div class="card-title">
+        <span>Наш рендер (HTML / CSS)</span>
+        <span style="color:#38bdf8;">Рендер компонента</span>
+      </div>
+      <div class="card-preview">
+        <img src="rendered-security-back.png" alt="Rendered Back">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

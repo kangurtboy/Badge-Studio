@@ -40,39 +40,114 @@ export function Inspector({
             Текст на макете тоже можно редактировать кликом
           </div>
 
-          <div className="form-section">
-            <div className="section-heading">
-              <span>ЛИЦЕВАЯ СТОРОНА</span>
-              <i />
+          {/* Template Switcher */}
+          <div className="template-switcher-section">
+            <span className="template-switcher-label">ШАБЛОНИ БЕЙДЖ:</span>
+            <div className="template-toggle-group">
+              <button
+                type="button"
+                className={`template-toggle-btn ${selected.template !== "security" ? "active" : ""}`}
+                onClick={() => onUpdateSelected("template", "student")}
+              >
+                <Icon name="user" size={13} />
+                <span>Донишҷӯ</span>
+              </button>
+              <button
+                type="button"
+                className={`template-toggle-btn ${selected.template === "security" ? "active" : ""}`}
+                onClick={() => {
+                  onUpdateSelected("template", "security");
+                  if (!selected.role) onUpdateSelected("role", "МУҲОФИЗ");
+                  if (!selected.roleEn) onUpdateSelected("roleEn", "COLLEGE SECURITY");
+                  if (!selected.cardType) onUpdateSelected("cardType", "КОРТИ ХИЗМАТӢ");
+                  if (!selected.studentId || selected.studentId.startsWith("2-")) {
+                    onUpdateSelected("studentId", `SEC-0${selectedIndex + 1}`);
+                  }
+                }}
+              >
+                <Icon name="shield" size={13} />
+                <span>Ҳифозат</span>
+              </button>
             </div>
-            <TextField
-              label="ФИО студента"
-              value={selected.fullName}
-              placeholder="Имя и фамилия"
-              onChange={(value) => onUpdateSelected("fullName", value)}
-            />
-            <div className="form-row">
-              <TextField
-                label="Номер"
-                value={selected.studentId}
-                placeholder="2-000000"
-                mono
-                onChange={(value) => onUpdateSelected("studentId", value)}
-              />
-              <TextField
-                label="Годы обучения"
-                value={selected.studyYears}
-                placeholder="2024–2028"
-                onChange={(value) => onUpdateSelected("studyYears", value)}
-              />
-            </div>
-            <TextField
-              label="Специальность"
-              value={selected.specialty}
-              placeholder="Направление"
-              onChange={(value) => onUpdateSelected("specialty", value)}
-            />
           </div>
+
+          {selected.template === "security" ? (
+            <div className="form-section">
+              <div className="section-heading">
+                <span>ЛИЦЕВАЯ СТОРОНА (ҲИФОЗАТ)</span>
+                <i />
+              </div>
+              <TextField
+                label="ФИО сотрудника"
+                value={selected.fullName}
+                placeholder="САФАРОВ ФАРҲОД КАРИМОВИЧ"
+                onChange={(value) => onUpdateSelected("fullName", value)}
+              />
+              <div className="form-row">
+                <TextField
+                  label="Вазифа (Роль)"
+                  value={selected.role || "МУҲОФИЗ"}
+                  placeholder="МУҲОФИЗ"
+                  onChange={(value) => onUpdateSelected("role", value)}
+                />
+                <TextField
+                  label="Вазифа (EN)"
+                  value={selected.roleEn || "COLLEGE SECURITY"}
+                  placeholder="COLLEGE SECURITY"
+                  onChange={(value) => onUpdateSelected("roleEn", value)}
+                />
+              </div>
+              <div className="form-row">
+                <TextField
+                  label="Навъи корт"
+                  value={selected.cardType || "КОРТИ ХИЗМАТӢ"}
+                  placeholder="КОРТИ ХИЗМАТӢ"
+                  onChange={(value) => onUpdateSelected("cardType", value)}
+                />
+                <TextField
+                  label="Рақами корманд"
+                  value={selected.studentId}
+                  placeholder="SEC-01"
+                  mono
+                  onChange={(value) => onUpdateSelected("studentId", value)}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="form-section">
+              <div className="section-heading">
+                <span>ЛИЦЕВАЯ СТОРОНА (ДОНИШҶӮ)</span>
+                <i />
+              </div>
+              <TextField
+                label="ФИО студента"
+                value={selected.fullName}
+                placeholder="Имя и фамилия"
+                onChange={(value) => onUpdateSelected("fullName", value)}
+              />
+              <div className="form-row">
+                <TextField
+                  label="Номер"
+                  value={selected.studentId}
+                  placeholder="2-000000"
+                  mono
+                  onChange={(value) => onUpdateSelected("studentId", value)}
+                />
+                <TextField
+                  label="Годы обучения"
+                  value={selected.studyYears}
+                  placeholder="2024–2028"
+                  onChange={(value) => onUpdateSelected("studyYears", value)}
+                />
+              </div>
+              <TextField
+                label="Специальность"
+                value={selected.specialty}
+                placeholder="Направление"
+                onChange={(value) => onUpdateSelected("specialty", value)}
+              />
+            </div>
+          )}
 
           <div className="form-section photo-section">
             <div className="section-heading">
@@ -286,22 +361,28 @@ export function Inspector({
               placeholder="ДД/ММ/ГГГГ"
               onChange={(value) => onUpdateSelected("expires", value)}
             />
-            <div className="form-row">
-              <TextField
-                label="Логин"
-                value={selected.login}
-                placeholder="Логин"
-                mono
-                onChange={(value) => onUpdateSelected("login", value)}
-              />
-              <TextField
-                label="Пароль"
-                value={selected.password}
-                placeholder="Пароль"
-                mono
-                onChange={(value) => onUpdateSelected("password", value)}
-              />
-            </div>
+            {selected.template === "security" ? (
+              <div className="security-rules-note">
+                <span>3 служебных правила охраны, QR-код и адрес колледжа в Кангурте формируются автоматически</span>
+              </div>
+            ) : (
+              <div className="form-row">
+                <TextField
+                  label="Логин"
+                  value={selected.login}
+                  placeholder="Логин"
+                  mono
+                  onChange={(value) => onUpdateSelected("login", value)}
+                />
+                <TextField
+                  label="Пароль"
+                  value={selected.password}
+                  placeholder="Пароль"
+                  mono
+                  onChange={(value) => onUpdateSelected("password", value)}
+                />
+              </div>
+            )}
           </div>
 
           <button
