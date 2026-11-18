@@ -80,7 +80,7 @@ export function BadgeFront({
   };
 
   return (
-    <div className="badge-artwork badge-front">
+    <div className="badge-artwork badge-front template-student">
       <div className="front-heading">
         <div className="crest-seal">
           <img

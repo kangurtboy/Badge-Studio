@@ -12,7 +12,7 @@ export function BadgeBack({
   update: <K extends StudentField>(field: K, value: Student[K]) => void;
 }) {
   return (
-    <div className="badge-artwork badge-back">
+    <div className="badge-artwork badge-back template-student">
       <div className="back-heading">
         <div className="back-title-group">
           <strong>ШАҲОДАТНОМАИ ДОНИШҶӮӢ</strong>

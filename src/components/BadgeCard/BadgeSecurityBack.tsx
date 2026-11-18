@@ -9,7 +9,7 @@ export function BadgeSecurityBack({
   update: <K extends StudentField>(field: K, value: Student[K]) => void;
 }) {
   return (
-    <div className="badge-artwork badge-back badge-security-back">
+    <div className="badge-artwork badge-back badge-security-back template-security">
       {/* 1. Header: Service identification (Figma 36:79 — No EXP badge!) */}
       <div className="security-back-header">
         <div className="security-back-titles">

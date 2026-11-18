@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 ### Добавлено
+- **Модульная изоляция стилей шаблонов (Isolated Template Styles Architecture):**
+  - Полное разделение CSS стилей каждого шаблона по изолированным файлам:
+    - [badge-base.css](file:///D:/Badge-Studio/src/styles/badge-base.css) — общие размеры артборда, container queries, утилиты.
+    - [template-student.css](file:///D:/Badge-Studio/src/styles/templates/template-student.css) — стили шаблона студента, строго изолированные пространством имён `.template-student`.
+    - [template-security.css](file:///D:/Badge-Studio/src/styles/templates/template-security.css) — стили шаблона охраны, строго изолированные пространством имён `.template-security`.
+  - Исключена любая возможность взаимной коллизии стилей при одновременном размещении разных бейджей на одном листе A4.
+  - Подготовлено подробное руководство разработчика: [ADDING_TEMPLATES.md](file:///D:/Badge-Studio/docs/ADDING_TEMPLATES.md).
 - **Мультишаблонная система бейджей (Multi-Template Architecture):**
   - Возможность создавать и размещать бейджи разных шаблонов на одном листе A4 с сохранением двусторонней печати и зеркалирования колонок.
   - **Шаблон «Ҳифозат / Охрана» (Figma-макет `36:2`, фреймы `36:19` и `36:75`):**

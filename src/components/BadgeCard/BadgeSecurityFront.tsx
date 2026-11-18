@@ -93,7 +93,7 @@ export function BadgeSecurityFront({
   };
 
   return (
-    <div className="badge-artwork badge-front badge-security-front">
+    <div className="badge-artwork badge-front badge-security-front template-security">
       {/* 1. Header with emblems and college name (Figma 36:25 — White background, 62px / 22.3%) */}
       <div className="front-heading security-front-heading">
         <div className="crest-seal">
