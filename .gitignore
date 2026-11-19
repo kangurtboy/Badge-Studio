@@ -2,6 +2,7 @@ node_modules
 dist
 dist/
 dist-offline/
+dist-offline-package/
 .DS_Store
 *.local
 *.zip

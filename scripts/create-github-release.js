@@ -29,11 +29,24 @@ const releaseTitle = "Badge Studio v1.3.0 - Мультишаблонность, 
 
 const body = `## Badge Studio v1.3.0 — Мультишаблонность, удостоверение охраны, 100% изоляция стилей и поворот фото
 
-### 📦 Как запустить оффлайн:
-1. Скачайте прикреплённый архив **\`BadgeStudio-v1.3.0-offline.zip\`**.
-2. Распакуйте архив в любую папку на компьютере.
-3. Откройте файл **\`BadgeStudio.html\`** в любом современном браузере (Google Chrome, Microsoft Edge, Яндекс Браузер, Mozilla Firefox).
-4. Программа работает **на 100% автономно** без интернета и локальных серверов!
+### 📦 Состав оффлайн-пакета (\`BadgeStudio-v1.3.0-offline.zip\`):
+- **\`BadgeStudio.html\`** и **\`index.html\`** — автономное одностраничное веб-приложение для подготовки и печати бейджей.
+- **\`assets/\`** — полный комплект векторных и растровых графических ресурсов:
+  - Герб Республики Таджикистан (SVG и HD PNG)
+  - Официальная медицинская эмблема
+  - Подлинная подпись директора колледжа («Имзо 1»)
+  - Защитный векторный QR-щиток для удостоверений охраны (\`figma-security-qr.svg\`)
+  - Штрихкоды и служебная графика
+- **\`images/\`** — встроенный набор демонстрационных фотографий сотрудников охраны и студентов для быстрого тестирования в 1 клик.
+- **\`README.txt\`** — краткая инструкция по запуску.
+
+---
+
+### 🚀 Как запустить оффлайн:
+1. Скачайте прикреплённый архив **\`BadgeStudio-v1.3.0-offline.zip\`** (~1.9 МБ).
+2. Распакуйте архив в любую папку на компьютере (обязательно распакуйте полностью, чтобы папки \`assets/\` и \`images/\` находились рядом с HTML-файлом).
+3. Откройте файл **\`BadgeStudio.html\`** (или \`index.html\`) в любом современном браузере (Google Chrome, Microsoft Edge, Яндекс Браузер, Mozilla Firefox).
+4. Программа работает **на 100% автономно** без интернета и веб-серверов!
 
 ---
 
@@ -86,6 +99,23 @@ async function main() {
   if (checkRes.ok) {
     release = await checkRes.json();
     console.log(`Release ${tag} already exists with id: ${release.id}`);
+
+    // Update release details
+    const updateRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases/${release.id}`, {
+      method: "PATCH",
+      headers: {
+        ...commonHeaders,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: releaseTitle,
+        body,
+      }),
+    });
+    if (updateRes.ok) {
+      release = await updateRes.json();
+      console.log(`Updated release ${tag} notes and title.`);
+    }
   } else {
     // 2. Create Release
     const createRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases`, {
@@ -112,13 +142,16 @@ async function main() {
     console.log(`Created release ${tag} (id: ${release.id})`);
   }
 
-  // 3. Prepare ZIP file from dist-offline or temp
-  let zipPath = path.resolve("dist-offline", "BadgeStudio-v1.3.0-offline.zip");
-  if (!fs.existsSync(zipPath)) {
-    zipPath = path.join(os.tmpdir(), "BadgeStudio-v1.3.0-offline.zip");
-  }
-  if (!fs.existsSync(zipPath)) {
-    throw new Error(`ZIP file not found at: ${zipPath}`);
+  // 3. Prepare ZIP file from dist-offline-package, dist-offline or temp
+  const searchPaths = [
+    path.resolve("dist-offline-package", "BadgeStudio-v1.3.0-offline.zip"),
+    path.resolve("dist-offline", "BadgeStudio-v1.3.0-offline.zip"),
+    path.join(os.tmpdir(), "BadgeStudio-v1.3.0-offline.zip"),
+  ];
+
+  let zipPath = searchPaths.find((p) => fs.existsSync(p));
+  if (!zipPath) {
+    throw new Error(`ZIP file not found in: ${searchPaths.join(", ")}`);
   }
   const zipBuffer = fs.readFileSync(zipPath);
   console.log(`Read ZIP file: ${zipPath} (${(zipBuffer.length / (1024 * 1024)).toFixed(2)} MB)`);
