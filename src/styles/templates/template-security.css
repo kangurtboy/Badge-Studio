@@ -195,6 +195,17 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
+/* 2-layer photo border: Outer gold (#d5b778) + Inner white (#ffffff) matching Figma 36:41 */
+.template-security .security-photo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 0.45cqw solid #ffffff;
+  border-radius: calc(0.91cqw - 1px);
+  pointer-events: none;
+  z-index: 4;
+}
+
 .template-security .security-photo-frame.is-dragging {
   cursor: grabbing;
 }
