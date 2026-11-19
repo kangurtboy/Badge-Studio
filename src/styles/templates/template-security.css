@@ -133,18 +133,20 @@
 }
 
 .template-security .security-name-box {
-  margin: 2.5cqw 0 2.2cqw 0;
+  margin: 2.2cqw 0 2cqw 0;
+  max-width: 64.1cqw;
 }
 
 .template-security .security-name-text {
   font-family: Roboto, sans-serif;
-  font-size: 5.45cqw;
+  font-size: 5cqw;
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.15;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0;
-  white-space: pre-line;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .template-security .security-identity-line {

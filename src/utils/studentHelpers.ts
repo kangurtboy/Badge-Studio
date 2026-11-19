@@ -101,7 +101,7 @@ export function makeNewStudent(_students: Array<Student | null>, index: number):
 export const DEMO_SECURITY_STAFF: Student = {
   id: "demo-security",
   template: "security",
-  fullName: "САФАРОВ\nФАРҲОД КАРИМОВИЧ",
+  fullName: "САФАРОВ ФАРҲОД КАРИМОВИЧ",
   studentId: "SEC-01",
   specialty: "",
   studyYears: "",
@@ -126,7 +126,7 @@ export function makeNewSecurity(_students: Array<Student | null>, index: number)
   return {
     id: `staff-${Date.now()}-${index}`,
     template: "security",
-    fullName: "САФАРОВ\nФАРҲОД КАРИМОВИЧ",
+    fullName: "САФАРОВ ФАРҲОД КАРИМОВИЧ",
     studentId: `SEC-0${index + 1}`,
     specialty: "",
     studyYears: "",

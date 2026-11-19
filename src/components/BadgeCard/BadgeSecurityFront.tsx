@@ -79,19 +79,6 @@ export function BadgeSecurityFront({
     window.addEventListener("mouseup", onMouseUp);
   };
 
-  // Format full name to guarantee Figma two-line structure:
-  // Line 1: Surname (e.g. САФАРОВ)
-  // Line 2: First Name + Patronymic (e.g. ФАРҲОД КАРИМОВИЧ)
-  const formatFullName = (raw: string) => {
-    if (!raw) return "САФАРОВ\nФАРҲОД КАРИМОВИЧ";
-    if (raw.includes("\n")) return raw;
-    const parts = raw.trim().split(/\s+/);
-    if (parts.length >= 2) {
-      return `${parts[0]}\n${parts.slice(1).join(" ")}`;
-    }
-    return raw;
-  };
-
   return (
     <div className="badge-artwork badge-front badge-security-front template-security">
       {/* 1. Header with emblems and college name (Figma 36:25 — White background, 62px / 22.3%) */}
@@ -143,9 +130,9 @@ export function BadgeSecurityFront({
 
           <div className="security-name-box">
             <EditableText
-              value={formatFullName(student.fullName)}
+              value={student.fullName}
               label="Ному насаби корманд"
-              placeholder="САФАРОВ&#10;ФАРҲОД КАРИМОВИЧ"
+              placeholder="САФАРОВ ФАРҲОД КАРИМОВИЧ"
               className="security-name-text"
               onChange={(value) => update("fullName", value)}
             />
