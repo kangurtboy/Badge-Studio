@@ -154,7 +154,7 @@ export function BadgeSecurityFront({
         {/* Right column: Student Photo frame (106x140 with brass border #d5b778, Figma 36:41) */}
         <div className="security-photo-col">
           <div
-            className={`security-photo-frame ${isDragging ? "is-dragging" : ""}`}
+            className={`security-photo-frame photo-frame ${isDragging ? "is-dragging" : ""}`}
             title="Двойной клик — сменить фото | Зажмите и перетащите мышью для настройки лица"
             onDoubleClick={(e) => {
               e.stopPropagation();
